@@ -1,0 +1,361 @@
+<!--
+  PM API REPORT CARD - PREVIEW BUILD
+
+  This is the staging copy. It lives in its own repo so it is NOT part of
+  peterlohmann.com while we iterate. See README.md for how it relates to the live
+  site, and for the one thing to watch (styles.css here is a COPY).
+
+  Nav and footer links point at the live peterlohmann.com on purpose. The grading
+  file is served from this repo's own /files folder.
+
+  SWAP POINTS (search "SWAP:"):
+    1. SWAP: results       - placeholder rows; no platform has a published grade yet
+    2. SWAP: stats         - summary tiles are placeholders
+    3. SWAP: sponsor       - Column sponsorship copy; confirm before launch
+    4. SWAP: tester-guide  - "help grade" points at /contact for now
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://use.typekit.net" crossorigin />
+<title>The PM API Report Card &middot; Peter Lohmann</title>
+<meta name="description" content="Grading the property management platforms we all use on whether they will actually let you access your own data. Same rubric, every platform, published in full." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="apple-touch-icon" href="favicon.png" />
+<link rel="stylesheet" href="https://use.typekit.net/dik1zcl.css" media="print" onload="this.media='all'" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'" /><noscript><link rel="stylesheet" href="https://use.typekit.net/dik1zcl.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" /></noscript>
+<link rel="stylesheet" href="styles.css?v=24" />
+<style>
+  /* Letter-grade chip. Colour tracks the band, so the table scans at a glance. */
+  .grade{ display:inline-flex; align-items:center; justify-content:center; min-width:44px;
+          padding:5px 10px; border-radius:8px; font-weight:800; font-size:14px;
+          font-variant-numeric:tabular-nums; }
+  .grade-a{ background:#e7f5ee; color:#248a5c; }
+  .grade-b{ background:var(--wash); color:var(--primary-dark); }
+  .grade-c{ background:#fff3ec; color:var(--orange-dark); }
+  .grade-d,.grade-f{ background:#fdecec; color:#b3382c; }
+  .grade-none{ background:#f0f3f6; color:#9aa5ad; font-weight:700; }
+
+  /* Per-category cells: a small score, muted until real numbers land. */
+  .cat-score{ font-variant-numeric:tabular-nums; font-weight:700; color:var(--navy); }
+  .cat-none{ color:#c2ccd4; font-weight:700; }
+  .rank-table td.num, .rank-table th.num{ text-align:center; }
+  .rank-table td.plat{ font-weight:700; color:var(--navy); white-space:nowrap; }
+  .rank-table .col-cat{ width:96px; }
+
+  /* Numbered category cards, same treatment as the tester guide. */
+  .step-head{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .step-head .num-badge{ margin-bottom:0; flex:none; }
+  .step-head h3{ margin:0; font-size:18px; }
+
+  /* Placeholder marker for content that does not exist yet. Delete with the SWAPs. */
+  .todo{ border:2px dashed #c9b18a; background:#fdf8ef; border-radius:var(--radius);
+         padding:20px; text-align:center; color:#7a6440; font-size:14.5px; }
+  .todo strong{ display:block; font-size:13px; letter-spacing:.05em; text-transform:uppercase;
+                margin-bottom:5px; color:#8a6d3b; }
+
+  /* The shared stylesheet hides .table-scroll below 760px, because the Largest PM page
+     swaps in a separate .rank-cards deck there. This page deliberately keeps ONE table:
+     scores live in a single place, so mobile and desktop can never fall out of sync.
+     So re-show it here and let it scroll sideways instead. */
+  .tbl-hint{ display:none; }
+  @media (max-width:760px){
+    #results .table-scroll{ display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    #results .rank-table{ min-width:640px; }
+    .tbl-hint{ display:block; font-size:13px; color:var(--muted); margin:0 0 10px; }
+  }
+
+  /* The shared stylesheet caps .sub at 62ch. This page runs wider: the copy is short
+     and scannable, so a longer measure reads dense rather than like a wall of text. */
+  #main .sub{ max-width:96ch; }
+
+  /* Sponsor strip: understated, not a banner ad. */
+  .sponsor-note{ display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+                 font-size:14px; color:var(--muted); }
+</style>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DRCVXMNK1D"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DRCVXMNK1D');</script>
+<!-- RB2B -->
+<script>!function(key) {
+if (window.reb2b) return;
+window.reb2b = {loaded: true};
+var s = document.createElement("script");
+s.async = true;
+s.src = "https://b2bjsstore.s3.us-west-2.amazonaws.com/b/" + key + "/" + key + ".js.gz";
+document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.getElementsByTagName("script")[0]);
+}("0NW1GH7LKEO4");</script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="top" aria-label="Primary">
+  <div class="bar">
+    <a class="brand" href="https://www.peterlohmann.com/">Peter <span>Lohmann</span></a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="navlinks">Menu</button>
+    <div class="links" id="navlinks">
+      <a href="https://www.peterlohmann.com/">About</a>
+      <a href="https://www.peterlohmann.com/newsletter">Newsletter</a>
+      <a href="https://www.peterlohmann.com/podcast">Podcast</a>
+      <a href="https://www.peterlohmann.com/largest-pm-companies">Largest PM Companies</a>
+      <a href="https://www.peterlohmann.com/blog">Blog</a>
+      <a href="https://www.peterlohmann.com/report/">M&amp;A Report</a>
+      <a href="https://www.peterlohmann.com/peterbot">PeterBot</a>
+      <a href="https://www.peterlohmann.com/products">Products</a>
+    </div>
+    <a class="btn btn-navy btn-sm cta" href="https://www.peterlohmann.com/contact">Contact</a>
+  </div>
+</nav>
+
+<main id="main">
+
+  <header class="page-hero">
+    <div class="wrap">
+      <div class="ticks" aria-hidden="true"><i></i><i></i><i></i></div>
+      <h1>The PM API Report Card</h1>
+      <p class="lead">Grading the property management platforms we all use, on whether they&#x27;ll actually let you access your own data.</p>
+      <p class="sub" style="margin-top:18px;">Same rubric for every platform: five categories, ten points each, scored out of 100. No cherry-picking, no platform-specific tuning, and the grading file is yours to download and check.</p>
+      <div class="hero-jump" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:26px;">
+        <a class="btn btn-primary" href="#results">See the results &darr;</a>
+        <a class="btn btn-ghost" href="#method">How we grade</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- AT A GLANCE -->
+  <section class="band tight">
+    <div class="wrap">
+      <!-- SWAP: stats - replace the dashes with real figures once grading is done.
+           Keep these honest; they are the first thing a skeptical vendor will check. -->
+      <div class="stats stats-color g4" aria-label="At a glance">
+        <div class="stat"><div class="v">&ndash;</div><div class="k">Platforms graded</div></div>
+        <div class="stat"><div class="v">5</div><div class="k">Scoring categories</div></div>
+        <div class="stat"><div class="v">&ndash;</div><div class="k">Average score</div></div>
+        <div class="stat"><div class="v">&ndash;</div><div class="k">Highest grade</div></div>
+      </div>
+      <p class="sub" style="margin-top:16px;font-size:14px;">Scores are point-in-time and tied to the evidence access date. Methodology v1.1.</p>
+    </div>
+  </section>
+
+  <!-- THE RESULTS -->
+  <section class="band" id="results">
+    <div class="wrap">
+      <h2 class="h-lead">The results.</h2>
+      <p class="sub" style="margin:10px 0 22px;">Scores are point-in-time, based on first-party documentation and, where available, live testing.</p>
+
+      <!-- SWAP: results - placeholder rows. Fill each category cell with its 0-10 score,
+           the overall with the 0-100 number, and swap .grade-none for .grade-a /
+           .grade-b / .grade-c / .grade-d / .grade-f to match the letter band. -->
+      <p class="tbl-hint">Scroll the table sideways to see every category &rarr;</p>
+      <div class="table-scroll">
+        <table class="rank-table">
+          <thead>
+            <tr>
+              <th>Platform</th>
+              <th class="num col-cat">Functional<br>Coverage</th>
+              <th class="num col-cat">Design &amp;<br>Reliability</th>
+              <th class="num col-cat">Access<br>Control</th>
+              <th class="num col-cat">Docs &amp;<br>AI-Ready</th>
+              <th class="num col-cat">Access<br>&amp; Cost</th>
+              <th class="num">Score</th>
+              <th class="num">Grade</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="plat">AppFolio</td>
+              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
+              <td class="num"><span class="cat-none">&ndash;</span></td>
+              <td class="num"><span class="grade grade-none">&ndash;</span></td>
+            </tr>
+            <tr>
+              <td class="plat">Buildium</td>
+              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
+              <td class="num"><span class="cat-none">&ndash;</span></td>
+              <td class="num"><span class="grade grade-none">&ndash;</span></td>
+            </tr>
+            <tr>
+              <td class="plat">Rentvine</td>
+              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
+              <td class="num"><span class="cat-none">&ndash;</span></td>
+              <td class="num"><span class="grade grade-none">&ndash;</span></td>
+            </tr>
+            <tr>
+              <td class="plat">Propertyware</td>
+              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
+              <td class="num"><span class="cat-none">&ndash;</span></td>
+              <td class="num"><span class="grade grade-none">&ndash;</span></td>
+            </tr>
+            <tr>
+              <td class="plat">Property Meld</td>
+              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
+              <td class="num"><span class="cat-none">&ndash;</span></td>
+              <td class="num"><span class="grade grade-none">&ndash;</span></td>
+            </tr>
+            <tr>
+              <td class="plat">Column</td>
+              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
+              <td class="num"><span class="cat-none">&ndash;</span></td>
+              <td class="num"><span class="grade grade-none">&ndash;</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="todo" style="margin-top:16px;">
+        <strong>Placeholder: results</strong>
+        No platform has a published grade yet. Rows show the intended layout only.
+      </div>
+
+      <p class="sub" style="margin-top:16px;font-size:14px;">More platforms will be added as results come in from operators across the industry.</p>
+    </div>
+  </section>
+
+  <!-- THE PROBLEM -->
+  <section class="band">
+    <div class="wrap">
+      <div>
+        <h2 class="h-lead">The problem.</h2>
+        <p class="sub" style="margin-top:12px;">Every platform will tell you their API is great. I wanted to find out if that&#x27;s actually true.</p>
+        <p class="sub" style="margin-top:14px;">Property managers should have access to their own data. These platforms are fantastic, but they vary wildly, both in how sophisticated the API is and in their <em>commercial posture</em>: how willing they are to let us reach our own data. Some of that is a technology problem. A lot of it is a business decision.</p>
+        <p class="sub" style="margin-top:14px;">Grading that objectively wasn&#x27;t possible at scale until recently. With AI, it is. The idea came from <a href="https://saastr.ai/api-report-card" target="_blank" rel="noopener">SaaStr</a>&#x27;s API Report Card for B2B SaaS. I wanted one for our industry.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE METHOD -->
+  <section class="band tight wash" id="method">
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <h2 class="h-lead">The method.</h2>
+          <p class="sub" style="margin-top:12px;">One fixed grading prompt, run against every platform below. Same criteria, same process, every time.</p>
+          <p class="sub" style="margin-top:14px;">Download it and check it yourself; every result traces back to it. If you think there&#x27;s a better way to grade this, I want to hear it.</p>
+        </div>
+        <div>
+          <div class="panel" style="text-align:center;">
+            <h3 style="margin:0 0 8px;font-size:21px;">The grading file</h3>
+            <p class="sub" style="margin-bottom:20px;">The exact rubric behind every score on this page.</p>
+            <a class="btn btn-primary" href="files/pm-api-report-card-methodology-v1.1.md" download>Download the .md file</a>
+            <p style="margin:14px 0 0;font-size:13px;color:var(--muted);">Methodology v1.1</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin:38px 0 0;font-size:20px;">What gets graded</h3>
+      <p class="sub" style="margin:6px 0 0;">Five categories, scored 0 to 10 each, normalized to a score out of 100.</p>
+      <div class="grid g2 mt-md">
+        <div class="card">
+          <div class="step-head"><div class="num-badge">1</div><h3>Functional Coverage and Usefulness</h3></div>
+          <p>Can you get the data and take the actions your business runs on, and change them, not just read them?</p>
+        </div>
+        <div class="card">
+          <div class="step-head"><div class="num-badge">2</div><h3>API Design and Reliability</h3></div>
+          <p>Is the API built so your code, no-code tools, and AI agents behave predictably instead of breaking?</p>
+        </div>
+        <div class="card">
+          <div class="step-head"><div class="num-badge">3</div><h3>Access Control and Safe Automation</h3></div>
+          <p>Can you safely hand a limited slice of access to an app or an AI agent, and shut it off?</p>
+        </div>
+        <div class="card">
+          <div class="step-head"><div class="num-badge">4</div><h3>Documentation and AI-Agent Readiness</h3></div>
+          <p>Can a developer, or an AI coding tool, understand the API and build against it correctly?</p>
+        </div>
+        <div class="card">
+          <div class="step-head"><div class="num-badge">5</div><h3>Accessibility and Cost</h3></div>
+          <p>Can you get access and a place to test without a sales call or a forced upgrade?</p>
+        </div>
+        <div class="card" style="background:var(--wash-soft);">
+          <h3 style="font-size:18px;margin-bottom:8px;">How the grade is calculated</h3>
+          <p>The five category scores add up to a raw total out of 50, which is normalized to a score out of 100 and mapped to a letter grade: A+ at 97 and above, down to F below 60. Scores are absolute, never curved against other platforms.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONFLICT OF INTEREST -->
+  <section class="band tight wash">
+    <div class="wrap">
+      <div class="panel" style="max-width:1000px;margin-inline:auto;">
+        <h2 class="h-lead" style="font-size:clamp(24px,3.2vw,32px);">Fair and transparent, on purpose.</h2>
+        <p class="sub" style="margin-top:12px;">Doesn&#x27;t a sponsor on this page create a conflict? Let&#x27;s address it directly.</p>
+        <!-- SWAP: sponsor - confirm the Column partnership and add their logo if wanted
+             before launch. If the sponsor changes, this whole section changes with it. -->
+        <p class="sub" style="margin-top:14px;">This report is sponsored by <strong>Column</strong>, whose support makes it possible. Column is graded by the same process as everything else here, and their sponsorship did not influence their ranking.</p>
+        <p class="sub" style="margin-top:14px;">The grading file contains no instruction to grade them favorably. Read it and confirm. Same goes for every platform here, sponsor or not.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY FREE -->
+  <section class="band">
+    <div class="wrap">
+      <div>
+        <h2 class="h-lead">Why I&#x27;m giving this away.</h2>
+        <p class="sub" style="margin-top:12px;">This is free because I want to push the industry forward: real pressure on vendors to build better APIs, and to stop treating basic data access as a paid upgrade.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HELP GRADE -->
+  <section class="band tight wash">
+    <div class="wrap center">
+      <h2 class="h-lead">Help us grade a platform.</h2>
+      <p class="sub" style="margin:10px auto 22px;max-width:78ch;">Want to help grade a platform we haven&#x27;t covered? We&#x27;re looking for operators to run this process against the tools they use daily. Submissions stay anonymous.</p>
+      <!-- SWAP: tester-guide - points at /contact for now. Swap to /api-grader-guide
+           once that page is meant to be discoverable; it is deliberately hidden today. -->
+      <a class="btn btn-primary" href="https://www.peterlohmann.com/contact">Get in touch</a>
+    </div>
+  </section>
+
+  <!-- CREDIT -->
+  <section class="band tight">
+    <div class="wrap center">
+      <p class="sponsor-note" style="justify-content:center;">
+        Methodology inspired by <a href="https://saastr.ai/api-report-card" target="_blank" rel="noopener">SaaStr&#x27;s AI Agent API Report Card</a>. Sponsored by Column.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="brand" style="font-weight:700;color:var(--navy);">Peter <span style="color:var(--primary);">Lohmann</span></div>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="https://www.peterlohmann.com/">About</a>
+        <a href="https://www.peterlohmann.com/newsletter">Newsletter</a>
+        <a href="https://www.peterlohmann.com/podcast">Podcast</a>
+        <a href="https://www.peterlohmann.com/largest-pm-companies">Largest PM Companies</a>
+        <a href="https://www.peterlohmann.com/blog">Blog</a>
+        <a href="https://www.peterlohmann.com/report/">M&amp;A Report</a>
+        <a href="https://www.peterlohmann.com/peterbot">PeterBot</a>
+        <a href="https://www.peterlohmann.com/products">Products</a>
+        <a href="https://www.peterlohmann.com/featured">Featured</a><a href="https://www.peterlohmann.com/sponsor/">Sponsor</a>
+        <a href="https://www.peterlohmann.com/contact">Contact</a>
+        <a href="https://www.linkedin.com/in/pslohmann/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.peterlohmann.com/faq">FAQ</a>
+      </nav>
+    </div>
+    <div class="foot-social" aria-label="Peter Lohmann on social media">
+      <a href="https://www.youtube.com/@peterlohmann" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.5 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg></a>
+      <a href="https://www.linkedin.com/in/pslohmann/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5v-9h3zM6.5 8.3a1.7 1.7 0 1 1 0-3.5 1.7 1.7 0 0 1 0 3.5zM19 19h-3v-4.4c0-1 0-2.4-1.5-2.4S13 13.4 13 14.5V19h-3v-9h2.9v1.2h.04a3.2 3.2 0 0 1 2.9-1.6c3.1 0 3.7 2 3.7 4.7z"/></svg></a>
+      <a href="https://x.com/pslohmann" target="_blank" rel="noopener" aria-label="X (formerly Twitter)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.9 2H22l-7.6 8.7L23.3 22h-6.9l-5.4-7-6.2 7H1.7l8.1-9.3L.9 2h7.1l4.9 6.5zM17.7 20h1.9L7.1 4H5.1z"/></svg></a>
+      <a href="https://www.facebook.com/lohmann" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7v-3.5h3.1V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.24 2.7.24v3H15.8c-1.5 0-2 .93-2 1.9v2.2h3.4l-.54 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/></svg></a>
+      <a href="https://www.instagram.com/peterlohmann_media/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.05 1.8.25 2.2.42.56.2.96.48 1.38.9.42.42.7.82.9 1.38.17.4.37 1 .42 2.2.06 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.05 1.2-.25 1.8-.42 2.2a3.7 3.7 0 0 1-.9 1.38 3.7 3.7 0 0 1-1.38.9c-.4.17-1 .37-2.2.42-1.3.06-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.05-1.8-.25-2.2-.42a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.17-.4-.37-1-.42-2.2-.06-1.3-.07-1.7-.07-4.9s0-3.6.07-4.9c.05-1.2.25-1.8.42-2.2.2-.56.48-.96.9-1.38.42-.42.82-.7 1.38-.9.4-.17 1-.37 2.2-.42C8.4 2.2 8.8 2.2 12 2.2zm0 3.14A6.66 6.66 0 1 0 18.66 12 6.66 6.66 0 0 0 12 5.34zm0 10.98A4.32 4.32 0 1 1 16.32 12 4.32 4.32 0 0 1 12 16.32zm6.9-11.24a1.56 1.56 0 1 1-1.56-1.56 1.56 1.56 0 0 1 1.56 1.56z"/></svg></a>
+    </div>
+    <p class="disc">The content of this website is for informational purposes only and does not constitute professional advice. I may have <a href="https://www.peterlohmann.com/financial-interest-disclosure">consulting agreements with, or financial interests in</a>, companies mentioned on this website. Additionally, some of the links across this site may be affiliate links, meaning I may earn a commission if you make a purchase through those links. Always perform your own due diligence before making any financial or business decisions. <a href="https://www.peterlohmann.com/privacy-policy">Privacy Policy</a></p>
+  </div>
+</footer>
+
+<script src="site.js?v=24"></script>
+</body>
+</html>
