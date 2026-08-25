@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preconnect" href="https://use.typekit.net" crossorigin />
-<title>The PM API Report Card &middot; Peter Lohmann</title>
+<title>The PM API Report Card (layout v2) &middot; Peter Lohmann</title>
 <meta name="description" content="Grading the property management platforms we all use on whether they will actually let you access your own data. Same rubric, every platform, published in full." />
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
@@ -45,9 +45,6 @@
   /* Per-category cells: a small score, muted until real numbers land. */
   .cat-score{ font-variant-numeric:tabular-nums; font-weight:700; color:var(--navy); }
   .cat-none{ color:#c2ccd4; font-weight:700; }
-  .rank-table td.num, .rank-table th.num{ text-align:center; }
-  .rank-table td.plat{ font-weight:700; color:var(--navy); white-space:nowrap; }
-  .rank-table .col-cat{ width:96px; }
 
   /* Numbered category cards, same treatment as the tester guide. */
   .step-head{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
@@ -60,20 +57,30 @@
   .todo strong{ display:block; font-size:13px; letter-spacing:.05em; text-transform:uppercase;
                 margin-bottom:5px; color:#8a6d3b; }
 
-  /* The shared stylesheet hides .table-scroll below 760px, because the Largest PM page
-     swaps in a separate .rank-cards deck there. This page deliberately keeps ONE table:
-     scores live in a single place, so mobile and desktop can never fall out of sync.
-     So re-show it here and let it scroll sideways instead. */
-  .tbl-hint{ display:none; }
-  @media (max-width:760px){
-    #results .table-scroll{ display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; }
-    #results .rank-table{ min-width:640px; }
-    .tbl-hint{ display:block; font-size:13px; color:var(--muted); margin:0 0 10px; }
-  }
-
   /* The shared stylesheet caps .sub at 62ch. This page runs wider: the copy is short
      and scannable, so a longer measure reads dense rather than like a wall of text. */
   #main .sub{ max-width:96ch; }
+
+  /* --- v2: a report card per platform, closer to how SaaStr presents theirs --- */
+  .pcards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(304px,1fr)); gap:18px; }
+  .pcard{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+          box-shadow:var(--shadow); padding:22px 22px 20px; display:flex; flex-direction:column; }
+  .pcard-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+  .pcard-head h3{ font-size:19px; margin:0; }
+  .pcard-score{ display:flex; align-items:baseline; gap:4px; margin:14px 0 4px; }
+  .pcard-num{ font-family:var(--serif); font-size:40px; font-weight:900; color:var(--navy);
+              line-height:1; font-variant-numeric:tabular-nums; }
+  .pcard-of{ font-size:14px; color:var(--muted); font-weight:600; }
+  .pcard-cats{ list-style:none; margin:16px 0 0; padding:16px 0 0; border-top:1px solid var(--line); }
+  .pcard-cats li{ display:grid; grid-template-columns:1fr 46px 26px; align-items:center;
+                  gap:10px; padding:7px 0; font-size:13.5px; color:var(--muted); }
+  .pcard-cats li span:first-child{ line-height:1.25; }
+  /* Track fills left-to-right with the 0-10 score once real numbers land. */
+  .bar{ height:6px; border-radius:999px; background:#eef2f6; overflow:hidden; }
+  .bar i{ display:block; height:100%; width:0; border-radius:999px; background:var(--primary); }
+  .pcard-cats .cat-none{ text-align:right; font-size:13px; }
+  .pcard-foot{ margin:16px 0 0; padding-top:14px; border-top:1px solid var(--line);
+               font-size:13px; color:var(--muted); }
 
   /* PREVIEW SCAFFOLDING - delete this block and the .ver-bar markup before launch. */
   .ver-bar{ background:#1F3A4D; color:#fff; font-size:13.5px; }
@@ -127,8 +134,8 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
      Delete this block (and the .ver-bar CSS) before this page goes live. -->
 <div class="ver-bar">
   <div class="wrap">
-    <span><strong>Layout v1</strong> &middot; one comparison table</span>
-    <a href="v2.html">See layout v2 (a card per platform) &rarr;</a>
+    <span><strong>Layout v2</strong> &middot; a card per platform, SaaStr-style</span>
+    <a href="index.html">&larr; Back to layout v1 (one table)</a>
   </div>
 </div>
 
@@ -163,68 +170,105 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
       <h2 class="h-lead" style="margin-top:46px;">The results.</h2>
       <p class="sub" style="margin:10px 0 22px;">Scores are point-in-time, based on first-party documentation and, where available, live testing.</p>
 
-      <!-- SWAP: results - placeholder rows. Fill each category cell with its 0-10 score,
-           the overall with the 0-100 number, and swap .grade-none for .grade-a /
-           .grade-b / .grade-c / .grade-d / .grade-f to match the letter band. -->
-      <p class="tbl-hint">Scroll the table sideways to see every category &rarr;</p>
-      <div class="table-scroll">
-        <table class="rank-table">
-          <thead>
-            <tr>
-              <th>Platform</th>
-              <th class="num col-cat">Functional<br>Coverage</th>
-              <th class="num col-cat">Design &amp;<br>Reliability</th>
-              <th class="num col-cat">Access<br>Control</th>
-              <th class="num col-cat">Docs &amp;<br>AI-Ready</th>
-              <th class="num col-cat">Access<br>&amp; Cost</th>
-              <th class="num">Score</th>
-              <th class="num">Grade</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="plat">AppFolio</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Buildium</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Rentvine</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Propertyware</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Property Meld</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Column</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- SWAP: results - placeholder cards. Per platform, fill in the 0-10 category
+           scores (and set each .bar i width to score*10%), the /100 number, and swap
+           .grade-none for .grade-a / .grade-b / .grade-c / .grade-d / .grade-f. -->
+      <div class="pcards">
+        <article class="pcard">
+          <div class="pcard-head">
+            <h3>AppFolio</h3>
+            <span class="grade grade-none">&ndash;</span>
+          </div>
+          <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
+          <ul class="pcard-cats">
+          <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          </ul>
+          <p class="pcard-foot">Not yet graded.</p>
+        </article>
+        <article class="pcard">
+          <div class="pcard-head">
+            <h3>Buildium</h3>
+            <span class="grade grade-none">&ndash;</span>
+          </div>
+          <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
+          <ul class="pcard-cats">
+          <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          </ul>
+          <p class="pcard-foot">Not yet graded.</p>
+        </article>
+        <article class="pcard">
+          <div class="pcard-head">
+            <h3>Rentvine</h3>
+            <span class="grade grade-none">&ndash;</span>
+          </div>
+          <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
+          <ul class="pcard-cats">
+          <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          </ul>
+          <p class="pcard-foot">Not yet graded.</p>
+        </article>
+        <article class="pcard">
+          <div class="pcard-head">
+            <h3>Propertyware</h3>
+            <span class="grade grade-none">&ndash;</span>
+          </div>
+          <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
+          <ul class="pcard-cats">
+          <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          </ul>
+          <p class="pcard-foot">Not yet graded.</p>
+        </article>
+        <article class="pcard">
+          <div class="pcard-head">
+            <h3>Property Meld</h3>
+            <span class="grade grade-none">&ndash;</span>
+          </div>
+          <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
+          <ul class="pcard-cats">
+          <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          </ul>
+          <p class="pcard-foot">Not yet graded.</p>
+        </article>
+        <article class="pcard">
+          <div class="pcard-head">
+            <h3>Column</h3>
+            <span class="grade grade-none">&ndash;</span>
+          </div>
+          <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
+          <ul class="pcard-cats">
+          <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+          </ul>
+          <p class="pcard-foot">Not yet graded.</p>
+        </article>
       </div>
 
-      <div class="todo" style="margin-top:16px;">
+      <div class="todo" style="margin-top:18px;">
         <strong>Placeholder: results</strong>
-        No platform has a published grade yet. Rows show the intended layout only.
+        No platform has a published grade yet. Cards show the intended layout only.
       </div>
 
       <p class="sub" style="margin-top:16px;font-size:14px;">More platforms will be added as results come in from operators across the industry.</p>
