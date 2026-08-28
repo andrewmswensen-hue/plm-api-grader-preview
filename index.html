@@ -75,6 +75,36 @@
      and scannable, so a longer measure reads dense rather than like a wall of text. */
   #main .sub{ max-width:96ch; }
 
+  /* Category group rows inside the results table. */
+  .rank-table tr.grp td{ background:var(--wash-soft); font-family:var(--serif);
+                         font-size:15px; color:var(--navy); font-weight:400;
+                         letter-spacing:.01em; padding-top:14px; padding-bottom:12px; }
+  .rank-table tr.grp .grp-n{ color:var(--muted); font-family:var(--sans);
+                             font-size:12px; font-weight:700; margin-left:8px; }
+  .rank-table tr.empty td{ color:var(--muted); font-size:13.5px; font-style:italic; }
+
+  /* Sponsor treatment, mirroring the Boom setup on the Largest PM Companies page. */
+  .presented-by{ display:inline-flex; align-items:center; gap:10px; margin:14px 0 0;
+                 color:var(--muted); font-size:14px; font-weight:600; text-decoration:none; }
+  .presented-by img{ height:clamp(22px,2.6vw,27px); width:auto; display:block; }
+  .presented-by:hover{ text-decoration:none; opacity:.82; }
+  .col-sticky{ position:fixed; right:18px; bottom:18px; z-index:60;
+    display:inline-flex; align-items:center; gap:7px; padding:8px 13px;
+    background:#fff; border:1px solid var(--line); border-radius:999px;
+    box-shadow:0 6px 20px rgba(31,58,77,.16);
+    font-size:12px; font-weight:600; color:var(--muted); text-decoration:none;
+    opacity:0; transform:translateY(12px); pointer-events:none;
+    transition:opacity .35s ease, transform .35s ease; }
+  .col-sticky.show{ opacity:1; transform:translateY(0); pointer-events:auto; }
+  .col-sticky img{ height:16px; width:auto; display:block; }
+  .col-sticky:hover{ box-shadow:0 8px 26px rgba(31,58,77,.22); }
+  @media (max-width:600px){
+    .col-sticky{ right:10px; bottom:10px; padding:7px 12px; flex-direction:column;
+                 gap:2px; align-items:center; text-align:center; }
+    .col-sticky span{ display:block; font-size:9.5px; line-height:1; }
+    .col-sticky img{ height:14px; }
+  }
+
   /* PREVIEW SCAFFOLDING - delete this block and the .ver-bar markup before launch. */
   .ver-bar{ background:#1F3A4D; color:#fff; font-size:13.5px; }
   .ver-bar .wrap{ display:flex; align-items:center; justify-content:space-between;
@@ -140,6 +170,7 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
       <h1>The PM API Report Card</h1>
       <p class="lead">Grading the property management platforms we all use, on whether they&#x27;ll actually let you access your own data.</p>
       <p class="sub" style="margin-top:18px;">Same rubric for every platform: five categories, ten points each, scored out of 100. No cherry-picking, no platform-specific tuning, and the grading file is yours to download and check.</p>
+      <a class="presented-by" href="https://column.com/?utm_source=peter-lohmann&amp;utm_medium=plm-api-grader" target="_blank" rel="noopener">Presented by <img src="column-logo.png" alt="Column" /></a>
       <div class="hero-jump" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:26px;">
         <a class="btn btn-primary" href="#results">See the results &darr;</a>
         <a class="btn btn-ghost" href="#method">How we grade</a>
@@ -182,6 +213,7 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             </tr>
           </thead>
           <tbody>
+            <tr class="grp"><td colspan="8">Accounting / PM Software<span class="grp-n">4 graded</span></td></tr>
             <tr>
               <td class="plat">AppFolio</td>
               <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
@@ -206,12 +238,18 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
               <td class="num"><span class="cat-none">&ndash;</span></td>
               <td class="num"><span class="grade grade-none">&ndash;</span></td>
             </tr>
+            <tr class="grp"><td colspan="8">Leasing / Screening<span class="grp-n">0 graded</span></td></tr>
+            <tr class="empty"><td colspan="8">Nothing graded in this category yet.</td></tr>
+            <tr class="grp"><td colspan="8">Workflow / CRM<span class="grp-n">0 graded</span></td></tr>
+            <tr class="empty"><td colspan="8">Nothing graded in this category yet.</td></tr>
+            <tr class="grp"><td colspan="8">Maintenance / Ops<span class="grp-n">1 graded</span></td></tr>
             <tr>
               <td class="plat">Property Meld</td>
               <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
               <td class="num"><span class="cat-none">&ndash;</span></td>
               <td class="num"><span class="grade grade-none">&ndash;</span></td>
             </tr>
+            <tr class="grp"><td colspan="8">Banking / Payments<span class="grp-n">1 graded</span></td></tr>
             <tr>
               <td class="plat">Column</td>
               <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
@@ -369,6 +407,23 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
   </div>
 </footer>
 
+<a class="col-sticky" id="colSticky" href="https://column.com/?utm_source=peter-lohmann&amp;utm_medium=plm-api-grader" target="_blank" rel="noopener" aria-label="Presented by Column">
+  <span>Presented by</span><img src="column-logo.png" alt="Column" />
+</a>
+
 <script src="site.js?v=24"></script>
+<script>
+/* Reveal the sponsor pill once the hero scrolls past (same as the Top 40 page). */
+(function () {
+  var hero = document.querySelector('.page-hero'),
+      badge = document.getElementById('colSticky');
+  if (!hero || !badge) return;
+  if (!('IntersectionObserver' in window)) { badge.classList.add('show'); return; }
+  new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { badge.classList.toggle('show', !e.isIntersecting); });
+  }, { threshold: 0 }).observe(hero);
+})();
+</script>
+
 </body>
 </html>
