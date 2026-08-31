@@ -185,26 +185,36 @@ RESULTS = {
 },
 
 "Property Meld": {
-  "score": 72, "grade": "C-",
-  "meta": {"run": "Aug 25, 2026", "method": "1.2", "model": "Claude Opus 4.8",
-           "tier": "Baseline verified", "raw": "36.19 / 50"},
+  # DO NOT re-score this by hand. An earlier pass recomputed it to 72 (C-) under
+  # the v1.2 weighting. The arithmetic was traceable, but every resulting number
+  # was calculated rather than produced by a grading run, and the report states
+  # no category score out of 15 or 5 anywhere. Category 5 is the clearest case:
+  # the report earns "2 of 4" checks, two of which (C5.2 free sandbox, C5.4
+  # onboarding friction) no longer exist, so its v1.2 score cannot be derived
+  # from anything the report actually says. Only the published 76 (C) below is a
+  # real result. Replace this whole entry when the v1.2 re-run lands.
+  "score": 76, "grade": "C",
+  "meta": {"run": "Aug 25, 2026", "method": "2.0", "model": "Claude Opus 4.8",
+           "tier": "Baseline verified", "raw": "38.07 / 50"},
+  "legacy": {
+    "maxima": [10, 10, 10, 10, 10],
+    "note": "This run was graded under methodology v2.0, which scored all five "
+            "categories out of 10. Despite the higher number, v2.0 came before the "
+            "current file: the line ran v2.0, then v1.1, then v1.2, which weights "
+            "the categories 15 / 10 / 5 / 5 / 15. The numbers below are the ones "
+            "this run actually published, on the older scale, so they are shown "
+            "here rather than in the table, where they would invite a false "
+            "comparison against the other rows. Property Meld is queued for a "
+            "re-run against the current methodology, and this row will be replaced "
+            "with that result.",
+  },
   # Originally run and published under methodology v2.0 (76/100, C). Re-scored
   # here under v1.2 from the same frozen evidence packet. Not one check mark was
   # changed; only the category weighting differs, exactly as the LeadSimple run
   # was re-scored from v2.0 to v1.1. See "rescored" below for the reader-facing
   # version of this note.
-  "rescored": "Originally run on 2026-08-25 under methodology v2.0, which scored "
-              "all five categories out of 10 and published 76 / 100 (C). Despite "
-              "the higher number, v2.0 came before the current file: the line ran "
-              "v2.0, then v1.1, then v1.2. This row re-scores the same evidence "
-              "under v1.2, whose categories are weighted 15 / 10 / 5 / 5 / 15. No "
-              "check mark was changed and the API was not re-tested; only the "
-              "weighting differs. The score moves to 72 because Access Control and "
-              "Documentation, where Property Meld is strongest, are now capped at 5 "
-              "points each instead of 10. Two retired checks, free sandbox and "
-              "onboarding friction, no longer score.",
   "cats": [
-    (13.1, 15, "You can build the whole maintenance workflow: intake a work order, "
+    (8.8, 10, "You can build the whole maintenance workflow: intake a work order, "
               "assign a vendor or technician, schedule it, complete it, and review "
               "it. The only coverage limit is change detection. There are no "
               "webhooks, so you poll for changes instead."),
@@ -213,18 +223,17 @@ RESULTS = {
               "two writes overwriting each other, no bulk export, no Retry-After "
               "header, no documented request id for support, and error codes you "
               "cannot branch on."),
-    (4.4, 5, "You can run several keys, revoke any of them yourself, and get a "
+    (8.8, 10, "You can run several keys, revoke any of them yourself, and get a "
               "read-limited identity. Scoping is role-based rather than "
               "fine-grained, so you pick from set tiers rather than choosing "
               "exactly what a key can touch."),
-    (4.4, 5, "Genuinely AI-friendly, and among the best documentation in this "
+    (8.8, 10, "Genuinely AI-friendly, and among the best documentation in this "
              "group. A public OpenAPI spec plus a real llms.txt corpus, with a "
               "Markdown twin of every page. The only weak signal is the changelog, "
               "which has two entries and has not been touched in about three years."),
-    (7.5, 15, "Split decision on the two checks that count here. Key creation is "
-              "self-serve in the app with no sales call, which is a real "
-              "improvement. But the API is gated to the higher Ops plan rather than "
-              "the cheaper Core plan, so you cannot reach it without paying up."),
+    (5.0, 10, "Key creation is self-serve in the app, which is a real improvement, "
+              "but there is still no free sandbox to test against and the API needs "
+              "the higher Ops plan rather than the cheaper Core plan."),
   ],
   "strengths": [
     "Best-in-class AI-readable docs: llms.txt plus a Markdown twin per page",
