@@ -373,6 +373,18 @@ RESULTS = {
 # Rendering
 # ---------------------------------------------------------------------------
 
+def tier(points, maximum):
+    """Colour band for a category score, as a share of that category's maximum.
+
+    The cutoffs are the methodology's own letter-grade boundaries rather than
+    numbers invented for the table: below 60 is failing, 60 to 79 is the D and C
+    range, 80 and up is B or better. Using the rubric's own scale keeps the
+    colours defensible if a vendor asks why their cell is red.
+    """
+    pct = float(points) / maximum * 100
+    return "lo" if pct < 60 else ("mid" if pct < 80 else "hi")
+
+
 def grade_class(g):
     return "grade-" + g[0].lower() if g else "grade-none"
 
@@ -417,9 +429,11 @@ def build_rows():
                 cells = ('<td class="num" colspan="5"><span class="cat-legacy">'
                          'graded on the older v2.0 scale, see details</span></td>')
             else:
+                maxes = [m for _, m in CAT_LABELS]
                 cells = "".join(
-                    f'<td class="num"><span class="cat-score">{fmt_pts(p)}</span></td>'
-                    for p, _, _ in r["cats"]
+                    f'<td class="num"><span class="cat-score '
+                    f'{tier(p, maxes[i])}">{fmt_pts(p)}</span></td>'
+                    for i, (p, _, _) in enumerate(r["cats"])
                 )
             flag = ' <span class="row-flag">v2.0</span>' if r.get("legacy") else ""
             rows.append(
@@ -465,6 +479,7 @@ def build_data():
             "c": [{"l": re.sub("&amp;", "&", CAT_LABELS[i][0]),
                    "p": fmt_pts(p), "x": maxima[i],
                    "pct": round(float(p) / maxima[i] * 100),
+                   "tier": tier(p, maxima[i]),
                    "t": t}
                   for i, (p, _, t) in enumerate(r["cats"])],
             "st": r["strengths"], "w": r["watch"], "b": r["bottom"],
