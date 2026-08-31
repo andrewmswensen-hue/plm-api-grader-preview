@@ -83,6 +83,12 @@
                              font-size:12px; font-weight:700; margin-left:8px; }
   .rank-table tr.empty td{ color:var(--muted); font-size:13.5px; font-style:italic; }
 
+  .th-max{ display:block; font-weight:600; color:#9aa5ad; font-size:10px; margin-top:2px; }
+
+  .cat-pts{ font-family:var(--sans); font-size:11.5px; font-weight:700; color:var(--muted);
+            background:var(--wash-soft); border-radius:999px; padding:2px 8px;
+            margin-left:6px; vertical-align:middle; white-space:nowrap; }
+
   /* Sponsor treatment, mirroring the Boom setup on the Largest PM Companies page. */
   .presented-by{ display:inline-flex; align-items:center; gap:10px; margin:14px 0 0;
                  color:var(--muted); font-size:14px; font-weight:600; text-decoration:none; }
@@ -169,7 +175,7 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
       <div class="ticks" aria-hidden="true"><i></i><i></i><i></i></div>
       <h1>The PM API Report Card</h1>
       <p class="lead">Grading the property management platforms we all use, on whether they&#x27;ll actually let you access your own data.</p>
-      <p class="sub" style="margin-top:18px;">Same rubric for every platform: five categories, ten points each, scored out of 100. No cherry-picking, no platform-specific tuning, and the grading file is yours to download and check.</p>
+      <p class="sub" style="margin-top:18px;">Same rubric for every platform: five weighted categories totalling 100 points. No cherry-picking, no platform-specific tuning, and the grading file is yours to download and check.</p>
       <a class="presented-by" href="https://column.com/?utm_source=peter-lohmann&amp;utm_medium=plm-api-grader" target="_blank" rel="noopener">Presented by <img src="column-logo.png" alt="Column" /></a>
       <div class="hero-jump" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:26px;">
         <a class="btn btn-primary" href="#results">See the results &darr;</a>
@@ -203,11 +209,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
           <thead>
             <tr>
               <th>Platform</th>
-              <th class="num col-cat">Functional<br>Coverage</th>
-              <th class="num col-cat">Design &amp;<br>Reliability</th>
-              <th class="num col-cat">Access<br>Control</th>
-              <th class="num col-cat">Docs &amp;<br>AI-Ready</th>
-              <th class="num col-cat">Access<br>&amp; Cost</th>
+              <th class="num col-cat">Functional<br>Coverage<span class="th-max">/15</span></th>
+              <th class="num col-cat">Design &amp;<br>Reliability<span class="th-max">/10</span></th>
+              <th class="num col-cat">Access<br>Control<span class="th-max">/5</span></th>
+              <th class="num col-cat">Docs &amp;<br>AI-Ready<span class="th-max">/5</span></th>
+              <th class="num col-cat">Access<br>&amp; Cost<span class="th-max">/15</span></th>
               <th class="num">Score</th>
               <th class="num">Grade</th>
             </tr>
@@ -656,31 +662,31 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
       </div>
 
       <h3 style="margin:38px 0 0;font-size:20px;">What gets graded</h3>
-      <p class="sub" style="margin:6px 0 0;">Five categories, scored 0 to 10 each, normalized to a score out of 100.</p>
+      <p class="sub" style="margin:6px 0 0;">Five categories, each worth a fixed share of the 100 points. A category earns the fraction of its checks it passes, times its maximum.</p>
       <div class="grid g2 mt-md">
         <div class="card">
-          <div class="step-head"><div class="num-badge">1</div><h3>Functional Coverage and Usefulness</h3></div>
-          <p>Can you get the data and take the actions your business runs on, and change them, not just read them?</p>
+          <div class="step-head"><div class="num-badge">1</div><h3>Functional Coverage and Usefulness <span class="cat-pts">15 pts</span></h3></div>
+          <p>Can you get the data and take the actions your business runs on, and change them, not just read them? Coverage is scored against a predetermined critical, important, and optional weighting.</p>
         </div>
         <div class="card">
-          <div class="step-head"><div class="num-badge">2</div><h3>API Design and Reliability</h3></div>
-          <p>Is the API built so your code, no-code tools, and AI agents behave predictably instead of breaking?</p>
+          <div class="step-head"><div class="num-badge">2</div><h3>API Design, Reliability, and Operability <span class="cat-pts">10 pts</span></h3></div>
+          <p>Is the API built so your code, no-code tools, and AI agents behave predictably instead of breaking, across typing, errors, idempotency, rate limits, pagination, bulk export, webhook security, concurrency, versioning, traceability, and uptime transparency?</p>
         </div>
         <div class="card">
-          <div class="step-head"><div class="num-badge">3</div><h3>Access Control and Safe Automation</h3></div>
+          <div class="step-head"><div class="num-badge">3</div><h3>Access Control and Safe Automation <span class="cat-pts">5 pts</span></h3></div>
           <p>Can you safely hand a limited slice of access to an app or an AI agent, and shut it off?</p>
         </div>
         <div class="card">
-          <div class="step-head"><div class="num-badge">4</div><h3>Documentation and AI-Agent Readiness</h3></div>
+          <div class="step-head"><div class="num-badge">4</div><h3>Documentation and AI-Agent Readiness <span class="cat-pts">5 pts</span></h3></div>
           <p>Can a developer, or an AI coding tool, understand the API and build against it correctly?</p>
         </div>
         <div class="card">
-          <div class="step-head"><div class="num-badge">5</div><h3>Accessibility and Cost</h3></div>
-          <p>Can you get access and a place to test without a sales call or a forced upgrade?</p>
+          <div class="step-head"><div class="num-badge">5</div><h3>Accessibility and Cost <span class="cat-pts">15 pts</span></h3></div>
+          <p>Can you get access without a sales call or a forced upgrade?</p>
         </div>
         <div class="card" style="background:var(--wash-soft);">
           <h3 style="font-size:18px;margin-bottom:8px;">How the grade is calculated</h3>
-          <p>The five category scores add up to a raw total out of 50, which is normalized to a score out of 100 and mapped to a letter grade: A+ at 97 and above, down to F below 60. Scores are absolute, never curved against other platforms.</p>
+          <p>The five category scores add up to a raw total out of 50, which is doubled to a score out of 100 and mapped to a letter grade: A+ at 97 and above, down to F below 60. Scores are absolute, never curved against other platforms. A number is only published when the run clears the methodology's verification bar; otherwise the score is withheld.</p>
         </div>
       </div>
     </div>

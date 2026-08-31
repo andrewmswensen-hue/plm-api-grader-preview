@@ -88,6 +88,38 @@
   .cat-head:first-of-type{ margin-top:0; }
   .cat-n{ font-family:var(--sans); font-size:12px; font-weight:700; color:var(--muted); }
 
+  .li-max{ color:#b6c0c9; font-weight:600; }
+
+  .jump-nav{ display:flex; flex-wrap:wrap; gap:8px; margin:0 0 30px; }
+  .jump-pill{ display:inline-block; font-size:12.5px; font-weight:700; line-height:1;
+              padding:8px 13px; border-radius:999px; text-decoration:none;
+              background:var(--wash-soft); color:var(--primary-dark);
+              border:1px solid var(--line); transition:background .15s ease, color .15s ease; }
+  .jump-pill:hover{ background:var(--wash); text-decoration:none; }
+  .jump-pill:focus-visible{ outline:2px solid var(--primary); outline-offset:2px; }
+  /* Jump targets must clear the sticky site nav. */
+  .cat-head{ scroll-margin-top:86px; }
+  #results{ scroll-margin-top:70px; }
+
+  /* Stacked above the sponsor pill, same show/hide behaviour. */
+  .to-top{ position:fixed; right:18px; bottom:65px; z-index:60;
+    display:inline-flex; align-items:center; gap:6px; padding:8px 13px;
+    background:var(--navy); color:#fff; border-radius:999px;
+    box-shadow:0 6px 20px rgba(31,58,77,.24);
+    font-size:12px; font-weight:700; text-decoration:none;
+    opacity:0; transform:translateY(12px); pointer-events:none;
+    transition:opacity .35s ease, transform .35s ease; }
+  .to-top.show{ opacity:1; transform:translateY(0); pointer-events:auto; }
+  .to-top svg{ width:14px; height:14px; }
+  .to-top:hover{ background:#162b3a; text-decoration:none; }
+  @media (max-width:600px){
+    .to-top{ right:10px; bottom:72px; padding:7px 11px; font-size:11px; }
+  }
+
+  .cat-pts{ font-family:var(--sans); font-size:11.5px; font-weight:700; color:var(--muted);
+            background:var(--wash-soft); border-radius:999px; padding:2px 8px;
+            margin-left:6px; vertical-align:middle; white-space:nowrap; }
+
   /* Sponsor treatment, mirroring the Boom setup on the Largest PM Companies page. */
   .presented-by{ display:inline-flex; align-items:center; gap:10px; margin:14px 0 0;
                  color:var(--muted); font-size:14px; font-weight:600; text-decoration:none; }
@@ -174,7 +206,7 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
       <div class="ticks" aria-hidden="true"><i></i><i></i><i></i></div>
       <h1>The PM API Report Card</h1>
       <p class="lead">Grading the property management platforms we all use, on whether they&#x27;ll actually let you access your own data.</p>
-      <p class="sub" style="margin-top:18px;">Same rubric for every platform: five categories, ten points each, scored out of 100. No cherry-picking, no platform-specific tuning, and the grading file is yours to download and check.</p>
+      <p class="sub" style="margin-top:18px;">Same rubric for every platform: five weighted categories totalling 100 points. No cherry-picking, no platform-specific tuning, and the grading file is yours to download and check.</p>
       <a class="presented-by" href="https://column.com/?utm_source=peter-lohmann&amp;utm_medium=plm-api-grader" target="_blank" rel="noopener">Presented by <img src="column-logo.png" alt="Column" /></a>
       <div class="hero-jump" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:26px;">
         <a class="btn btn-primary" href="#results">See the results &darr;</a>
@@ -202,17 +234,34 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
       <!-- SWAP: results - placeholder cards. Per platform, fill in the 0-10 category
            scores (and set each .bar i width to score*10%), the /100 number, and swap
            .grade-none for .grade-a / .grade-b / .grade-c / .grade-d / .grade-f. -->
-        <h3 class="cat-head">PM Software<span class="cat-n">9 listed</span></h3>
+      <nav class="jump-nav" aria-label="Jump to a category">
+        <a class="jump-pill" href="#cat-pm-software">PM Software</a>
+        <a class="jump-pill" href="#cat-listings-applications-tenant-screening">Listings, Applications &amp; Tenant Screening</a>
+        <a class="jump-pill" href="#cat-workflow-crm">Workflow / CRM</a>
+        <a class="jump-pill" href="#cat-maintenance">Maintenance</a>
+        <a class="jump-pill" href="#cat-market-rent-property-data">Market Rent &amp; Property Data</a>
+        <a class="jump-pill" href="#cat-inspections">Inspections</a>
+        <a class="jump-pill" href="#cat-pets">Pets</a>
+        <a class="jump-pill" href="#cat-banks">Banks</a>
+        <a class="jump-pill" href="#cat-corporate-accounting">Corporate Accounting</a>
+        <a class="jump-pill" href="#cat-deposits">Deposits</a>
+        <a class="jump-pill" href="#cat-insurance">Insurance</a>
+        <a class="jump-pill" href="#cat-phone">Phone</a>
+        <a class="jump-pill" href="#cat-esign">eSign</a>
+        <a class="jump-pill" href="#cat-other">Other</a>
+      </nav>
+
+        <h3 class="cat-head" id="cat-pm-software">PM Software<span class="cat-n">9 listed</span></h3>
         <div class="pcards">
           <article class="pcard">
             <div class="pcard-head"><h3>AppFolio</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -220,11 +269,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Buildium</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -232,11 +281,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Rentvine</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -244,11 +293,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Propertyware</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -256,11 +305,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>RentManager</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -268,11 +317,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Doorloop</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -280,11 +329,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Revela</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -292,11 +341,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Rentec Direct</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -304,26 +353,26 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Yardi Breeze</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
         </div>
-        <h3 class="cat-head">Listings, Applications &amp; Tenant Screening<span class="cat-n">8 listed</span></h3>
+        <h3 class="cat-head" id="cat-listings-applications-tenant-screening">Listings, Applications &amp; Tenant Screening<span class="cat-n">8 listed</span></h3>
         <div class="pcards">
           <article class="pcard">
             <div class="pcard-head"><h3>Boom</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -331,11 +380,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>ShowMojo</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -343,11 +392,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Tenant Turner</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -355,11 +404,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>RentEngine</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -367,11 +416,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Showdigs</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -379,11 +428,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Findigs</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -391,11 +440,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>RentSpree</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -403,26 +452,26 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Rently</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
         </div>
-        <h3 class="cat-head">Workflow / CRM<span class="cat-n">2 listed</span></h3>
+        <h3 class="cat-head" id="cat-workflow-crm">Workflow / CRM<span class="cat-n">2 listed</span></h3>
         <div class="pcards">
           <article class="pcard">
             <div class="pcard-head"><h3>LeadSimple</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -430,26 +479,26 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Aptly</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
         </div>
-        <h3 class="cat-head">Maintenance<span class="cat-n">5 listed</span></h3>
+        <h3 class="cat-head" id="cat-maintenance">Maintenance<span class="cat-n">5 listed</span></h3>
         <div class="pcards">
           <article class="pcard">
             <div class="pcard-head"><h3>Property Meld</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -457,11 +506,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Vendoroo</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -469,11 +518,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Mason</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -481,11 +530,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Latchel</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -493,26 +542,26 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Lula</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
         </div>
-        <h3 class="cat-head">Market Rent &amp; Property Data<span class="cat-n">6 listed</span></h3>
+        <h3 class="cat-head" id="cat-market-rent-property-data">Market Rent &amp; Property Data<span class="cat-n">6 listed</span></h3>
         <div class="pcards">
           <article class="pcard">
             <div class="pcard-head"><h3>RentCast</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -520,11 +569,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>RentFinder.AI</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -532,11 +581,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Rescover</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -544,11 +593,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Rentometer</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -556,11 +605,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>HouseCanary</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -568,26 +617,26 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>RentRange</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
         </div>
-        <h3 class="cat-head">Inspections<span class="cat-n">6 listed</span></h3>
+        <h3 class="cat-head" id="cat-inspections">Inspections<span class="cat-n">6 listed</span></h3>
         <div class="pcards">
           <article class="pcard">
             <div class="pcard-head"><h3>ZInspector</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -595,11 +644,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>ResidentInspect</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -607,11 +656,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>RentCheck</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -619,11 +668,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>HappyCo</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -631,11 +680,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>SnapInspect</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -643,26 +692,26 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>PropertyInspect</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
         </div>
-        <h3 class="cat-head">Pets<span class="cat-n">2 listed</span></h3>
+        <h3 class="cat-head" id="cat-pets">Pets<span class="cat-n">2 listed</span></h3>
         <div class="pcards">
           <article class="pcard">
             <div class="pcard-head"><h3>PetScreening</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -670,26 +719,26 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>OurPetPolicy</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
         </div>
-        <h3 class="cat-head">Banks<span class="cat-n">2 listed</span></h3>
+        <h3 class="cat-head" id="cat-banks">Banks<span class="cat-n">2 listed</span></h3>
         <div class="pcards">
           <article class="pcard">
             <div class="pcard-head"><h3>Column</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -697,26 +746,26 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Enterprise Bank</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
         </div>
-        <h3 class="cat-head">Corporate Accounting<span class="cat-n">2 listed</span></h3>
+        <h3 class="cat-head" id="cat-corporate-accounting">Corporate Accounting<span class="cat-n">2 listed</span></h3>
         <div class="pcards">
           <article class="pcard">
             <div class="pcard-head"><h3>Xero</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -724,26 +773,26 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>QuickBooks Online</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
         </div>
-        <h3 class="cat-head">Deposits<span class="cat-n">4 listed</span></h3>
+        <h3 class="cat-head" id="cat-deposits">Deposits<span class="cat-n">4 listed</span></h3>
         <div class="pcards">
           <article class="pcard">
             <div class="pcard-head"><h3>Obligo</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -751,11 +800,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Lighthouse</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -763,11 +812,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Rhino</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -775,26 +824,26 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Jetty</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
         </div>
-        <h3 class="cat-head">Insurance<span class="cat-n">3 listed</span></h3>
+        <h3 class="cat-head" id="cat-insurance">Insurance<span class="cat-n">3 listed</span></h3>
         <div class="pcards">
           <article class="pcard">
             <div class="pcard-head"><h3>SureVestor</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -802,11 +851,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Obie</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -814,26 +863,26 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Steadily</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
         </div>
-        <h3 class="cat-head">Phone<span class="cat-n">5 listed</span></h3>
+        <h3 class="cat-head" id="cat-phone">Phone<span class="cat-n">5 listed</span></h3>
         <div class="pcards">
           <article class="pcard">
             <div class="pcard-head"><h3>RingCentral</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -841,11 +890,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>LeadSimple Phone</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -853,11 +902,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>SimpleVOIP</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -865,11 +914,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Zoom Phone</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -877,26 +926,26 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>OpenPhone</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
         </div>
-        <h3 class="cat-head">eSign<span class="cat-n">5 listed</span></h3>
+        <h3 class="cat-head" id="cat-esign">eSign<span class="cat-n">5 listed</span></h3>
         <div class="pcards">
           <article class="pcard">
             <div class="pcard-head"><h3>LeadSimple Signatures</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -904,11 +953,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>DocuSign</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -916,11 +965,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Dropbox Sign</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -928,11 +977,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>PandaDoc</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -940,26 +989,26 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Adobe Sign</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
         </div>
-        <h3 class="cat-head">Other<span class="cat-n">5 listed</span></h3>
+        <h3 class="cat-head" id="cat-other">Other<span class="cat-n">5 listed</span></h3>
         <div class="pcards">
           <article class="pcard">
             <div class="pcard-head"><h3>Second Nature</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -967,11 +1016,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>PlanOmatic</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -979,11 +1028,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Blanket</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -991,11 +1040,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Lineage</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -1003,11 +1052,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             <div class="pcard-head"><h3>Lob</h3><span class="grade grade-none">&ndash;</span></div>
             <div class="pcard-score"><span class="pcard-num">&ndash;</span><span class="pcard-of">/ 100</span></div>
             <ul class="pcard-cats">
-            <li><span>Functional Coverage</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Design &amp; Reliability</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Access Control</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Docs &amp; AI-Readiness</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
-            <li><span>Accessibility &amp; Cost</span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Functional Coverage <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Design &amp; Reliability <span class="li-max">/10</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Access Control <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Docs &amp; AI-Readiness <span class="li-max">/5</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
+            <li><span>Accessibility &amp; Cost <span class="li-max">/15</span></span><span class="bar"><i style="width:0%"></i></span><span class="cat-none">&ndash;</span></li>
             </ul>
             <p class="pcard-foot">Not yet graded.</p>
           </article>
@@ -1054,31 +1103,31 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
       </div>
 
       <h3 style="margin:38px 0 0;font-size:20px;">What gets graded</h3>
-      <p class="sub" style="margin:6px 0 0;">Five categories, scored 0 to 10 each, normalized to a score out of 100.</p>
+      <p class="sub" style="margin:6px 0 0;">Five categories, each worth a fixed share of the 100 points. A category earns the fraction of its checks it passes, times its maximum.</p>
       <div class="grid g2 mt-md">
         <div class="card">
-          <div class="step-head"><div class="num-badge">1</div><h3>Functional Coverage and Usefulness</h3></div>
-          <p>Can you get the data and take the actions your business runs on, and change them, not just read them?</p>
+          <div class="step-head"><div class="num-badge">1</div><h3>Functional Coverage and Usefulness <span class="cat-pts">15 pts</span></h3></div>
+          <p>Can you get the data and take the actions your business runs on, and change them, not just read them? Coverage is scored against a predetermined critical, important, and optional weighting.</p>
         </div>
         <div class="card">
-          <div class="step-head"><div class="num-badge">2</div><h3>API Design and Reliability</h3></div>
-          <p>Is the API built so your code, no-code tools, and AI agents behave predictably instead of breaking?</p>
+          <div class="step-head"><div class="num-badge">2</div><h3>API Design, Reliability, and Operability <span class="cat-pts">10 pts</span></h3></div>
+          <p>Is the API built so your code, no-code tools, and AI agents behave predictably instead of breaking, across typing, errors, idempotency, rate limits, pagination, bulk export, webhook security, concurrency, versioning, traceability, and uptime transparency?</p>
         </div>
         <div class="card">
-          <div class="step-head"><div class="num-badge">3</div><h3>Access Control and Safe Automation</h3></div>
+          <div class="step-head"><div class="num-badge">3</div><h3>Access Control and Safe Automation <span class="cat-pts">5 pts</span></h3></div>
           <p>Can you safely hand a limited slice of access to an app or an AI agent, and shut it off?</p>
         </div>
         <div class="card">
-          <div class="step-head"><div class="num-badge">4</div><h3>Documentation and AI-Agent Readiness</h3></div>
+          <div class="step-head"><div class="num-badge">4</div><h3>Documentation and AI-Agent Readiness <span class="cat-pts">5 pts</span></h3></div>
           <p>Can a developer, or an AI coding tool, understand the API and build against it correctly?</p>
         </div>
         <div class="card">
-          <div class="step-head"><div class="num-badge">5</div><h3>Accessibility and Cost</h3></div>
-          <p>Can you get access and a place to test without a sales call or a forced upgrade?</p>
+          <div class="step-head"><div class="num-badge">5</div><h3>Accessibility and Cost <span class="cat-pts">15 pts</span></h3></div>
+          <p>Can you get access without a sales call or a forced upgrade?</p>
         </div>
         <div class="card" style="background:var(--wash-soft);">
           <h3 style="font-size:18px;margin-bottom:8px;">How the grade is calculated</h3>
-          <p>The five category scores add up to a raw total out of 50, which is normalized to a score out of 100 and mapped to a letter grade: A+ at 97 and above, down to F below 60. Scores are absolute, never curved against other platforms.</p>
+          <p>The five category scores add up to a raw total out of 50, which is doubled to a score out of 100 and mapped to a letter grade: A+ at 97 and above, down to F below 60. Scores are absolute, never curved against other platforms. A number is only published when the run clears the methodology's verification bar; otherwise the score is withheld.</p>
         </div>
       </div>
     </div>
@@ -1160,6 +1209,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
   </div>
 </footer>
 
+<a class="to-top" id="toTop" href="#results" aria-label="Back to the top of the results">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  <span>Top of results</span>
+</a>
+
 <a class="col-sticky" id="colSticky" href="https://column.com/?utm_source=peter-lohmann&amp;utm_medium=plm-api-grader" target="_blank" rel="noopener" aria-label="Presented by Column">
   <span>Presented by</span><img src="column-logo.png" alt="Column" />
 </a>
@@ -1169,11 +1223,15 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
 /* Reveal the sponsor pill once the hero scrolls past (same as the Top 40 page). */
 (function () {
   var hero = document.querySelector('.page-hero'),
-      badge = document.getElementById('colSticky');
+      badge = document.getElementById('colSticky'),
+      top   = document.getElementById('toTop');
   if (!hero || !badge) return;
   if (!('IntersectionObserver' in window)) { badge.classList.add('show'); return; }
   new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) { badge.classList.toggle('show', !e.isIntersecting); });
+    entries.forEach(function (e) {
+      badge.classList.toggle('show', !e.isIntersecting);
+      if (top) top.classList.toggle('show', !e.isIntersecting);
+    });
   }, { threshold: 0 }).observe(hero);
 })();
 </script>
