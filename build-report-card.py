@@ -185,29 +185,26 @@ RESULTS = {
 },
 
 "Property Meld": {
-  "score": 76, "grade": "C",
-  "meta": {"run": "Aug 25, 2026", "method": "2.0", "model": "Claude Opus 4.8",
-           "tier": "Baseline verified", "raw": "38.07 / 50"},
-  # Graded under the superseded v2.0 model, which scored all five categories out
-  # of 10 instead of 15/10/5/5/15. Its subscores are therefore NOT comparable to
-  # the rest of the table, which is why the row shows a flag instead of numbers.
-  "legacy": {
-    "maxima": [10, 10, 10, 10, 10],
-    "estimate": 72, "estimate_grade": "C-",
-    "note": "This run used methodology v2.0, which scored all five categories out "
-            "of 10. Despite the higher number, v2.0 came before the current file: "
-            "the line ran v2.0, then v1.1, then v1.2. The current methodology "
-            "weights the categories 15 / 10 / 5 / 5 / 15, so these numbers cannot "
-            "be compared against the other rows and are left out of the table. "
-            "Re-scoring the same marks under the current weighting gives roughly "
-            "72 / 100 (C-). Property Meld loses ground because its two joint-best "
-            "categories, Access Control and Documentation, are now capped at 5 "
-            "points each instead of 10. The 76 below is the number this run "
-            "actually published. No re-test is needed, only re-scoring the marks "
-            "already on file.",
-  },
+  "score": 72, "grade": "C-",
+  "meta": {"run": "Aug 25, 2026", "method": "1.2", "model": "Claude Opus 4.8",
+           "tier": "Baseline verified", "raw": "36.19 / 50"},
+  # Originally run and published under methodology v2.0 (76/100, C). Re-scored
+  # here under v1.2 from the same frozen evidence packet. Not one check mark was
+  # changed; only the category weighting differs, exactly as the LeadSimple run
+  # was re-scored from v2.0 to v1.1. See "rescored" below for the reader-facing
+  # version of this note.
+  "rescored": "Originally run on 2026-08-25 under methodology v2.0, which scored "
+              "all five categories out of 10 and published 76 / 100 (C). Despite "
+              "the higher number, v2.0 came before the current file: the line ran "
+              "v2.0, then v1.1, then v1.2. This row re-scores the same evidence "
+              "under v1.2, whose categories are weighted 15 / 10 / 5 / 5 / 15. No "
+              "check mark was changed and the API was not re-tested; only the "
+              "weighting differs. The score moves to 72 because Access Control and "
+              "Documentation, where Property Meld is strongest, are now capped at 5 "
+              "points each instead of 10. Two retired checks, free sandbox and "
+              "onboarding friction, no longer score.",
   "cats": [
-    (8.8, 10, "You can build the whole maintenance workflow: intake a work order, "
+    (13.1, 15, "You can build the whole maintenance workflow: intake a work order, "
               "assign a vendor or technician, schedule it, complete it, and review "
               "it. The only coverage limit is change detection. There are no "
               "webhooks, so you poll for changes instead."),
@@ -216,17 +213,18 @@ RESULTS = {
               "two writes overwriting each other, no bulk export, no Retry-After "
               "header, no documented request id for support, and error codes you "
               "cannot branch on."),
-    (8.8, 10, "You can run several keys, revoke any of them yourself, and get a "
+    (4.4, 5, "You can run several keys, revoke any of them yourself, and get a "
               "read-limited identity. Scoping is role-based rather than "
               "fine-grained, so you pick from set tiers rather than choosing "
               "exactly what a key can touch."),
-    (8.8, 10, "Genuinely AI-friendly and the joint-best documentation graded so "
-              "far. A public OpenAPI spec plus a real llms.txt corpus, with a "
+    (4.4, 5, "Genuinely AI-friendly, and among the best documentation in this "
+             "group. A public OpenAPI spec plus a real llms.txt corpus, with a "
               "Markdown twin of every page. The only weak signal is the changelog, "
               "which has two entries and has not been touched in about three years."),
-    (5.0, 10, "Key creation is self-serve in the app, which is a real improvement, "
-              "but there is still no free sandbox to test against and the API needs "
-              "the higher Ops plan rather than the cheaper Core plan."),
+    (7.5, 15, "Split decision on the two checks that count here. Key creation is "
+              "self-serve in the app with no sales call, which is a real "
+              "improvement. But the API is gated to the higher Ops plan rather than "
+              "the cheaper Core plan, so you cannot reach it without paying up."),
   ],
   "strengths": [
     "Best-in-class AI-readable docs: llms.txt plus a Markdown twin per page",
@@ -243,7 +241,7 @@ RESULTS = {
   ],
   "bottom": "Property Meld is a strong, genuinely AI-friendly build target for the "
             "full maintenance workflow, with idempotency keys, a public uptime page, "
-            "and the best documentation in this group. The reliability gaps are "
+            "and documentation as good as any here. The reliability gaps are "
             "real: no webhooks (you poll instead), no lost-update protection, no "
             "bulk export, and no support-usable request id. Access still costs the "
             "higher Ops plan with no free sandbox. Reads were live-tested, but write "
@@ -324,7 +322,7 @@ RESULTS = {
              "read-only key, and cut off access at any time. The one gap is testing: "
              "there is no true sandbox, you develop against a Demo Company, which is "
              "a separate data set but not a separate environment or key."),
-    (4.4, 5, "The best documentation score in this group. A developer or an AI "
+    (4.4, 5, "Among the best documentation in this group. A developer or an AI "
              "coding tool can build against Xero without reverse-engineering. The "
              "reference is complete, the OpenAPI spec and six official SDKs are "
              "current, and Xero ships an official MCP server for AI agents. The only "
@@ -462,11 +460,42 @@ def build_data():
                   for i, (p, _, t) in enumerate(r["cats"])],
             "st": r["strengths"], "w": r["watch"], "b": r["bottom"],
             "lg": r["legacy"]["note"] if r.get("legacy") else None,
+            "rs": r.get("rescored"),
         }
     return json.dumps(out, separators=(",", ":"), ensure_ascii=False)
 
 
+BANDS = [(97,"A+"),(93,"A"),(90,"A-"),(87,"B+"),(83,"B"),(80,"B-"),
+         (77,"C+"),(73,"C"),(70,"C-"),(67,"D+"),(63,"D"),(60,"D-"),(0,"F")]
+
+
+def check_math():
+    """Every row must add up, and its letter must match the published number.
+
+    The category points, the headline score, and the grade are three separate
+    fields that a careless edit can knock out of step. This recomputes the score
+    from the parts and re-derives the letter from the v1.2 bands, and refuses to
+    build if either disagrees. Rounding tolerance is one point, because the
+    displayed category points are rounded to one decimal.
+    """
+    for name, r in RESULTS.items():
+        maxima = r["legacy"]["maxima"] if r.get("legacy") else [m for _, m in CAT_LABELS]
+        raw = sum(float(p) for p, _, _ in r["cats"])
+        got = raw / sum(maxima) * 100
+        if abs(got - r["score"]) > 1.0:
+            raise SystemExit(
+                f"{name}: categories sum to {raw:.2f}/{sum(maxima)} = {got:.1f}, "
+                f"but the published score is {r['score']}")
+        letter = next(g for lo, g in BANDS if r["score"] >= lo)
+        if letter != r["grade"]:
+            raise SystemExit(
+                f"{name}: {r['score']}/100 is {letter} under the v1.2 bands, "
+                f"but the grade is set to {r['grade']}")
+        print(f"  ok  {name:15} {raw:5.2f}/{sum(maxima)} -> {r['score']} {r['grade']}")
+
+
 def main():
+    check_math()
     html = PAGE.read_text(encoding="utf-8")
 
     results_block = f"""      {build_stats()}
