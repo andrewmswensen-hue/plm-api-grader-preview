@@ -26,6 +26,7 @@ disallows crawling.
 | `index.html` | The page. Nav/footer link out to the live peterlohmann.com. |
 | `styles.css` | **A COPY** of the live site's stylesheet. See the warning below. |
 | `site.js` | A copy of the live site's script (mobile nav, scroll reveals). |
+| `build-report-card.py` | Source of truth for the results table AND the detail modals. Edit `DATA` here, re-run it, never hand-edit the table in index.html. |
 | `files/pm-api-report-card-methodology.md` | The grading file the download button serves. |
 | `favicon.*` | Copies. |
 

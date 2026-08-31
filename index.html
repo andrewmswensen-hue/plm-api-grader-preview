@@ -122,6 +122,83 @@
   /* Sponsor strip: understated, not a banner ad. */
   .sponsor-note{ display:flex; align-items:center; gap:10px; flex-wrap:wrap;
                  font-size:14px; color:var(--muted); }
+  /* ---- Category jump pills above the table ---- */
+  .pill-row{ display:flex; flex-wrap:wrap; gap:7px; margin:0 0 22px; }
+  .jump-pill{ display:inline-block; font-size:12.5px; font-weight:700; line-height:1;
+              padding:8px 13px; border-radius:999px; text-decoration:none;
+              background:var(--wash-soft); color:var(--primary-dark);
+              border:1px solid var(--line); transition:background .15s ease; }
+  .jump-pill:hover{ background:var(--wash); text-decoration:none; }
+  .jump-pill:focus-visible{ outline:2px solid var(--primary); outline-offset:2px; }
+  /* Sticky nav would otherwise sit on top of the row you just jumped to. */
+  .rank-table tr.grp{ scroll-margin-top:86px; }
+
+  /* ---- Clickable company rows ---- */
+  /* The name is the affordance: bigger than the old plain cell, with a faint hint
+     underneath. Only graded rows get this, because an empty modal helps nobody. */
+  .co-btn{ display:block; width:100%; text-align:left; background:none; border:0;
+           padding:0; font:inherit; color:inherit; cursor:pointer; }
+  .co-name{ font-size:16px; font-weight:800; color:var(--navy); letter-spacing:-.01em; }
+  .co-hint{ display:block; font-size:11px; font-weight:600; color:#aeb8c0;
+            margin-top:3px; letter-spacing:.01em; transition:color .15s ease; }
+  tr.has-detail{ cursor:pointer; transition:background .13s ease; }
+  tr.has-detail:hover{ background:var(--wash-soft); }
+  tr.has-detail:hover .co-hint{ color:var(--primary); }
+  .co-btn:focus-visible{ outline:2px solid var(--primary); outline-offset:3px; border-radius:4px; }
+  .rank-table td.plat{ white-space:normal; }
+  .cat-total{ font-variant-numeric:tabular-nums; font-weight:800; font-size:16px; color:var(--navy); }
+
+  /* A run scored on a superseded methodology. Its category numbers are on a
+     different scale, so the table shows this instead of misleading figures. */
+  .cat-legacy{ font-size:12px; font-style:italic; color:var(--muted); }
+  .row-flag{ display:inline-block; margin-left:7px; padding:2px 7px; border-radius:999px;
+             background:#fdf0e6; color:var(--orange-dark); font-size:10px;
+             font-weight:800; letter-spacing:.04em; vertical-align:middle; }
+
+  /* ---- Detail modal ---- */
+  .co-modal-card{ max-width:760px; }
+  .cm-head{ border-bottom:1px solid var(--line); padding-bottom:16px; margin-bottom:18px; }
+  .cm-cat{ font-size:11.5px; font-weight:800; letter-spacing:.09em; text-transform:uppercase;
+           color:var(--primary); margin:0 0 5px; }
+  .cm-head h3{ font-family:var(--serif); font-size:clamp(25px,3.4vw,32px); font-weight:400;
+               margin:0 0 12px; color:var(--navy); padding-right:44px; line-height:1.15; }
+  .cm-score{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .cm-num{ font-size:40px; font-weight:800; color:var(--navy); line-height:1;
+           font-variant-numeric:tabular-nums; }
+  .cm-den{ font-size:15px; color:var(--muted); font-weight:600; }
+  .cm-meta{ display:flex; flex-wrap:wrap; gap:6px 16px; margin:14px 0 0;
+            font-size:12.5px; color:var(--muted); }
+  .cm-meta span strong{ color:var(--navy); font-weight:700; }
+
+  .cm-flag{ background:#fdf6ef; border:1px solid #f0dcc6; border-left:4px solid var(--orange);
+            border-radius:10px; padding:14px 16px; margin:0 0 20px; }
+  .cm-flag p{ margin:0; font-size:13.5px; line-height:1.6; color:var(--navy); }
+  .cm-flag strong{ display:block; font-size:11px; letter-spacing:.06em; text-transform:uppercase;
+                   color:var(--orange-dark); margin-bottom:5px; }
+
+  .cm-h{ font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
+         color:var(--muted); margin:26px 0 12px; }
+  .cm-cat-row{ padding:14px 0; border-top:1px solid var(--line); }
+  .cm-cat-top{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+  .cm-cat-name{ font-weight:800; font-size:14.5px; color:var(--navy); }
+  .cm-cat-pts{ font-variant-numeric:tabular-nums; font-weight:800; font-size:14.5px;
+               color:var(--navy); white-space:nowrap; }
+  .cm-cat-pts em{ font-style:normal; color:var(--muted); font-weight:600; font-size:12.5px; }
+  .cm-bar{ height:6px; border-radius:999px; background:#eef2f5; margin:8px 0 9px; overflow:hidden; }
+  .cm-bar i{ display:block; height:100%; border-radius:999px; background:var(--primary); }
+  .cm-bar i.lo{ background:var(--orange); }
+  .cm-cat-row p{ margin:0; font-size:13.5px; line-height:1.6; color:var(--muted); }
+
+  .cm-cols{ display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:6px; }
+  @media (max-width:620px){ .cm-cols{ grid-template-columns:1fr; gap:6px; } }
+  .cm-cols ul{ list-style:none; margin:0; padding:0; }
+  .cm-cols li{ position:relative; padding-left:20px; margin-bottom:8px;
+               font-size:13.5px; line-height:1.55; color:var(--navy); }
+  .cm-cols li::before{ position:absolute; left:0; top:0; font-weight:800; }
+  .cm-good li::before{ content:"\2713"; color:#2f9e6b; }
+  .cm-bad li::before{ content:"\0021"; color:var(--orange-dark); }
+  .cm-bottom{ background:var(--wash-soft); border-radius:12px; padding:16px 18px; margin-top:8px; }
+  .cm-bottom p{ margin:0; font-size:14px; line-height:1.65; color:var(--navy); }
 </style>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DRCVXMNK1D"></script>
@@ -187,446 +264,90 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
   <!-- THE RESULTS -->
   <section class="band tight" id="results">
     <div class="wrap">
-      <!-- SWAP: stats - replace the dashes with real figures once grading is done.
-           Keep these honest; they are the first thing a skeptical vendor will check. -->
-      <div class="stats stats-color g4" aria-label="At a glance">
-        <div class="stat"><div class="v">&ndash;</div><div class="k">Platforms graded</div></div>
-        <div class="stat"><div class="v">5</div><div class="k">Scoring categories</div></div>
-        <div class="stat"><div class="v">&ndash;</div><div class="k">Average score</div></div>
-        <div class="stat"><div class="v">&ndash;</div><div class="k">Highest grade</div></div>
-      </div>
+      <!-- RESULTS:START -->
+      <div class="stats stats-color g4" aria-label="At a glance"><div class="stat"><div class="v">37</div><div class="k">Platforms listed</div></div><div class="stat"><div class="v">5</div><div class="k">Graded so far</div></div><div class="stat"><div class="v">77</div><div class="k">Average score</div></div><div class="stat"><div class="v">B-</div><div class="k">Highest grade (Xero)</div></div></div>
       <p class="sub" style="margin-top:16px;font-size:14px;">Scores are point-in-time and tied to the evidence access date. Methodology v1.2.</p>
 
       <h2 class="h-lead" style="margin-top:46px;">The results.</h2>
-      <p class="sub" style="margin:10px 0 22px;">Scores are point-in-time, based on first-party documentation and, where available, live testing.</p>
+      <p class="sub" style="margin:10px 0 18px;">Scores are point-in-time, based on first-party documentation and, where available, live testing. Click any graded platform for the full breakdown.</p>
 
-      <!-- SWAP: results - placeholder rows. Fill each category cell with its 0-10 score,
-           the overall with the 0-100 number, and swap .grade-none for .grade-a /
-           .grade-b / .grade-c / .grade-d / .grade-f to match the letter band. -->
+        <div class="pill-row" aria-label="Jump to a category">
+        <a class="jump-pill" href="#cat-pm-software">PM Software</a>
+        <a class="jump-pill" href="#cat-listings">Listings &amp; Screening</a>
+        <a class="jump-pill" href="#cat-workflow">Workflow &amp; CRM</a>
+        <a class="jump-pill" href="#cat-maintenance">Maintenance</a>
+        <a class="jump-pill" href="#cat-inspections">Inspections</a>
+        <a class="jump-pill" href="#cat-banks">Banks</a>
+        <a class="jump-pill" href="#cat-accounting">Corp Accounting</a>
+        <a class="jump-pill" href="#cat-deposits">Deposits</a>
+        <a class="jump-pill" href="#cat-phone">Phone</a>
+        </div>
+
       <p class="tbl-hint">Scroll the table sideways to see every category &rarr;</p>
       <div class="table-scroll">
         <table class="rank-table">
           <thead>
             <tr>
               <th>Platform</th>
-              <th class="num col-cat">Functional<br>Coverage<span class="th-max">/15</span></th>
-              <th class="num col-cat">Design &amp;<br>Reliability<span class="th-max">/10</span></th>
-              <th class="num col-cat">Access<br>Control<span class="th-max">/5</span></th>
-              <th class="num col-cat">Docs &amp;<br>AI-Ready<span class="th-max">/5</span></th>
-              <th class="num col-cat">Access<br>&amp; Cost<span class="th-max">/15</span></th>
+              <th class="num col-cat">Functional Coverage<span class="th-max">/15</span></th>
+              <th class="num col-cat">Design &amp; Reliability<span class="th-max">/10</span></th>
+              <th class="num col-cat">Access Control<span class="th-max">/5</span></th>
+              <th class="num col-cat">Docs &amp; AI-Ready<span class="th-max">/5</span></th>
+              <th class="num col-cat">Access &amp; Cost<span class="th-max">/15</span></th>
               <th class="num">Score</th>
               <th class="num">Grade</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="grp"><td colspan="8">PM Software<span class="grp-n">9 listed</span></td></tr>
-            <tr>
-              <td class="plat">AppFolio</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Buildium</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Rentvine</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Propertyware</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">RentManager</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Doorloop</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Revela</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Rentec Direct</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Yardi Breeze</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr class="grp"><td colspan="8">Listings, Applications &amp; Tenant Screening<span class="grp-n">8 listed</span></td></tr>
-            <tr>
-              <td class="plat">Boom</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">ShowMojo</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Tenant Turner</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">RentEngine</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Showdigs</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Findigs</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">RentSpree</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Rently</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr class="grp"><td colspan="8">Workflow / CRM<span class="grp-n">2 listed</span></td></tr>
-            <tr>
-              <td class="plat">LeadSimple</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Aptly</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr class="grp"><td colspan="8">Maintenance<span class="grp-n">5 listed</span></td></tr>
-            <tr>
-              <td class="plat">Property Meld</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Vendoroo</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Mason</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Latchel</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Lula</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr class="grp"><td colspan="8">Market Rent &amp; Property Data<span class="grp-n">6 listed</span></td></tr>
-            <tr>
-              <td class="plat">RentCast</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">RentFinder.AI</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Rescover</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Rentometer</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">HouseCanary</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">RentRange</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr class="grp"><td colspan="8">Inspections<span class="grp-n">6 listed</span></td></tr>
-            <tr>
-              <td class="plat">ZInspector</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">ResidentInspect</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">RentCheck</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">HappyCo</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">SnapInspect</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">PropertyInspect</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr class="grp"><td colspan="8">Pets<span class="grp-n">2 listed</span></td></tr>
-            <tr>
-              <td class="plat">PetScreening</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">OurPetPolicy</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr class="grp"><td colspan="8">Banks<span class="grp-n">2 listed</span></td></tr>
-            <tr>
-              <td class="plat">Column</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Enterprise Bank</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr class="grp"><td colspan="8">Corporate Accounting<span class="grp-n">2 listed</span></td></tr>
-            <tr>
-              <td class="plat">Xero</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">QuickBooks Online</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr class="grp"><td colspan="8">Deposits<span class="grp-n">4 listed</span></td></tr>
-            <tr>
-              <td class="plat">Obligo</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Lighthouse</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Rhino</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Jetty</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr class="grp"><td colspan="8">Insurance<span class="grp-n">3 listed</span></td></tr>
-            <tr>
-              <td class="plat">SureVestor</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Obie</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Steadily</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr class="grp"><td colspan="8">Phone<span class="grp-n">5 listed</span></td></tr>
-            <tr>
-              <td class="plat">RingCentral</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">LeadSimple Phone</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">SimpleVOIP</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Zoom Phone</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">OpenPhone</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr class="grp"><td colspan="8">eSign<span class="grp-n">5 listed</span></td></tr>
-            <tr>
-              <td class="plat">LeadSimple Signatures</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">DocuSign</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Dropbox Sign</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">PandaDoc</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Adobe Sign</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr class="grp"><td colspan="8">Other<span class="grp-n">5 listed</span></td></tr>
-            <tr>
-              <td class="plat">Second Nature</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">PlanOmatic</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Blanket</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Lineage</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
-            <tr>
-              <td class="plat">Lob</td>
-              <td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="cat-none">&ndash;</span></td>
-              <td class="num"><span class="grade grade-none">&ndash;</span></td>
-            </tr>
+            <tr class="grp" id="cat-pm-software"><td colspan="8">PM Software<span class="grp-n">5 listed</span></td></tr>
+            <tr><td class="plat"><span class="co-name">AppFolio</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr class="has-detail" data-co="buildium"><td class="plat"><button class="co-btn" type="button"><span class="co-name">Buildium</span><span class="co-hint">Click for details</span></button></td><td class="num"><span class="cat-score">15</span></td><td class="num"><span class="cat-score">7.5</span></td><td class="num"><span class="cat-score">5</span></td><td class="num"><span class="cat-score">3.75</span></td><td class="num"><span class="cat-score">7.5</span></td><td class="num"><span class="cat-total">78</span></td><td class="num"><span class="grade grade-c">C+</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Rentvine</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Propertyware</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Rent Manager</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr class="grp" id="cat-listings"><td colspan="8">Listings, Applications &amp; Tenant Screening<span class="grp-n">5 listed</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Boom</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">ShowMojo</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Tenant Turner</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr class="has-detail" data-co="rentengine"><td class="plat"><button class="co-btn" type="button"><span class="co-name">RentEngine</span><span class="co-hint">Click for details</span></button></td><td class="num"><span class="cat-score">11.3</span></td><td class="num"><span class="cat-score">4.6</span></td><td class="num"><span class="cat-score">3</span></td><td class="num"><span class="cat-score">3.1</span></td><td class="num"><span class="cat-score">15</span></td><td class="num"><span class="cat-total">74</span></td><td class="num"><span class="grade grade-c">C</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Rently</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr class="grp" id="cat-workflow"><td colspan="8">Workflow &amp; CRM<span class="grp-n">3 listed</span></td></tr>
+            <tr class="has-detail" data-co="leadsimple"><td class="plat"><button class="co-btn" type="button"><span class="co-name">LeadSimple</span><span class="co-hint">Click for details</span></button></td><td class="num"><span class="cat-score">15</span></td><td class="num"><span class="cat-score">5.4</span></td><td class="num"><span class="cat-score">1.3</span></td><td class="num"><span class="cat-score">2.5</span></td><td class="num"><span class="cat-score">15</span></td><td class="num"><span class="cat-total">78</span></td><td class="num"><span class="grade grade-c">C+</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Aptly</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Process Street</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr class="grp" id="cat-maintenance"><td colspan="8">Maintenance<span class="grp-n">5 listed</span></td></tr>
+            <tr class="has-detail" data-co="property-meld"><td class="plat"><button class="co-btn" type="button"><span class="co-name">Property Meld</span> <span class="row-flag">v2.0</span><span class="co-hint">Click for details</span></button></td><td class="num" colspan="5"><span class="cat-legacy">graded on the older v2.0 scale, see details</span></td><td class="num"><span class="cat-total">76</span></td><td class="num"><span class="grade grade-c">C</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Vendoroo</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Mason</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Latchel</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Lula</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr class="grp" id="cat-inspections"><td colspan="8">Inspections<span class="grp-n">6 listed</span></td></tr>
+            <tr><td class="plat"><span class="co-name">zInspector</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">ResidentInspect</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">RentCheck</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">HappyCo</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">SnapInspect</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">PropertyInspect</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr class="grp" id="cat-banks"><td colspan="8">Banks<span class="grp-n">2 listed</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Column</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Enterprise Bank</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr class="grp" id="cat-accounting"><td colspan="8">Corporate Accounting<span class="grp-n">2 listed</span></td></tr>
+            <tr class="has-detail" data-co="xero"><td class="plat"><button class="co-btn" type="button"><span class="co-name">Xero</span><span class="co-hint">Click for details</span></button></td><td class="num"><span class="cat-score">13.1</span></td><td class="num"><span class="cat-score">6.7</span></td><td class="num"><span class="cat-score">4.5</span></td><td class="num"><span class="cat-score">4.4</span></td><td class="num"><span class="cat-score">11.3</span></td><td class="num"><span class="cat-total">80</span></td><td class="num"><span class="grade grade-b">B-</span></td></tr>
+            <tr><td class="plat"><span class="co-name">QuickBooks Online</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr class="grp" id="cat-deposits"><td colspan="8">Deposits<span class="grp-n">4 listed</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Obligo</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Lighthouse</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Rhino</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Jetty</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr class="grp" id="cat-phone"><td colspan="8">Phone<span class="grp-n">5 listed</span></td></tr>
+            <tr><td class="plat"><span class="co-name">RingCentral</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">LeadSimple Phone</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">SimpleVOIP</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">Zoom Phone</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
+            <tr><td class="plat"><span class="co-name">OpenPhone</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="cat-none">&ndash;</span></td><td class="num"><span class="grade grade-none">&ndash;</span></td></tr>
           </tbody>
         </table>
-      </div>
-
-      <div class="todo" style="margin-top:16px;">
-        <strong>Placeholder: results</strong>
-        No platform has a published grade yet. Rows show the intended layout only.
-      </div>
-
-      <p class="sub" style="margin-top:16px;font-size:14px;">More platforms will be added as results come in from operators across the industry.</p>
+      </div>      <!-- RESULTS:END -->
     </div>
   </section>
 
@@ -771,6 +492,104 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
 <a class="col-sticky" id="colSticky" href="https://column.com/?utm_source=peter-lohmann&amp;utm_medium=plm-api-grader" target="_blank" rel="noopener" aria-label="Presented by Column">
   <span>Presented by</span><img src="column-logo.png" alt="Column" />
 </a>
+
+<!-- Per-company detail modal. Same pattern as the state pop-ups on the Top 40 page. -->
+<div class="smodal" id="coModal" aria-hidden="true">
+  <div class="smodal-card co-modal-card" role="dialog" aria-modal="true" aria-labelledby="cmTitle">
+    <button class="smodal-close" id="cmClose" aria-label="Close">&times;</button>
+    <div id="cmBody"></div>
+  </div>
+</div>
+
+<!-- DATA:START -->
+<script type="application/json" id="coData">{"buildium":{"n":"Buildium","cat":"PM Software","s":78,"g":"C+","gc":"grade-c","m":{"run":"Aug 27, 2026","method":"1.1","model":"Claude Opus 4.8","tier":"Baseline verified","raw":"38.75 / 50"},"c":[{"l":"Functional Coverage","p":"15","x":15,"pct":100,"t":"Reads and writes nearly everything the business runs on: properties, units, leases, tenants, ledgers, bank accounts, bills, tasks, and work orders. Nothing critical is missing, and 91 webhook event types push changes to you in near real time."},{"l":"Design & Reliability","p":"7.5","x":10,"pct":75,"t":"Modern, well typed, paginated, versioned, and openly monitored. Four gaps need code on your side: error responses carry no stable machine code, there are no idempotency keys (so a retried payment can double post), there is no lock stopping two writes from overwriting each other, and the only per-request trace id is an AWS header rather than a Buildium one."},{"l":"Access Control","p":"5","x":5,"pct":100,"t":"A perfect score, and the best access control graded so far. Issue a read-only key for a reporting agent, scope a key to just the data an app needs, make one key per integration, and rotate or delete any of them yourself. A real sandbox exists and its keys cannot touch production."},{"l":"Docs & AI-Ready","p":"3.75","x":5,"pct":75,"t":"A developer or an AI tool can build against Buildium without reverse-engineering it. The reference is public and complete, the OpenAPI file drives code generation, and the changelog was current to nine days before the run. The gap is AI-native docs: no llms.txt, so an agent has to consume the OpenAPI file itself."},{"l":"Access & Cost","p":"7.5","x":15,"pct":50,"t":"One real barrier, and it is cost. Key creation is fully self-serve with no sales call, but the API is exclusive to the Premium plan at $400 a month. On Essential ($62) or Growth ($192) you cannot use it at all."}],"st":["The most complete object coverage of any API graded so far","A real sandbox, with keys that cannot reach production data","Read-only and per-resource scoped keys, self-serve","91 webhook event types across 32 entities","Changelog running monthly since 2020"],"w":["Premium plan only, $400/month, so most operators are locked out","No idempotency keys, so a retried payment can post twice","Error responses never populate a machine-readable code","No optimistic concurrency, so two writers can silently overwrite"],"b":"Buildium's Open API is one of the most complete property management APIs you can build on today. It is a modern, well typed, versioned REST API with clear docs, a downloadable OpenAPI file, a sandbox, safe read-only keys, and a public status page. Its weak spots are all in money-safe automation: guard against double-posting a retried payment yourself, because the API will not. The biggest practical barrier is cost rather than capability, since the API is Premium-plan only. Buildium is not a bank, and moving money still depends on its ePay add-on and the underlying banks.","lg":null},"leadsimple":{"n":"LeadSimple","cat":"Workflow & CRM","s":78,"g":"C+","gc":"grade-c","m":{"run":"Aug 27, 2026","method":"1.1","model":"Claude Opus 4.8","tier":"Baseline verified","raw":"39.17 / 50"},"c":[{"l":"Functional Coverage","p":"15","x":15,"pct":100,"t":"You can build real tools on this. Read and change your main records, contacts, deals, and processes, and receive change events by webhook. Two gaps: you cannot create or complete a task through the API, and you cannot delete records through it."},{"l":"Design & Reliability","p":"5.4","x":10,"pct":54,"t":"Good in places: live rate-limit counters on every response, a request id on each one, and page totals so you can plan a full sync. Weaker elsewhere: money fields come back as text rather than numbers, errors give a message but no fixed code, webhooks have no signature and no stated retry rule, and there is no API version policy at all."},{"l":"Access Control","p":"1.3","x":5,"pct":26,"t":"The weakest single score on the board. LeadSimple gives one API key for the whole account, and that key can read and change everything. No read-only key, no way to limit a key to certain data, and no separate keys per tool. You can rotate it yourself, but a leaked key puts the entire account at risk."},{"l":"Docs & AI-Ready","p":"2.5","x":5,"pct":50,"t":"Workable for a developer, with limits. There is a full OpenAPI file for code tools, but the reference sits behind a login rather than being public, there are no AI-ready docs for the API, and no API-specific changelog."},{"l":"Access & Cost","p":"15","x":15,"pct":100,"t":"Full marks. You enable the API and copy the key yourself with no sales call, and the REST surface you need is included in the plan rather than locked behind the top tier."}],"st":["Full coverage of contacts, deals, and processes, with webhooks","Included in the plan, not gated to the top tier","Self-serve key with no sales call","Live rate-limit counters and a request id on every response"],"w":["One all-powerful account key, with no read-only or scoped option","Webhooks have no signature and no documented retry policy","Money fields return as text, not numbers","No API version or deprecation policy","Docs require a login"],"b":"LeadSimple gives you a real, useful REST API. You can read and change your core CRM and operations data, contacts, deals, processes, communications, custom fields, and reports, and get change events by webhook. Its two clear weaknesses are safe automation and documentation. There is exactly one account key, it can do everything, and you cannot narrow it, so guard and rotate it carefully. Access itself is a genuine strength: self-serve and included on the plan. LeadSimple is not your system of record, it sits on top of your PMS, so you still need AppFolio, Buildium, or the like for property, lease, and money data.","lg":null},"property-meld":{"n":"Property Meld","cat":"Maintenance","s":76,"g":"C","gc":"grade-c","m":{"run":"Aug 25, 2026","method":"2.0","model":"Claude Opus 4.8","tier":"Baseline verified","raw":"38.07 / 50"},"c":[{"l":"Functional Coverage","p":"8.8","x":10,"pct":88,"t":"You can build the whole maintenance workflow: intake a work order, assign a vendor or technician, schedule it, complete it, and review it. The only coverage limit is change detection. There are no webhooks, so you poll for changes instead."},{"l":"Design & Reliability","p":"6.8","x":10,"pct":68,"t":"Modern, well typed, idempotent, paginated, and transparent about uptime. The reliability gaps are real though: no protection against two writes overwriting each other, no bulk export, no Retry-After header, no documented request id for support, and error codes you cannot branch on."},{"l":"Access Control","p":"8.8","x":10,"pct":88,"t":"You can run several keys, revoke any of them yourself, and get a read-limited identity. Scoping is role-based rather than fine-grained, so you pick from set tiers rather than choosing exactly what a key can touch."},{"l":"Docs & AI-Ready","p":"8.8","x":10,"pct":88,"t":"Genuinely AI-friendly and the joint-best documentation graded so far. A public OpenAPI spec plus a real llms.txt corpus, with a Markdown twin of every page. The only weak signal is the changelog, which has two entries and has not been touched in about three years."},{"l":"Access & Cost","p":"5","x":10,"pct":50,"t":"Key creation is self-serve in the app, which is a real improvement, but there is still no free sandbox to test against and the API needs the higher Ops plan rather than the cheaper Core plan."}],"st":["Best-in-class AI-readable docs: llms.txt plus a Markdown twin per page","Real idempotency keys on writes, with 24-hour retention","Multiple keys, self-serve create and revoke","Public status page showing 99.98% to 100% uptime"],"w":["No webhooks at all, so you have to poll for every change","No protection against two writes overwriting each other","No free sandbox, so write testing happens against production","Needs the higher Ops plan","Changelog is about three years stale"],"b":"Property Meld is a strong, genuinely AI-friendly build target for the full maintenance workflow, with idempotency keys, a public uptime page, and the best documentation in this group. The reliability gaps are real: no webhooks (you poll instead), no lost-update protection, no bulk export, and no support-usable request id. Access still costs the higher Ops plan with no free sandbox. Reads were live-tested, but write behavior is graded from documentation, because there is no sandbox to write against.","lg":"This run used methodology v2.0, which scored all five categories out of 10. The current methodology weights them 15 / 10 / 5 / 5 / 15, so these category numbers cannot be compared against the other rows and are left out of the table. Re-scoring the same marks under the current weighting gives roughly 72 / 100 (C-), because Accessibility and Cost, where Property Meld scores worst, is now worth 15 points instead of 10. The 76 below is the number the run actually published. Treat this row as provisional until it is re-run."},"rentengine":{"n":"RentEngine","cat":"Listings, Applications & Tenant Screening","s":74,"g":"C","gc":"grade-c","m":{"run":"Aug 27, 2026","method":"1.1","model":"Claude Opus 4.8","tier":"Baseline verified","raw":"36.96 / 50"},"c":[{"l":"Functional Coverage","p":"11.3","x":15,"pct":75,"t":"You can build real leasing automation: sync leads, drive the pipeline, schedule showings, and manage units and listings. What you cannot do through the API is submit an application, run or read a screening decision, cancel a showing, or delete anything. Applications and prescreening are read-only, so RentEngine's own hosted flow stays the front door."},{"l":"Design & Reliability","p":"4.6","x":10,"pct":46,"t":"The lowest Design and Reliability score in this group. It behaves predictably where you touch it most, with clean REST, honest rate-limit headers, and useful validation errors. But rent, bedrooms, and bathrooms are typed as strings in the contract (and the live data disagrees with the contract), there is no concurrency protection, most list endpoints give no has-more signal, and there is no status page at all."},{"l":"Access Control","p":"3","x":5,"pct":60,"t":"You can hand out several named keys and cut any of them off yourself in seconds, which is good. But you cannot issue a read-only or narrowly scoped key: every token inherits the full power of the user who created it, across all their accounts. Make a dedicated limited-permission user and mint the token from that."},{"l":"Docs & AI-Ready","p":"3.1","x":5,"pct":62,"t":"The reference is genuinely good and machine-ready. A downloadable OpenAPI 3.1 spec plus a docs MCP server means Claude Code can build against it quickly. The gap is currency: there is no changelog, so you get no warning when something changes."},{"l":"Access & Cost","p":"15","x":15,"pct":100,"t":"The strongest part of the card. Open API access is included for every RentEngine customer, and you can mint your own key without a sales call. Nothing forces a plan upgrade to build."}],"st":["API access included for every customer, no upgrade needed","OpenAPI 3.1 spec plus a live docs MCP server for AI tools","Seven webhook event types covering the mutable objects","Write path was verified with real controlled live testing"],"w":["Rent, bedrooms, and bathrooms are typed as strings, and live data disagrees","No read-only or scoped keys: every token inherits full user power","No delete and no showing cancel; applications and screening are read-only","No status page and no changelog"],"b":"RentEngine has a real, modern, self-serve API, and access is its strongest feature. You can build genuine leasing automation today: sync prospects, drive the pipeline, schedule showings, and manage units and listings, with webhooks for changes. The limitations are that the API is read-only for applications and screening, there is no delete and no cancel, and production hygiene is uneven. Build defensive parsing and your own retry safety net. It is a leasing and CRM layer, not a PMS, so you still run your PMS as the system of record.","lg":null},"xero":{"n":"Xero","cat":"Corporate Accounting","s":80,"g":"B-","gc":"grade-b","m":{"run":"Aug 27, 2026","method":"1.1","model":"Claude Opus 4.8","tier":"Baseline verified","raw":"39.92 / 50"},"c":[{"l":"Functional Coverage","p":"13.1","x":15,"pct":87,"t":"You can read and change the accounting data your business runs on, post invoices and payments, and update contacts and accounts. What you cannot do is import bank statements or reconcile through the API; a partner bank feed or another tool does that. Plan to poll with the modified-since filter, because webhooks only cover a few record types."},{"l":"Design & Reliability","p":"6.7","x":10,"pct":67,"t":"Stable and predictable to run in production. Rate limits, pagination, request tracing, and idempotency are all solid, and you can trace any request with support. Watch three things: dates arrive in two different formats, error shapes are not uniform, and there is no lost-update protection, so two writers can overwrite each other."},{"l":"Access Control","p":"4.5","x":5,"pct":90,"t":"A strong point. You can safely give an app or an AI agent a limited, read-only key, and cut off access at any time. The one gap is testing: there is no true sandbox, you develop against a Demo Company, which is a separate data set but not a separate environment or key."},{"l":"Docs & AI-Ready","p":"4.4","x":5,"pct":88,"t":"The best documentation score in this group. A developer or an AI coding tool can build against Xero without reverse-engineering. The reference is complete, the OpenAPI spec and six official SDKs are current, and Xero ships an official MCP server for AI agents. The only soft spot is no llms.txt-style bundle."},{"l":"Access & Cost","p":"11.3","x":15,"pct":75,"t":"You can get in the door today for free and connect your own organization at no cost beyond your Xero subscription. Costs appear only when you scale: higher call volumes, more connections, or the hands-off machine-to-machine key all move you to a paid tier."}],"st":["Highest score graded so far, and the only B so far","Granular read/write scopes, verified enforced in live testing","Six official SDKs plus an official MCP server for AI agents","First-class idempotency keys on writes","A correlation id on every response that support can actually use"],"w":["Not property management software: no properties, units, leases, or work orders","No bank statement import or reconciliation through the API","Webhooks cover only four record types, so you poll for the rest","Dates come back in two different formats","No true sandbox, only a Demo Company"],"b":"Xero has a strong, mature accounting API. You can build your own tools and AI agents on top of your general ledger, with good rate limits, pagination, tracing, and read-only keys you can revoke. The biggest API limits are no bank statement import or reconciliation, webhooks for only a few record types, and no lost-update protection. The biggest fit limit is that Xero is general accounting, not property management: no native properties, units, leases, or work orders, and no first-party trust or security deposit workflows. Treat Xero as an excellent accounting backend to connect to, not a replacement for a PMS, a bank, or a trust accounting system.","lg":null}}</script><!-- DATA:END -->
+
+<script>
+/* Renders a company's report card into the modal. Everything here comes from the
+   JSON above, which build-report-card.py writes from the same numbers as the
+   table, so the two can never disagree. */
+(function () {
+  var el = document.getElementById('coData'); if (!el) return;
+  var data; try { data = JSON.parse(el.textContent); } catch (e) { return; }
+  var modal = document.getElementById('coModal'),
+      body  = document.getElementById('cmBody'),
+      close = document.getElementById('cmClose'),
+      last  = null;
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c];
+    });
+  }
+
+  function render(key) {
+    var d = data[key]; if (!d) return;
+
+    var cats = d.c.map(function (c) {
+      return '<div class="cm-cat-row">'
+        + '<div class="cm-cat-top"><span class="cm-cat-name">' + esc(c.l) + '</span>'
+        + '<span class="cm-cat-pts">' + esc(c.p) + ' <em>/ ' + esc(c.x) + '</em></span></div>'
+        + '<div class="cm-bar"><i class="' + (c.pct < 60 ? 'lo' : '') + '" style="width:'
+        + c.pct + '%"></i></div>'
+        + '<p>' + esc(c.t) + '</p></div>';
+    }).join('');
+
+    var flag = d.lg
+      ? '<div class="cm-flag"><strong>Scored on a superseded methodology</strong><p>'
+        + esc(d.lg) + '</p></div>'
+      : '';
+
+    body.innerHTML =
+        '<div class="cm-head">'
+      +   '<p class="cm-cat">' + esc(d.cat) + '</p>'
+      +   '<h3 id="cmTitle">' + esc(d.n) + '</h3>'
+      +   '<div class="cm-score"><span class="cm-num">' + esc(d.s) + '</span>'
+      +     '<span class="cm-den">/ 100</span>'
+      +     '<span class="grade ' + esc(d.gc) + '">' + esc(d.g) + '</span></div>'
+      +   '<div class="cm-meta">'
+      +     '<span>Run <strong>' + esc(d.m.run) + '</strong></span>'
+      +     '<span>Methodology <strong>v' + esc(d.m.method) + '</strong></span>'
+      +     '<span>Evidence <strong>' + esc(d.m.tier) + '</strong></span>'
+      +     '<span>Graded by <strong>' + esc(d.m.model) + '</strong></span>'
+      +     '<span>Raw <strong>' + esc(d.m.raw) + '</strong></span>'
+      +   '</div>'
+      + '</div>'
+      + flag
+      + '<p class="cm-h">Where the points came from</p>' + cats
+      + '<p class="cm-h">What stands out</p>'
+      + '<div class="cm-cols">'
+      +   '<ul class="cm-good">' + d.st.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>'
+      +   '<ul class="cm-bad">'  + d.w.map(function (x)  { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>'
+      + '</div>'
+      + '<p class="cm-h">Bottom line for a property manager</p>'
+      + '<div class="cm-bottom"><p>' + esc(d.b) + '</p></div>';
+  }
+
+  function open(key) {
+    last = document.activeElement;
+    render(key);
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    close.focus();
+  }
+  function shut() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (last) last.focus();
+  }
+
+  document.querySelectorAll('tr.has-detail').forEach(function (row) {
+    row.addEventListener('click', function () { open(row.getAttribute('data-co')); });
+  });
+  close.addEventListener('click', shut);
+  modal.addEventListener('click', function (e) { if (e.target === modal) shut(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal.classList.contains('open')) shut();
+  });
+})();
+</script>
 
 <script src="site.js?v=24"></script>
 <script>
