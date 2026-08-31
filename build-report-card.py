@@ -184,79 +184,6 @@ RESULTS = {
             "money data.",
 },
 
-"Property Meld": {
-  # DO NOT re-score this by hand. An earlier pass recomputed it to 72 (C-) under
-  # the v1.2 weighting. The arithmetic was traceable, but every resulting number
-  # was calculated rather than produced by a grading run, and the report states
-  # no category score out of 15 or 5 anywhere. Category 5 is the clearest case:
-  # the report earns "2 of 4" checks, two of which (C5.2 free sandbox, C5.4
-  # onboarding friction) no longer exist, so its v1.2 score cannot be derived
-  # from anything the report actually says. Only the published 76 (C) below is a
-  # real result. Replace this whole entry when the v1.2 re-run lands.
-  "score": 76, "grade": "C",
-  "meta": {"run": "Aug 25, 2026", "method": "2.0", "model": "Claude Opus 4.8",
-           "tier": "Baseline verified", "raw": "38.07 / 50"},
-  "legacy": {
-    "maxima": [10, 10, 10, 10, 10],
-    "note": "This run was graded under methodology v2.0, which scored all five "
-            "categories out of 10. Despite the higher number, v2.0 came before the "
-            "current file: the line ran v2.0, then v1.1, then v1.2, which weights "
-            "the categories 15 / 10 / 5 / 5 / 15. The numbers below are the ones "
-            "this run actually published, on the older scale, so they are shown "
-            "here rather than in the table, where they would invite a false "
-            "comparison against the other rows. Property Meld is queued for a "
-            "re-run against the current methodology, and this row will be replaced "
-            "with that result.",
-  },
-  # Originally run and published under methodology v2.0 (76/100, C). Re-scored
-  # here under v1.2 from the same frozen evidence packet. Not one check mark was
-  # changed; only the category weighting differs, exactly as the LeadSimple run
-  # was re-scored from v2.0 to v1.1. See "rescored" below for the reader-facing
-  # version of this note.
-  "cats": [
-    (8.8, 10, "You can build the whole maintenance workflow: intake a work order, "
-              "assign a vendor or technician, schedule it, complete it, and review "
-              "it. The only coverage limit is change detection. There are no "
-              "webhooks, so you poll for changes instead."),
-    (6.8, 10, "Modern, well typed, idempotent, paginated, and transparent about "
-              "uptime. The reliability gaps are real though: no protection against "
-              "two writes overwriting each other, no bulk export, no Retry-After "
-              "header, no documented request id for support, and error codes you "
-              "cannot branch on."),
-    (8.8, 10, "You can run several keys, revoke any of them yourself, and get a "
-              "read-limited identity. Scoping is role-based rather than "
-              "fine-grained, so you pick from set tiers rather than choosing "
-              "exactly what a key can touch."),
-    (8.8, 10, "Genuinely AI-friendly, and among the best documentation in this "
-             "group. A public OpenAPI spec plus a real llms.txt corpus, with a "
-              "Markdown twin of every page. The only weak signal is the changelog, "
-              "which has two entries and has not been touched in about three years."),
-    (5.0, 10, "Key creation is self-serve in the app, which is a real improvement, "
-              "but there is still no free sandbox to test against and the API needs "
-              "the higher Ops plan rather than the cheaper Core plan."),
-  ],
-  "strengths": [
-    "Best-in-class AI-readable docs: llms.txt plus a Markdown twin per page",
-    "Real idempotency keys on writes, with 24-hour retention",
-    "Multiple keys, self-serve create and revoke",
-    "Public status page showing 99.98% to 100% uptime",
-  ],
-  "watch": [
-    "No webhooks at all, so you have to poll for every change",
-    "No protection against two writes overwriting each other",
-    "No free sandbox, so write testing happens against production",
-    "Needs the higher Ops plan",
-    "Changelog is about three years stale",
-  ],
-  "bottom": "Property Meld is a strong, genuinely AI-friendly build target for the "
-            "full maintenance workflow, with idempotency keys, a public uptime page, "
-            "and documentation as good as any here. The reliability gaps are "
-            "real: no webhooks (you poll instead), no lost-update protection, no "
-            "bulk export, and no support-usable request id. Access still costs the "
-            "higher Ops plan with no free sandbox. Reads were live-tested, but write "
-            "behavior is graded from documentation, because there is no sandbox to "
-            "write against.",
-},
 
 "RentEngine": {
   "score": 74, "grade": "C",
@@ -367,6 +294,103 @@ RESULTS = {
             "or a trust accounting system.",
 },
 
+}
+
+
+# ---------------------------------------------------------------------------
+# AWAITING RE-RUN. Not rendered. Property Meld was graded on 2026-08-25 under
+# methodology v2.0, which scored all five categories out of 10 rather than
+# 15/10/5/5/15, and included two checks (C5.2 free sandbox, C5.4 onboarding
+# friction) that no longer exist.
+#
+# Its numbers cannot be converted. The report states no category score out of 15
+# or 5 anywhere, and Category 5 in particular earns "2 of 4" checks, two of which
+# were retired, so there is nothing in the report to convert from. Any figure put
+# in those columns would be one we calculated, not one a grading run produced.
+#
+# So the row is simply blank, like every other ungraded platform, until Peter
+# re-runs Property Meld against the current methodology file. When that lands,
+# move this entry back into RESULTS and replace score, grade, meta, and cats with
+# the new run's numbers. The prose below (strengths, watch-outs, bottom line) is
+# drawn from the v2.0 report and should be re-checked against the new one.
+#
+# Kept here rather than deleted so nothing from Peter's original run is lost.
+# ---------------------------------------------------------------------------
+AWAITING_RERUN = {
+
+"Property Meld": {
+  # DO NOT re-score this by hand. An earlier pass recomputed it to 72 (C-) under
+  # the v1.2 weighting. The arithmetic was traceable, but every resulting number
+  # was calculated rather than produced by a grading run, and the report states
+  # no category score out of 15 or 5 anywhere. Category 5 is the clearest case:
+  # the report earns "2 of 4" checks, two of which (C5.2 free sandbox, C5.4
+  # onboarding friction) no longer exist, so its v1.2 score cannot be derived
+  # from anything the report actually says. Only the published 76 (C) below is a
+  # real result. Replace this whole entry when the v1.2 re-run lands.
+  "score": 76, "grade": "C",
+  "meta": {"run": "Aug 25, 2026", "method": "2.0", "model": "Claude Opus 4.8",
+           "tier": "Baseline verified", "raw": "38.07 / 50"},
+  "legacy": {
+    "maxima": [10, 10, 10, 10, 10],
+    "note": "This run was graded under methodology v2.0, which scored all five "
+            "categories out of 10. Despite the higher number, v2.0 came before the "
+            "current file: the line ran v2.0, then v1.1, then v1.2, which weights "
+            "the categories 15 / 10 / 5 / 5 / 15. The numbers below are the ones "
+            "this run actually published, on the older scale, so they are shown "
+            "here rather than in the table, where they would invite a false "
+            "comparison against the other rows. Property Meld is queued for a "
+            "re-run against the current methodology, and this row will be replaced "
+            "with that result.",
+  },
+  # Originally run and published under methodology v2.0 (76/100, C). Re-scored
+  # here under v1.2 from the same frozen evidence packet. Not one check mark was
+  # changed; only the category weighting differs, exactly as the LeadSimple run
+  # was re-scored from v2.0 to v1.1. See "rescored" below for the reader-facing
+  # version of this note.
+  "cats": [
+    (8.8, 10, "You can build the whole maintenance workflow: intake a work order, "
+              "assign a vendor or technician, schedule it, complete it, and review "
+              "it. The only coverage limit is change detection. There are no "
+              "webhooks, so you poll for changes instead."),
+    (6.8, 10, "Modern, well typed, idempotent, paginated, and transparent about "
+              "uptime. The reliability gaps are real though: no protection against "
+              "two writes overwriting each other, no bulk export, no Retry-After "
+              "header, no documented request id for support, and error codes you "
+              "cannot branch on."),
+    (8.8, 10, "You can run several keys, revoke any of them yourself, and get a "
+              "read-limited identity. Scoping is role-based rather than "
+              "fine-grained, so you pick from set tiers rather than choosing "
+              "exactly what a key can touch."),
+    (8.8, 10, "Genuinely AI-friendly, and among the best documentation in this "
+             "group. A public OpenAPI spec plus a real llms.txt corpus, with a "
+              "Markdown twin of every page. The only weak signal is the changelog, "
+              "which has two entries and has not been touched in about three years."),
+    (5.0, 10, "Key creation is self-serve in the app, which is a real improvement, "
+              "but there is still no free sandbox to test against and the API needs "
+              "the higher Ops plan rather than the cheaper Core plan."),
+  ],
+  "strengths": [
+    "Best-in-class AI-readable docs: llms.txt plus a Markdown twin per page",
+    "Real idempotency keys on writes, with 24-hour retention",
+    "Multiple keys, self-serve create and revoke",
+    "Public status page showing 99.98% to 100% uptime",
+  ],
+  "watch": [
+    "No webhooks at all, so you have to poll for every change",
+    "No protection against two writes overwriting each other",
+    "No free sandbox, so write testing happens against production",
+    "Needs the higher Ops plan",
+    "Changelog is about three years stale",
+  ],
+  "bottom": "Property Meld is a strong, genuinely AI-friendly build target for the "
+            "full maintenance workflow, with idempotency keys, a public uptime page, "
+            "and documentation as good as any here. The reliability gaps are "
+            "real: no webhooks (you poll instead), no lost-update protection, no "
+            "bulk export, and no support-usable request id. Access still costs the "
+            "higher Ops plan with no free sandbox. Reads were live-tested, but write "
+            "behavior is graded from documentation, because there is no sandbox to "
+            "write against.",
+},
 }
 
 # ---------------------------------------------------------------------------
