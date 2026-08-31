@@ -26,7 +26,7 @@ disallows crawling.
 | `index.html` | The page. Nav/footer link out to the live peterlohmann.com. |
 | `styles.css` | **A COPY** of the live site's stylesheet. See the warning below. |
 | `site.js` | A copy of the live site's script (mobile nav, scroll reveals). |
-| `files/…methodology-v1.1.md` | The grading file the download button serves. |
+| `files/pm-api-report-card-methodology.md` | The grading file the download button serves. |
 | `favicon.*` | Copies. |
 
 ## The one thing to watch
