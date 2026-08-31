@@ -1,6 +1,6 @@
 # API Report Card for Property Management Operators
 
-Methodology version: 1.1  
+Methodology version: 1.2  
 Published: August 2026
 
 This rubric measures how useful and buildable an API is for property management operators creating their own software, automations, and AI agents. Every score comes from a fixed checklist and cited first-party evidence.
@@ -365,7 +365,7 @@ Use this format for a **Fully verified** or **Baseline verified** run that passe
 # API Report Card: <Vendor> <Product>
 
 ## Run metadata
-- Methodology version: 1.1
+- Methodology version: 1.2
 - Evaluating model: <model>
 - Date run: <date>
 - Provisional evidence-packet version or ID: <identifier>
@@ -462,7 +462,7 @@ If the qualifying API result is `no`, use this shorter output instead of scoring
 # API Report Card: <Vendor> <Product>
 
 ## Run metadata
-- Methodology version: 1.1
+- Methodology version: 1.2
 - Evaluating model: <model>
 - Date run: <date>
 - Final evidence-packet version or ID: <identifier>
@@ -494,7 +494,7 @@ If the run is **Partially verified**, **Documentation-only**, the run is `unveri
 # API Report Card: <Vendor> <Product> — Score withheld
 
 ## Run metadata
-- Methodology version: 1.1
+- Methodology version: 1.2
 - Evaluating model: <model>
 - Date run: <date>
 - Final evidence-packet version or ID: <identifier>
