@@ -32,17 +32,6 @@ Each category is worth a fixed maximum number of points — shown below — and 
 - Documentation and APIs change over time. Every score is point-in-time and tied to the evidence access date.
 - Structured checks and predetermined weights reduce, but do not eliminate, evaluator disagreement. The process below records any remaining disagreement explicitly.
 
-## Version history
-
-Version numbers restarted during a rewrite, so a superseded 2.0 predates 1.1. Always grade against the version named at the top of this file, and record that version in the report.
-
-Quick test: a report is on the current criteria if it scores 27 checks, includes C2.12, and does not include C5.2.
-
-- **1.2, current.** 27 checks. Category maxima 15 / 10 / 5 / 5 / 15, summing to 50 and doubled to 100. Content is identical to the 27-check 1.1 below; only the version label changed, so results produced under that document are already on the current criteria and need no re-run.
-- **1.1, second document, 27 checks. Superseded by 1.2 in name only.** Added C2.6 through C2.12 (pagination, bulk export, webhook security, concurrency, versioning, traceability, and status transparency), and retired C5.2 (free place to test) and C5.4 (low onboarding friction), leaving Category 5 as C5.1 and C5.3.
-- **1.1, first document, 22 checks. Superseded.** Carried the same 1.1 label as the document above, which is the one real trap in this history: check the count before trusting the number. Lacked C2.6 through C2.12 and still scored C5.2 and C5.4.
-- **2.0, superseded, and older than 1.1 despite the higher number.** 29 checks. Scored all five categories out of 10, equally weighted. Results cannot be converted to 1.x by re-weighting, because Category 5 loses two of its four checks and there is nothing left to convert from. Re-run any 2.0 result before publishing it alongside 1.x results.
-
 ## How to run it reproducibly
 
 1. **Perform initial evidence discovery before scoring.** Use the same discovery procedure for every vendor. Check the supplied documentation, vendor root and documentation domains, API reference, OpenAPI or Swagger resources, authentication and permission guides, error and reliability guides, pagination and bulk-export guides, event and webhook guides (including signatures and retries), concurrency and versioning guidance, request-identifier and status/uptime pages, sandbox and pricing materials, registration flows, SDKs, MCP resources, AI-readable documentation, changelogs or release notes, evidence identifying the API operator and access model, relevant legal or account terms, and documented property-management offerings or workflows.
