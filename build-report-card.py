@@ -400,13 +400,16 @@ AWAITING_RERUN = {
 def tier(points, maximum):
     """Colour band for a category score, as a share of that category's maximum.
 
-    The cutoffs are the methodology's own letter-grade boundaries rather than
-    numbers invented for the table: below 60 is failing, 60 to 79 is the D and C
-    range, 80 and up is B or better. Using the rubric's own scale keeps the
-    colours defensible if a vendor asks why their cell is red.
+    40% and under is red, 41 to 74 is orange, 75 and up is blue.
+
+    These are deliberately NOT the methodology's letter-grade boundaries. Tying
+    them to the rubric would paint 75% orange, which reads as a warning about a
+    score that is actually respectable, and it would spend red on so many cells
+    that red stops meaning anything. Set here so red stays rare and genuinely
+    signals a problem worth looking at.
     """
     pct = float(points) / maximum * 100
-    return "lo" if pct < 60 else ("mid" if pct < 80 else "hi")
+    return "lo" if pct <= 40 else ("mid" if pct < 75 else "hi")
 
 
 def grade_class(g):
