@@ -195,13 +195,16 @@ RESULTS = {
     "maxima": [10, 10, 10, 10, 10],
     "estimate": 72, "estimate_grade": "C-",
     "note": "This run used methodology v2.0, which scored all five categories out "
-            "of 10. The current methodology weights them 15 / 10 / 5 / 5 / 15, so "
-            "these category numbers cannot be compared against the other rows and "
-            "are left out of the table. Re-scoring the same marks under the current "
-            "weighting gives roughly 72 / 100 (C-), because Accessibility and Cost, "
-            "where Property Meld scores worst, is now worth 15 points instead of 10. "
-            "The 76 below is the number the run actually published. Treat this row "
-            "as provisional until it is re-run.",
+            "of 10. Despite the higher number, v2.0 came before the current file: "
+            "the line ran v2.0, then v1.1, then v1.2. The current methodology "
+            "weights the categories 15 / 10 / 5 / 5 / 15, so these numbers cannot "
+            "be compared against the other rows and are left out of the table. "
+            "Re-scoring the same marks under the current weighting gives roughly "
+            "72 / 100 (C-). Property Meld loses ground because its two joint-best "
+            "categories, Access Control and Documentation, are now capped at 5 "
+            "points each instead of 10. The 76 below is the number this run "
+            "actually published. No re-test is needed, only re-scoring the marks "
+            "already on file.",
   },
   "cats": [
     (8.8, 10, "You can build the whole maintenance workflow: intake a work order, "
