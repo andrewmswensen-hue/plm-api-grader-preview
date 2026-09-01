@@ -457,6 +457,86 @@ RESULTS = {
             "property-specific objects in the API.",
 },
 
+"RingCentral": {
+  "score": 93, "grade": "A",
+  "meta": {"run": "Sep 1, 2026", "method": "1.1", "model": "Claude Opus 4.8",
+           "tier": "Baseline verified", "raw": "46.67 / 50"},
+  # First A, and by a wide margin the highest score on the board. The note has to
+  # carry the comparability caveat: this is a phone system, not PM software, and
+  # a reader scanning the table will otherwise read the A next to AppFolio's F as
+  # a straight product comparison.
+  "note": "The highest score graded so far, and the first A. Graded three "
+          "independent times, and all three runs landed on 93. 25 of the 27 "
+          "checks were unanimous, and the two that split sat in the same category "
+          "and offset each other exactly, so the total is 93 under either "
+          "resolution. Worth reading alongside the rest of the table with one "
+          "caveat: RingCentral is a communications platform, not property "
+          "management software. It documents no PM-specific workflows, and the "
+          "rubric does not penalise a product for capabilities its category has "
+          "no use for. So the score says this is an excellent API to build on, "
+          "not that it does what a PMS does. Read paths were tested live on a "
+          "production account with a read-only key; the write paths are graded "
+          "from documentation, because the key supplied could not write.",
+  "cats": [
+    (15, 15, "A perfect score. You can pull essentially all of your "
+             "communications data, calls, texts, voicemail and the directory, "
+             "and act on it programmatically by sending texts and placing or "
+             "controlling calls. Real-time events arrive by webhook, and there is "
+             "dedicated incremental sync for call logs and messages. The write "
+             "actions are well documented but were not exercised live here, "
+             "because the key supplied was read-only."),
+    (7.9, 10, "Predictable and production-grade: clean REST, structured errors "
+              "carrying a stable machine code, clear rate-limit and request-id "
+              "headers, real pagination, and proper incremental sync. Two gaps "
+              "matter if you automate messaging. There are no idempotency keys, "
+              "so guard your own retries or a text can send twice. And there is "
+              "no optimistic concurrency: the API does return a conflict on "
+              "competing writes, but nothing stops a lost update."),
+    (5, 5, "A perfect score, and the safest platform here to hand to an app or an "
+           "AI agent. You can issue a read-only, narrowly scoped key, which is "
+           "exactly what this run used, run a separate key per integration, test "
+           "against a real sandbox with its own isolated data, and revoke access "
+           "instantly."),
+    (3.8, 5, "Strong and build-ready, with a published OpenAPI spec and "
+             "maintained SDKs in every common language. Two weak spots: there is "
+             "no llms.txt for AI retrieval, so an AI tool consumes the spec "
+             "instead, and the central changelog's newest entry is from April "
+             "2022. Confirm current behaviour against the live reference rather "
+             "than the changelog."),
+    (15, 15, "Full marks. A free developer account, self-issued keys, a sandbox "
+             "included, and API access bundled with a normal subscription. No "
+             "premium tier to unlock and no sales call."),
+  ],
+  "strengths": [
+    "The highest score graded so far, and the only A",
+    "Read-only and finely scoped keys, proven on the key used for this run",
+    "A real sandbox with its own accounts and isolated data",
+    "OpenAPI spec plus maintained SDKs in eight languages",
+    "Dedicated incremental sync for call logs and messages",
+  ],
+  "watch": [
+    "No idempotency keys, so a retried text or call can send twice",
+    "No optimistic concurrency, so two writers can overwrite each other",
+    "The central changelog has not been updated since April 2022",
+    "No llms.txt, so AI tools fall back to the OpenAPI spec",
+    "Not property management software: no PM workflows are documented",
+  ],
+  "bottom": "RingCentral's API is excellent to build on: modern REST with an "
+            "OpenAPI spec and SDKs in every common language, granular read-only "
+            "and scoped keys, a real sandbox, structured errors, rate-limit and "
+            "request-id headers, proper pagination and incremental sync, and "
+            "self-serve free access. For a property manager this is the "
+            "communications layer. You can log every tenant, owner and vendor "
+            "call and text, send SMS reminders, build click-to-call and "
+            "screen-pop, and get real-time webhooks. It is not a PMS, an "
+            "accounting system, or a trust-accounting system, and it holds no "
+            "funds. Property management is not a documented use case, only a "
+            "general fit. The main engineering cautions are the missing "
+            "idempotency keys and the lack of lost-update protection, so protect "
+            "your own retries of anything that sends a message or moves money, "
+            "and the stale changelog, so verify against the live reference.",
+},
+
 "Xero": {
   "score": 80, "grade": "B-",
   "meta": {"run": "Aug 27, 2026", "method": "1.1", "model": "Claude Opus 4.8",
