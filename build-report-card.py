@@ -559,22 +559,25 @@ RESULTS = {
 },
 
 "Xero": {
-  "score": 79, "grade": "C+",
+  "score": 80, "grade": "B-",
   "meta": {"run": "Aug 27, 2026", "method": "1.1", "model": "Claude Opus 4.8",
-           "tier": "Baseline verified", "raw": "39.50 / 50"},
-  # Same run, now three-run reconciled. Exactly one check moved (C2.8, yes to
-  # partial) and that single check is the whole 80-to-79 drop. Nothing about
-  # Xero's API changed, so the note has to say so plainly.
-  "note": "Re-examined under a three-run reconciliation. The three runs scored "
-          "80, 80 and 78 and agreed on 25 of the 27 checks. The published score "
-          "moves from 80 (B-) to 79 (C+) on a single check, webhook delivery. "
-          "Xero's API did not change and nothing about it got worse. The retry "
-          "policy behind that check turned out not to be citable from the frozen "
-          "evidence packet, only surfaced by search, and the methodology requires "
-          "a pinpoint citation, so signed payloads and replay guidance alone earn "
-          "a partial rather than a yes. One disagreement is left open, on "
-          "AI-readable documentation, worth 79 against 78. Both readings sit in "
-          "the same band, so the C+ holds either way.",
+           "tier": "Baseline verified", "raw": "39.92 / 50"},
+  # C2.8 has now flipped twice on the same run. Both flips were about what the
+  # grader could READ, never about Xero. Worth stating, because this is the second
+  # report (after RentEngine) marked down for evidence that existed on a page the
+  # fetch tool could not render.
+  "note": "Three runs scored 80, 80 and 78 and agreed on 25 of the 27 checks. The "
+          "check that split was webhook delivery, marked down because no retry "
+          "policy could be cited from the frozen evidence. It turns out the policy "
+          "is documented: it sits on a JavaScript-rendered page the discovery tool "
+          "could not load. Rendering that page in a browser confirmed all three "
+          "legs, HMAC signatures, a retry schedule of immediate then every 15 "
+          "minutes for 24 hours, and consumer replay guidance. So the check is "
+          "finalised yes and the score is 80 (B-). Nothing about Xero changed at "
+          "any point; what changed was what the grader could read. One "
+          "disagreement stays open, on AI-readable documentation, and it is now "
+          "the only check that moves the letter: 80 (B-) if partial, 79 (C+) if "
+          "no.",
   "cats": [
     (13.1, 15, "You can read and change the accounting data your business runs on, "
                "post invoices and payments, and update contacts and accounts. What "
@@ -582,7 +585,7 @@ RESULTS = {
                "API; a partner bank feed or another tool does that. Plan to poll "
                "with the modified-since filter, because webhooks only cover a few "
                "record types."),
-    (6.3, 10, "Stable and predictable to run in production. Rate limits, "
+    (6.7, 10, "Stable and predictable to run in production. Rate limits, "
               "pagination, request tracing, and idempotency are all solid, and you "
               "can trace any request with support. Watch three things: dates arrive "
               "in two different formats, error shapes are not uniform, and there is "
