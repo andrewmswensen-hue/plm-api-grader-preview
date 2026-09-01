@@ -93,7 +93,7 @@ RESULTS = {
           "ambiguities the score stays between 45 and 56, so the letter grade is F "
           "under all of them. Worth being precise about what that means: this is "
           "not a verdict on engineering quality. On design and reliability alone "
-          "AppFolio scores 7.9 out of 10, the second highest of any platform graded "
+          "AppFolio scores 7.9 out of 10, tied for the highest of any platform graded "
           "so far. The F comes from the other half of the question, which is what "
           "an operator is actually allowed to build.",
   "cats": [
@@ -193,7 +193,7 @@ RESULTS = {
               "post), there is no lock stopping two writes from overwriting each "
               "other, and the only per-request trace id is an AWS header rather than "
               "a Buildium one."),
-    (5, 5, "A perfect score, and the best access control graded so far. Issue a "
+    (5, 5, "A perfect score, matched only by RingCentral. Issue a "
            "read-only key for a reporting agent, scope a key to just the data an app "
            "needs, make one key per integration, and rotate or delete any of them "
            "yourself. A real sandbox exists and its keys cannot touch production."),
@@ -245,7 +245,7 @@ RESULTS = {
               "elsewhere: money fields come back as text rather than numbers, errors "
               "give a message but no fixed code, webhooks have no signature and no "
               "stated retry rule, and there is no API version policy at all."),
-    (1.3, 5, "The weakest single score on the board. LeadSimple gives one API key "
+    (1.3, 5, "Tied for the weakest single score on the board. LeadSimple gives one API key "
              "for the whole account, and that key can read and change everything. "
              "No read-only key, no way to limit a key to certain data, and no "
              "separate keys per tool. You can rotate it yourself, but a leaked key "
@@ -410,7 +410,7 @@ RESULTS = {
              "real controls: you can hold several separate keys, and you can revoke "
              "any one of them instantly yourself. Treat every key as a master "
              "password and give each integration its own."),
-    (3.8, 5, "The strongest category. The full machine-readable spec is public and "
+    (3.8, 5, "A genuine strength. The full machine-readable spec is public and "
              "free, no login and no sales call, so an AI coding tool can consume "
              "the whole API in one file. Process Street also runs its own MCP "
              "server, which means Claude can drive the account directly without you "
@@ -533,9 +533,22 @@ RESULTS = {
 },
 
 "Xero": {
-  "score": 80, "grade": "B-",
+  "score": 79, "grade": "C+",
   "meta": {"run": "Aug 27, 2026", "method": "1.1", "model": "Claude Opus 4.8",
-           "tier": "Baseline verified", "raw": "39.92 / 50"},
+           "tier": "Baseline verified", "raw": "39.50 / 50"},
+  # Same run, now three-run reconciled. Exactly one check moved (C2.8, yes to
+  # partial) and that single check is the whole 80-to-79 drop. Nothing about
+  # Xero's API changed, so the note has to say so plainly.
+  "note": "Re-examined under a three-run reconciliation. The three runs scored "
+          "80, 80 and 78 and agreed on 25 of the 27 checks. The published score "
+          "moves from 80 (B-) to 79 (C+) on a single check, webhook delivery. "
+          "Xero's API did not change and nothing about it got worse. The retry "
+          "policy behind that check turned out not to be citable from the frozen "
+          "evidence packet, only surfaced by search, and the methodology requires "
+          "a pinpoint citation, so signed payloads and replay guidance alone earn "
+          "a partial rather than a yes. One disagreement is left open, on "
+          "AI-readable documentation, worth 79 against 78. Both readings sit in "
+          "the same band, so the C+ holds either way.",
   "cats": [
     (13.1, 15, "You can read and change the accounting data your business runs on, "
                "post invoices and payments, and update contacts and accounts. What "
@@ -543,7 +556,7 @@ RESULTS = {
                "API; a partner bank feed or another tool does that. Plan to poll "
                "with the modified-since filter, because webhooks only cover a few "
                "record types."),
-    (6.7, 10, "Stable and predictable to run in production. Rate limits, "
+    (6.3, 10, "Stable and predictable to run in production. Rate limits, "
               "pagination, request tracing, and idempotency are all solid, and you "
               "can trace any request with support. Watch three things: dates arrive "
               "in two different formats, error shapes are not uniform, and there is "
@@ -563,7 +576,7 @@ RESULTS = {
                "hands-off machine-to-machine key all move you to a paid tier."),
   ],
   "strengths": [
-    "Highest score graded so far, and the only B so far",
+    "A changelog kept current, with a dated deprecation window out to Sept 2027",
     "Granular read/write scopes, verified enforced in live testing",
     "Six official SDKs plus an official MCP server for AI agents",
     "First-class idempotency keys on writes",
