@@ -31,7 +31,7 @@ import json, re, pathlib
 HERE = pathlib.Path(__file__).parent
 PAGE = HERE / "index.html"
 
-# The five scoring categories, in table-column order, with their v1.2 maxima.
+# The five scoring categories, in table-column order, with their v1.1 maxima.
 CAT_LABELS = [
     ("Functional Coverage",  15),
     ("Design &amp; Reliability", 10),
@@ -238,6 +238,98 @@ RESULTS = {
             "you still run your PMS as the system of record.",
 },
 
+"Process Street": {
+  "score": 73, "grade": "C",
+  "meta": {"run": "Aug 31, 2026", "method": "1.1", "model": "Claude Opus 5",
+           "tier": "Fully verified, controlled live", "raw": "36.25 / 50"},
+  # The only Fully verified run so far, and the only one graded three times.
+  # The note below is not optional colour: the report leaves one disagreement
+  # unresolved that moves the letter grade, so publishing 73 without it would
+  # present a contested number as settled.
+  "note": "Graded three independent times against the same frozen evidence. The "
+          "three unreconciled totals were 75, 72 and 70, and the published 73 is "
+          "not their average: it is recomputed from the check-level marks after "
+          "each disagreement was resolved against the evidence. 21 of 26 "
+          "applicable checks were unanimous. One disagreement is left unresolved "
+          "and it moves the grade: on change notification, a strict reading of the "
+          "scoring band gives 69 (D+) instead of 73 (C). This is also the only "
+          "result so far graded Fully verified, meaning all eight live-test steps "
+          "ran, including real writes and a webhook delivery, with nothing graded "
+          "from documentation alone.",
+  "cats": [
+    (13.1, 15, "The strongest part of the API. Everything the product does, the "
+               "API can do: start a checklist, tick tasks off, write form answers, "
+               "assign people, build and publish templates, manage data sets. The "
+               "writes were proven on a live account rather than taken from the "
+               "docs. The weak spot is being told when things change. You get an "
+               "event when a run starts, when a task is ticked, and when a run "
+               "finishes, and nothing else. There is no changed-since filter "
+               "anywhere, so anything outside those events means re-reading the "
+               "whole list and comparing it yourself."),
+    (5.0, 10, "The weakest half of the API, and the reason the grade sits where it "
+              "does. The shape is fine: clean REST, sensible pagination with a "
+              "documented sort order, and rate-limit headers that tell you exactly "
+              "when to back off. Three things will cost you real engineering time. "
+              "Retry safety is broken: the documentation promises that sending the "
+              "same start-this-checklist request twice will not duplicate it, and "
+              "in live testing it created two runs. The form-field data is loosely "
+              "typed in both directions, and the docs describe the read format "
+              "incorrectly. And there is no version check, so two systems writing "
+              "the same run will silently overwrite each other."),
+    (3.1, 5, "The category with real operational risk. Outside Enterprise, every "
+             "API key is a full organization administrator. There is no read-only "
+             "key and no way to limit a key to one workflow or folder, so any key "
+             "you issue could delete every workflow in the account. You do get two "
+             "real controls: you can hold several separate keys, and you can revoke "
+             "any one of them instantly yourself. Treat every key as a master "
+             "password and give each integration its own."),
+    (3.8, 5, "The strongest category. The full machine-readable spec is public and "
+             "free, no login and no sales call, so an AI coding tool can consume "
+             "the whole API in one file. Process Street also runs its own MCP "
+             "server, which means Claude can drive the account directly without you "
+             "writing an integration at all. That is unusual and genuinely "
+             "valuable. Cautions: many write endpoints have no worked example, the "
+             "AI-specific files are only link indexes, and the overview contains at "
+             "least two statements that live testing disproved."),
+    (11.3, 15, "Getting in the door is easy and free. You create keys yourself, and "
+               "the whole API works on the entry plan. The catch is on paper rather "
+               "than in practice: the Startup plan officially allows 50 API calls a "
+               "month, which would be useless for real automation, though nothing "
+               "enforced that limit during testing. Confirm your actual quota before "
+               "building anything business critical, and note that scoped keys are "
+               "Enterprise only."),
+  ],
+  "strengths": [
+    "The only Fully verified result so far: all eight live-test steps run, writes included",
+    "Graded three independent times, every disagreement resolved against the evidence",
+    "Full OpenAPI 3.1 spec, public and free, no login required",
+    "A first-party MCP server, so Claude can drive the account directly",
+    "API access included on every plan, with self-serve keys",
+  ],
+  "watch": [
+    "Documented duplicate prevention does not work: the same request created two runs",
+    "Every API key is a full organization admin outside Enterprise",
+    "Form-field data is loosely typed, and the docs describe the read format wrongly",
+    "No changed-since filter anywhere, so no incremental sync",
+    "Webhooks carry no payload signature of any kind",
+  ],
+  "bottom": "Process Street's API can do essentially everything the product can do, "
+            "and the writes were proven on a live account rather than taken on "
+            "trust. The documentation is a real strength: the complete "
+            "machine-readable spec is public and free, and Process Street runs its "
+            "own MCP server, so Claude can drive an account with very little custom "
+            "code. Three things should shape how you use it. Retry safety is broken, "
+            "so build your own duplicate guard. The documentation is wrong in places "
+            "that matter, so build against observed behaviour and test each endpoint "
+            "yourself. And outside Enterprise every key is a full organization "
+            "administrator, so give each integration its own key and revoke "
+            "precisely. It is not a PMS, a bank, or a trust accounting system. It is "
+            "the procedure layer that runs on top of whatever holds your properties, "
+            "leases and money, and it does have a genuine property management "
+            "offering, though that comes from templates rather than any "
+            "property-specific objects in the API.",
+},
+
 "Xero": {
   "score": 80, "grade": "B-",
   "meta": {"run": "Aug 27, 2026", "method": "1.1", "model": "Claude Opus 4.8",
@@ -320,13 +412,13 @@ AWAITING_RERUN = {
 
 "Property Meld": {
   # DO NOT re-score this by hand. An earlier pass recomputed it to 72 (C-) under
-  # the v1.2 weighting. The arithmetic was traceable, but every resulting number
+  # the v1.1 weighting. The arithmetic was traceable, but every resulting number
   # was calculated rather than produced by a grading run, and the report states
   # no category score out of 15 or 5 anywhere. Category 5 is the clearest case:
   # the report earns "2 of 4" checks, two of which (C5.2 free sandbox, C5.4
-  # onboarding friction) no longer exist, so its v1.2 score cannot be derived
+  # onboarding friction) no longer exist, so its v1.1 score cannot be derived
   # from anything the report actually says. Only the published 76 (C) below is a
-  # real result. Replace this whole entry when the v1.2 re-run lands.
+  # real result. Replace this whole entry when the v1.1 re-run lands.
   "score": 76, "grade": "C",
   "meta": {"run": "Aug 25, 2026", "method": "2.0", "model": "Claude Opus 4.8",
            "tier": "Baseline verified", "raw": "38.07 / 50"},
@@ -343,7 +435,7 @@ AWAITING_RERUN = {
             "with that result.",
   },
   # Originally run and published under methodology v2.0 (76/100, C). Re-scored
-  # here under v1.2 from the same frozen evidence packet. Not one check mark was
+  # here under v1.1 from the same frozen evidence packet. Not one check mark was
   # changed; only the category weighting differs, exactly as the LeadSimple run
   # was re-scored from v2.0 to v1.1. See "rescored" below for the reader-facing
   # version of this note.
@@ -511,7 +603,7 @@ def build_data():
                   for i, (p, _, t) in enumerate(r["cats"])],
             "st": r["strengths"], "w": r["watch"], "b": r["bottom"],
             "lg": r["legacy"]["note"] if r.get("legacy") else None,
-            "rs": r.get("rescored"),
+            "rs": r.get("note") or r.get("rescored"),
         }
     return json.dumps(out, separators=(",", ":"), ensure_ascii=False)
 
@@ -525,7 +617,7 @@ def check_math():
 
     The category points, the headline score, and the grade are three separate
     fields that a careless edit can knock out of step. This recomputes the score
-    from the parts and re-derives the letter from the v1.2 bands, and refuses to
+    from the parts and re-derives the letter from the v1.1 bands, and refuses to
     build if either disagrees. Rounding tolerance is one point, because the
     displayed category points are rounded to one decimal.
     """
@@ -540,7 +632,7 @@ def check_math():
         letter = next(g for lo, g in BANDS if r["score"] >= lo)
         if letter != r["grade"]:
             raise SystemExit(
-                f"{name}: {r['score']}/100 is {letter} under the v1.2 bands, "
+                f"{name}: {r['score']}/100 is {letter} under the v1.1 bands, "
                 f"but the grade is set to {r['grade']}")
         print(f"  ok  {name:15} {raw:5.2f}/{sum(maxima)} -> {r['score']} {r['grade']}")
 
@@ -550,7 +642,7 @@ def main():
     html = PAGE.read_text(encoding="utf-8")
 
     results_block = f"""      {build_stats()}
-      <p class="sub" style="margin-top:16px;font-size:14px;">Scores are point-in-time and tied to the evidence access date. Methodology v1.2.</p>
+      <p class="sub" style="margin-top:16px;font-size:14px;">Scores are point-in-time and tied to the evidence access date. Methodology v1.1.</p>
 
       <h2 class="h-lead" style="margin-top:46px;">The results.</h2>
       <p class="sub" style="margin:10px 0 18px;">Scores are point-in-time, based on first-party documentation and, where available, live testing. Click any graded platform for the full breakdown.</p>
