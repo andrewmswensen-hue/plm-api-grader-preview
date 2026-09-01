@@ -81,8 +81,24 @@ RESULTS = {
 
 "Buildium": {
   "score": 78, "grade": "C+",
-  "meta": {"run": "Aug 27, 2026", "method": "1.1", "model": "Claude Opus 4.8",
+  "meta": {"run": "Sep 1, 2026", "method": "1.1", "model": "Claude Opus 4.8",
            "tier": "Baseline verified", "raw": "38.75 / 50"},
+  # Re-graded 2026-09-01 as a clean-room run plus a 3-grader reconciliation.
+  # Every category landed on the identical points as the 2026-08-27 run, and the
+  # two checks that diverged resolved to the same marks, so the per-category
+  # prose below still holds. What is new is the provenance and one real caveat.
+  "note": "Re-graded on 2026-09-01 as a clean-room run, then checked by three "
+          "independent graders against the same frozen evidence. 25 of the 27 "
+          "checks were unanimous, and the published 78 is recomputed from the "
+          "reconciled marks rather than averaged. One honest caveat, and it is the "
+          "whole spread between the runs: it rests on a single check, core "
+          "operational actions. Graded strictly from the frozen evidence packet as "
+          "written, the reproducible result is 74 (C). Graded against Buildium's "
+          "full first-party reference, which lists create and update operations "
+          "for every core object, it is 78 (C+). The difference is how complete "
+          "the evidence packet was, not Buildium's actual capability. The 3-run "
+          "process earned its keep here: it also forced a correction on bulk "
+          "export, from yes down to partial.",
   "cats": [
     (15, 15, "Reads and writes nearly everything the business runs on: properties, "
              "units, leases, tenants, ledgers, bank accounts, bills, tasks, and work "
