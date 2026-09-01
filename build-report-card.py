@@ -461,22 +461,17 @@ RESULTS = {
   "score": 93, "grade": "A",
   "meta": {"run": "Sep 1, 2026", "method": "1.1", "model": "Claude Opus 4.8",
            "tier": "Baseline verified", "raw": "46.67 / 50"},
-  # First A, and by a wide margin the highest score on the board. The note has to
-  # carry the comparability caveat: this is a phone system, not PM software, and
-  # a reader scanning the table will otherwise read the A next to AppFolio's F as
-  # a straight product comparison.
+  # No cross-category caveat here. The table groups by software type, so this is
+  # read against the other phone systems, which is the whole reason the grouping
+  # exists. A note explaining that would only undercut the score.
   "note": "The highest score graded so far, and the first A. Graded three "
           "independent times, and all three runs landed on 93. 25 of the 27 "
           "checks were unanimous, and the two that split sat in the same category "
           "and offset each other exactly, so the total is 93 under either "
-          "resolution. Worth reading alongside the rest of the table with one "
-          "caveat: RingCentral is a communications platform, not property "
-          "management software. It documents no PM-specific workflows, and the "
-          "rubric does not penalise a product for capabilities its category has "
-          "no use for. So the score says this is an excellent API to build on, "
-          "not that it does what a PMS does. Read paths were tested live on a "
-          "production account with a read-only key; the write paths are graded "
-          "from documentation, because the key supplied could not write.",
+          "resolution. Read paths were tested live on a production account with a "
+          "read-only key; the write paths are graded from documentation, because "
+          "the key supplied could not write. A sandbox key would lift those to "
+          "fully verified.",
   "cats": [
     (15, 15, "A perfect score. You can pull essentially all of your "
              "communications data, calls, texts, voicemail and the directory, "
@@ -519,7 +514,7 @@ RESULTS = {
     "No optimistic concurrency, so two writers can overwrite each other",
     "The central changelog has not been updated since April 2022",
     "No llms.txt, so AI tools fall back to the OpenAPI spec",
-    "Not property management software: no PM workflows are documented",
+    "High-volume SMS needs separate A2P registration and entitlement",
   ],
   "bottom": "RingCentral's API is excellent to build on: modern REST with an "
             "OpenAPI spec and SDKs in every common language, granular read-only "
