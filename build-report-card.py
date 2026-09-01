@@ -79,6 +79,89 @@ PILL_LABELS = {
 # ---------------------------------------------------------------------------
 RESULTS = {
 
+"AppFolio": {
+  "score": 48, "grade": "F",
+  "meta": {"run": "Sep 1, 2026", "method": "1.1", "model": "Claude Fable 5",
+           "tier": "Baseline verified", "raw": "24.17 / 50"},
+  # The first F, and the largest vendor on the list, so the note has to be
+  # scrupulous about what the score does and does not say. The report is explicit
+  # that the grade reflects access and control, not engineering quality.
+  "note": "Graded three independent times against the same frozen evidence, with "
+          "unreconciled totals of 50, 45 and 48. 21 of the 27 checks were "
+          "unanimous, and the published 48 is recomputed from the reconciled marks "
+          "rather than averaged. Across every defensible reading of the remaining "
+          "ambiguities the score stays between 45 and 56, so the letter grade is F "
+          "under all of them. Worth being precise about what that means: this is "
+          "not a verdict on engineering quality. On design and reliability alone "
+          "AppFolio scores 7.9 out of 10, the second highest of any platform graded "
+          "so far. The F comes from the other half of the question, which is what "
+          "an operator is actually allowed to build.",
+  "cats": [
+    (5.6, 15, "You can read everything and be notified about nearly everything, and "
+              "you can automate maintenance, billing, and application decisions. "
+              "But the leasing money cycle stays in the AppFolio interface. There "
+              "is no lease creation, no move-out, no payment posting, no voiding or "
+              "reversing a ledger transaction, and no reconciliation through the "
+              "API. Leases can only be updated on three fields."),
+    (7.9, 10, "The strongest part of the card, and a well engineered API by any "
+              "measure. Typed schemas, real idempotency keys with replay headers, "
+              "exact rate-limit semantics, cryptographically signed webhooks across "
+              "20 topics, documented conflict behaviour, and a public status page. "
+              "The gaps are minor: error codes mirror the HTTP status rather than "
+              "naming the cause, there is no ordering guarantee on lists, the "
+              "request id is undocumented, and there is no webhook retry contract."),
+    (1.9, 5, "One all-or-nothing production key per database. You can rotate it "
+             "yourself, but you cannot mint a read-only key for a reporting tool, a "
+             "scoped key for an AI agent, or a second key you can revoke "
+             "independently. Which endpoints and even which fields your key can see "
+             "is negotiated with AppFolio rather than set by you. And there is no "
+             "sandbox, so you test against production with that one key."),
+    (1.3, 5, "A human developer with your login gets excellent documentation: 162 "
+             "operations, typed schemas, worked examples, and a monthly changelog. "
+             "Your AI tools get almost nothing. There is no OpenAPI spec published "
+             "anywhere, no SDK, no MCP server, and the reference is a "
+             "JavaScript-rendered page that returns an empty shell to anything "
+             "without a browser. It is also login-gated, so it is not public."),
+    (7.5, 15, "The API is a premium plan feature. There is no API at all on Core, "
+              "read-only on Plus, and read-write only on the top Max plan. Even "
+              "once you are entitled, generating the credential is self-serve but "
+              "usable access is not: endpoint and field permissions are agreed with "
+              "AppFolio case by case, and webhooks and batching need a "
+              "representative."),
+  ],
+  "strengths": [
+    "Second-highest Design and Reliability score of any platform graded so far",
+    "Real idempotency keys, with replay headers and documented error codes",
+    "Signed webhooks across 20 topics, with a public key set",
+    "A Reports API exposing trust account, deposit, ledger and 1099 data",
+    "Changelog with 104 dated entries and a monthly cadence",
+  ],
+  "watch": [
+    "No lease creation, move-out, payment posting, voids or reconciliation via API",
+    "One all-powerful key per database, with no read-only or scoped option",
+    "No operator sandbox, so you test against production",
+    "No OpenAPI spec, no SDK, and docs an AI tool cannot retrieve",
+    "Endpoint and field access is negotiated with AppFolio, not self-serve",
+  ],
+  "bottom": "AppFolio's Database API is a well engineered read-and-notify platform "
+            "with a genuinely strong operational core. Every object your business "
+            "runs on is readable with typed schemas, incremental sync is the "
+            "documented design, webhooks are cryptographically signed, and "
+            "idempotency and rate limits are properly specified. The score is "
+            "dragged down by what an operator is allowed to build. The API is "
+            "locked to premium plans, endpoint and field access is negotiated with "
+            "AppFolio rather than self-serve, there is one all-powerful key per "
+            "database with no sandbox, AI tooling gets no spec or retrievable docs, "
+            "and the leasing money cycle is absent entirely. The F reflects this "
+            "rubric's heavy weighting of access, control and workflow completeness, "
+            "not engineering quality. Practical read: on the Max plan this is an "
+            "excellent system of record to sync from and to automate maintenance, "
+            "billing and application decisions against, and the Reports API pulls "
+            "trust account and 1099 data programmatically. It is not a platform you "
+            "can run your whole business through, because managing trust accounts, "
+            "posting payments and reconciliation stay in the interface.",
+},
+
 "Buildium": {
   "score": 78, "grade": "C+",
   "meta": {"run": "Sep 1, 2026", "method": "1.1", "model": "Claude Opus 4.8",
@@ -202,56 +285,84 @@ RESULTS = {
 
 
 "RentEngine": {
-  "score": 74, "grade": "C",
-  "meta": {"run": "Aug 27, 2026", "method": "1.1", "model": "Claude Opus 4.8",
-           "tier": "Baseline verified", "raw": "36.96 / 50"},
+  "score": 78, "grade": "C+",
+  "meta": {"run": "Sep 1, 2026", "method": "1.1", "model": "Claude Opus 4.8",
+           "tier": "Baseline verified", "raw": "38.83 / 50"},
+  # Supersedes the 2026-08-27 run (74, C). Four of five categories moved, mostly
+  # because the earlier run missed first-party evidence that exists: a status
+  # page, a changelog, and a written compatibility policy. RentEngine also
+  # shipped spec 1.3.0 in between.
+  "note": "This replaces an earlier run from 2026-08-27 that scored 74 (C). Two "
+          "things changed. The first run reported no status page and no changelog; "
+          "both exist, along with a written compatibility policy promising 30 days "
+          "notice before a breaking change, which is why Design and Reliability "
+          "rose from 4.6 to 7.1. RentEngine also shipped a new API version in "
+          "between. This run was graded three times against the same frozen "
+          "evidence, with unreconciled totals of 75, 81 and 78, and the published "
+          "78 is recomputed from the reconciled marks rather than averaged. "
+          "Categories 2, 3 and 5 were unanimous. Two checks carry residual "
+          "sensitivity, so the honest band is 74 to 82, centred on 78.",
   "cats": [
-    (11.3, 15, "You can build real leasing automation: sync leads, drive the "
-               "pipeline, schedule showings, and manage units and listings. What you "
-               "cannot do through the API is submit an application, run or read a "
-               "screening decision, cancel a showing, or delete anything. "
-               "Applications and prescreening are read-only, so RentEngine's own "
-               "hosted flow stays the front door."),
-    (4.6, 10, "The lowest Design and Reliability score in this group. It behaves "
-              "predictably where you touch it most, with clean REST, honest "
-              "rate-limit headers, and useful validation errors. But rent, bedrooms, "
-              "and bathrooms are typed as strings in the contract (and the live data "
-              "disagrees with the contract), there is no concurrency protection, "
-              "most list endpoints give no has-more signal, and there is no status "
-              "page at all."),
-    (3.0, 5, "You can hand out several named keys and cut any of them off yourself "
-             "in seconds, which is good. But you cannot issue a read-only or "
-             "narrowly scoped key: every token inherits the full power of the user "
-             "who created it, across all their accounts. Make a dedicated "
-             "limited-permission user and mint the token from that."),
-    (3.1, 5, "The reference is genuinely good and machine-ready. A downloadable "
-             "OpenAPI 3.1 spec plus a docs MCP server means Claude Code can build "
-             "against it quickly. The gap is currency: there is no changelog, so you "
-             "get no warning when something changes."),
-    (15, 15, "The strongest part of the card. Open API access is included for every "
-             "RentEngine customer, and you can mint your own key without a sales "
-             "call. Nothing forces a plan upgrade to build."),
+    (9.4, 15, "You can read essentially everything RentEngine knows: leads, units, "
+              "showings, applications, screening results, calls, messages, and "
+              "reports. That is the coverage that matters most for a leasing "
+              "integration. You can also push new leads, schedule showings, manage "
+              "unit inventory, and add notes and follow-ups. The limits are on "
+              "changing state. You cannot update a prospect's fields at all, stage "
+              "advancement is limited to two event types, there is no delete and no "
+              "showing cancel, and the approve or reject decision lives in your PMS."),
+    (7.1, 10, "Built to run in production, and confirmed live. Rate-limit headers, "
+              "a real Retry-After, request ids you can quote to support, a clear "
+              "versioning and deprecation contract, and a public status page are "
+              "all present. The gaps are manageable: errors carry no stable machine "
+              "code so you match on status and message text, there is no "
+              "idempotency key, there is no protection against two writers "
+              "overwriting each other, and webhook verification is an optional "
+              "shared secret rather than a real signature."),
+    (3.0, 5, "You can create several named keys and revoke them yourself, which is "
+             "good for separating integrations and cutting off access fast. The "
+             "weakness is blast radius. Every key carries the full permissions of "
+             "the user who created it, and there is no read-only or "
+             "resource-scoped option. To give an AI agent or a third party a narrow "
+             "slice, your only lever is to create a limited RentEngine user and "
+             "mint the token as that user. Treat every token like a password."),
+    (4.4, 5, "A real strength. A developer or an AI coding tool can build straight "
+             "from the public OpenAPI 3.1 spec without reverse-engineering, the "
+             "guides for auth, pagination, rate limits and webhooks are clear, and "
+             "the changelog was current to the day before this run. The one gap is "
+             "a purpose-built AI retrieval corpus: the llms.txt file is an index "
+             "only, so an AI tool leans on the spec instead."),
+    (15, 15, "Full marks, and the opposite of the call-sales-to-unlock pattern "
+             "common in this industry. If you are a customer you create your own "
+             "key in the portal in minutes. API access is part of the standard "
+             "platform on transaction pricing, with no premium tier gating it."),
   ],
   "strengths": [
-    "API access included for every customer, no upgrade needed",
-    "OpenAPI 3.1 spec plus a live docs MCP server for AI tools",
-    "Seven webhook event types covering the mutable objects",
-    "Write path was verified with real controlled live testing",
+    "API access included on standard pricing, with self-serve keys",
+    "Public OpenAPI 3.1 spec, downloadable as JSON and YAML",
+    "A written compatibility policy with 30 days notice before breaking changes",
+    "Changelog current to the day before the run, and a public status page",
+    "Request ids you can quote to support, echoed back if you supply your own",
   ],
   "watch": [
-    "Rent, bedrooms, and bathrooms are typed as strings, and live data disagrees",
-    "No read-only or scoped keys: every token inherits full user power",
-    "No delete and no showing cancel; applications and screening are read-only",
-    "No status page and no changelog",
+    "No endpoint updates a prospect's fields, and stage advance covers two events",
+    "No delete anywhere, and no showing cancel",
+    "Every key carries its creator's full permissions; no read-only option",
+    "No idempotency key and no concurrency control, so retries and races need care",
+    "Webhook verification is an optional shared secret, not a signature",
   ],
-  "bottom": "RentEngine has a real, modern, self-serve API, and access is its "
-            "strongest feature. You can build genuine leasing automation today: sync "
-            "prospects, drive the pipeline, schedule showings, and manage units and "
-            "listings, with webhooks for changes. The limitations are that the API "
-            "is read-only for applications and screening, there is no delete and no "
-            "cancel, and production hygiene is uneven. Build defensive parsing and "
-            "your own retry safety net. It is a leasing and CRM layer, not a PMS, so "
-            "you still run your PMS as the system of record.",
+  "bottom": "RentEngine gives you a real, modern, well-documented leasing API you "
+            "can get into today without a sales call, and it is genuinely strong at "
+            "reading your leasing data and feeding it: leads in, showings "
+            "scheduled, and change events out by webhook for the core objects. Its "
+            "biggest strength is buildability and access, with a clean OpenAPI 3.1 "
+            "spec, production-grade operability signals, and self-serve keys that "
+            "are not paywalled. Its biggest limitation is write depth and safety. "
+            "You cannot update a prospect or approve applications through the API, "
+            "there is no delete, and there is no idempotency key, no concurrency "
+            "control, and no read-only credential. It is a top-of-funnel leasing "
+            "system, not a bank, PMS or trust-accounting platform, so you will "
+            "still run accounting and the signed-lease lifecycle in your PMS.",
 },
 
 "Process Street": {
@@ -587,7 +698,10 @@ def build_rows():
 def build_stats():
     graded = [r for r in RESULTS.values()]
     listed = sum(len(c) for _, _, c in CATEGORIES)
-    avg = round(sum(r["score"] for r in graded) / len(graded)) if graded else "&ndash;"
+    # Round half up, matching the methodology's own rule for scores.
+    # Python's round() is banker's rounding: it would turn 72.5 into 72.
+    avg = (int(sum(r["score"] for r in graded) / len(graded) + 0.5)
+           if graded else "&ndash;")
     best = max(graded, key=lambda r: r["score"]) if graded else None
     best_txt = f'{best["grade"]}' if best else "&ndash;"
     best_who = next((n for n, r in RESULTS.items() if r is best), "")
