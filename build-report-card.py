@@ -232,55 +232,81 @@ RESULTS = {
 },
 
 "LeadSimple": {
-  "score": 78, "grade": "C+",
-  "meta": {"run": "Aug 27, 2026", "method": "1.1", "model": "Claude Opus 4.8",
-           "tier": "Baseline verified", "raw": "39.17 / 50"},
+  "score": 87, "grade": "B+",
+  "meta": {"run": "Aug 28, 2026", "method": "1.1", "model": "Claude Opus 4.8",
+           "tier": "Baseline verified", "raw": "43.33 / 50"},
+  # The first row that moved because the VENDOR changed the product, not because
+  # the evidence or the rubric changed. Worth saying out loud: it is the clearest
+  # evidence the report card is doing what it is for.
+  "note": "This is the first platform here to move because the vendor changed the "
+          "product, rather than because the evidence or the rubric changed. "
+          "Between the 2026-08-27 run and this one, LeadSimple shipped five "
+          "fixes, all of them in its two weakest categories: a public "
+          "documentation site, multiple API keys, read-only keys, per-key revoke, "
+          "and key labels. Access Control went from 1.3 out of 5 to 4.4, and "
+          "Documentation from 2.5 to 3.1, taking the score from 78 (C+) to 87 "
+          "(B+). Coverage and cost did not move, because the API surface and plan "
+          "access did not change. Two independent graders then scored the same "
+          "frozen evidence and agreed on 25 of the 27 checks, with the two splits "
+          "resolved against the evidence rather than averaged. The three runs "
+          "landed at 85, 86 and 87, so the result is robustly B or B+.",
   "cats": [
-    (15, 15, "You can build real tools on this. Read and change your main records, "
-             "contacts, deals, and processes, and receive change events by webhook. "
-             "Two gaps: you cannot create or complete a task through the API, and "
-             "you cannot delete records through it."),
-    (5.4, 10, "Good in places: live rate-limit counters on every response, a request "
-              "id on each one, and page totals so you can plan a full sync. Weaker "
-              "elsewhere: money fields come back as text rather than numbers, errors "
-              "give a message but no fixed code, webhooks have no signature and no "
-              "stated retry rule, and there is no API version policy at all."),
-    (1.3, 5, "Tied for the weakest single score on the board. LeadSimple gives one API key "
-             "for the whole account, and that key can read and change everything. "
-             "No read-only key, no way to limit a key to certain data, and no "
-             "separate keys per tool. You can rotate it yourself, but a leaked key "
-             "puts the entire account at risk."),
-    (2.5, 5, "Workable for a developer, with limits. There is a full OpenAPI file "
-             "for code tools, but the reference sits behind a login rather than "
-             "being public, there are no AI-ready docs for the API, and no "
-             "API-specific changelog."),
-    (15, 15, "Full marks. You enable the API and copy the key yourself with no sales "
-             "call, and the REST surface you need is included in the plan rather "
-             "than locked behind the top tier."),
+    (15, 15, "You can build real tools on this. Read and change your main "
+             "records, contacts, deals, and processes, and receive change events "
+             "by webhook. Two gaps: you cannot create or complete a task through "
+             "the API, and you cannot delete records through it."),
+    (5.8, 10, "The one category the improvements did not touch, and it shows. "
+              "Good in places: live rate-limit counters on every response, a "
+              "request id on each one, and page totals so you can plan a full "
+              "sync. Weaker elsewhere, and unchanged from the last run. Money "
+              "fields come back as text rather than numbers, errors give a "
+              "message but no fixed code, webhooks have no signature and no "
+              "stated retry rule, and there is no version in the path and no "
+              "deprecation policy."),
+    (4.4, 5, "This was the weakest area on the card at 1.3 out of 5, and it is "
+             "now one of the stronger ones. LeadSimple shipped read-only keys, "
+             "multiple named keys, and per-key revoke. You can hand a reporting "
+             "agent a key that cannot change anything, give every integration its "
+             "own key, and cut one off without breaking the rest. The gap left is "
+             "fine-grained scoping: the create-key dialog offers only read-only or "
+             "full read and write, so a key still cannot be limited to particular "
+             "data."),
+    (3.1, 5, "The reference is now public, which was the big fix. A complete "
+             "no-login reference, a downloadable OpenAPI 3.0 file, and request "
+             "samples in five languages, so a developer or an AI tool can build "
+             "against it without an account. Two gaps remain: no llms.txt for AI "
+             "retrieval, and no API-specific changelog, only a product-wide one."),
+    (15, 15, "Full marks. You enable the API and create keys yourself with no "
+             "sales call, and the REST surface you need is included in the plan "
+             "rather than locked behind the top tier."),
   ],
   "strengths": [
+    "Gained 9 points by shipping fixes to its two weakest categories",
+    "Read-only keys, multiple named keys, and per-key revoke, all self-serve",
+    "Public OpenAPI 3.0 spec and reference, no login required",
     "Full coverage of contacts, deals, and processes, with webhooks",
-    "Included in the plan, not gated to the top tier",
-    "Self-serve key with no sales call",
-    "Live rate-limit counters and a request id on every response",
+    "API access included in the plan, not gated to the top tier",
   ],
   "watch": [
-    "One all-powerful account key, with no read-only or scoped option",
+    "Money fields come back as text, not numbers",
     "Webhooks have no signature and no documented retry policy",
-    "Money fields return as text, not numbers",
-    "No API version or deprecation policy",
-    "Docs require a login",
+    "Errors carry no stable machine-readable code",
+    "Keys are read-only or full access; still no per-resource scoping",
+    "No version in the path, and no deprecation policy",
   ],
-  "bottom": "LeadSimple gives you a real, useful REST API. You can read and change "
-            "your core CRM and operations data, contacts, deals, processes, "
-            "communications, custom fields, and reports, and get change events by "
-            "webhook. Its two clear weaknesses are safe automation and "
-            "documentation. There is exactly one account key, it can do everything, "
-            "and you cannot narrow it, so guard and rotate it carefully. Access "
-            "itself is a genuine strength: self-serve and included on the plan. "
-            "LeadSimple is not your system of record, it sits on top of your PMS, so "
-            "you still need AppFolio, Buildium, or the like for property, lease, and "
-            "money data.",
+  "bottom": "LeadSimple's REST API has improved markedly, from 78 (C+) to 87 (B+), "
+            "because it fixed its two weakest areas. You can now create multiple "
+            "labeled keys, make a key read-only, and revoke any key on its own, so "
+            "you can hand a reporting agent something safe and cut off one "
+            "integration without breaking the rest. The documentation is public "
+            "now, with a downloadable OpenAPI 3.0 file and request samples in five "
+            "languages, so a developer or an AI tool can build against it without "
+            "a login. The remaining weaknesses are in reliability rather than "
+            "access: money fields come back as text, errors carry no stable code, "
+            "webhooks have no signature or retry policy, and there is no clear "
+            "version policy. LeadSimple is not a bank and not your system of "
+            "record. It sits on top of your PMS, so you still need that PMS for "
+            "property, lease, ledger and money data.",
 },
 
 
