@@ -53,25 +53,23 @@ CATEGORIES = [
         ["LeadSimple", "Aptly", "Process Street"]),
     ("maintenance",  "Maintenance",
         ["Property Meld", "Vendoroo", "Mason", "Latchel", "Lula"]),
-    ("inspections",  "Inspections",
-        ["zInspector", "ResidentInspect", "RentCheck", "HappyCo", "SnapInspect",
-         "PropertyInspect"]),
     ("banks",        "Banks",
         ["Column", "Enterprise Bank"]),
     ("accounting",   "Corporate Accounting",
         ["Xero", "QuickBooks Online"]),
-    ("deposits",     "Deposits",
-        ["Obligo", "Lighthouse", "Rhino", "Jetty"]),
     ("phone",        "Phone",
-        ["RingCentral", "LeadSimple Phone", "SimpleVOIP", "Zoom Phone", "OpenPhone"]),
+        ["RingCentral", "SimpleVOIP", "Zoom Phone", "OpenPhone", "JustCall"]),
 ]
+
+# Platforms with no API to grade at all. The row says so across the score columns
+# rather than showing dashes, which would imply "not graded yet".
+NO_API = {"Enterprise Bank"}
 
 # Short labels for the pills (the headings above are too long for a pill row).
 PILL_LABELS = {
     "pm-software": "PM Software", "listings": "Listings &amp; Screening",
     "workflow": "Workflow &amp; CRM", "maintenance": "Maintenance",
-    "inspections": "Inspections", "banks": "Banks",
-    "accounting": "Corp Accounting", "deposits": "Deposits", "phone": "Phone",
+    "banks": "Banks", "accounting": "Corp Accounting", "phone": "Phone",
 }
 
 # ---------------------------------------------------------------------------
@@ -843,6 +841,14 @@ def build_rows():
         )
         for co in companies:
             r = RESULTS.get(co)
+            if co in NO_API:
+                rows.append(
+                    f'<tr class="no-api"><td class="plat">'
+                    f'<span class="co-name">{co}</span></td>'
+                    f'<td class="num" colspan="7">'
+                    f'<span class="cat-legacy">No API available</span></td></tr>'
+                )
+                continue
             if not r:
                 cells = '<td class="num"><span class="cat-none">&ndash;</span></td>' * 5
                 rows.append(
