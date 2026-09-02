@@ -558,6 +558,87 @@ RESULTS = {
             "and the stale changelog, so verify against the live reference.",
 },
 
+"Tenant Turner": {
+  "score": 51, "grade": "F",
+  "meta": {"run": "Sep 1, 2026", "method": "1.1", "model": "Claude Opus 5",
+           "tier": "Baseline verified", "raw": "25.42 / 50"},
+  # Sits directly under RentEngine in the same category, which is the comparison
+  # that matters: 51 against 78 for two leasing tools graded on the same rubric.
+  "note": "Graded three independent times. The runs scored 56, 50 and 51 before "
+          "reconciliation and agreed on 23 of the 26 applicable checks; the three "
+          "splits were each resolved against the evidence rather than averaged, "
+          "landing on 51. The F held in all three runs and under every "
+          "single-check alternative either independent grader considered. One "
+          "detail worth knowing if you are grading a platform yourself: Tenant "
+          "Turner's API reference and OpenAPI file sit behind a customer login, "
+          "and the run only proceeded because the operator supplied authenticated "
+          "access. Without it most of three categories would have been unverified "
+          "and the run would have failed the coverage gate outright.",
+  "cats": [
+    (3.8, 15, "You can read almost everything Tenant Turner knows about your "
+              "listings, leads and showings, and you can publish and activate a "
+              "listing end to end. What you largely cannot do is change things. "
+              "There is no cancelling or rescheduling a showing, no updating a "
+              "lead, no writing back showing feedback, and no turning self-access "
+              "viewing on or off. Event coverage is genuinely strong, with 21 "
+              "signed triggers, but for anything beyond listings you will be "
+              "reading Tenant Turner and acting somewhere else."),
+    (4.2, 10, "The shape of the API is fine, and the pagination and incremental "
+              "filters are well behaved. The problems are the ones that bite in "
+              "production. Money-adjacent numbers arrive as strings even though "
+              "you write them as numbers, so every rent and deposit needs parsing "
+              "and your types will not round-trip. Retrying a failed showing "
+              "creation can double-book a prospect, because nothing prevents "
+              "duplicates. Nothing tells you what the rate limit is or when you "
+              "hit it. And you cannot quote a request id to support."),
+    (1.3, 5, "The area with real operational risk. There is one key, it can do "
+             "everything your account can do, and you cannot give a contractor, a "
+             "vendor or an AI agent a narrower slice. If you hand that key to an "
+             "automation and it misbehaves, your only lever is to refresh the key, "
+             "which instantly breaks every other integration using it. With no "
+             "sandbox either, there is nowhere safe to develop."),
+    (1.3, 5, "For the REST endpoints, a developer or coding agent handed the "
+             "OpenAPI file can build quickly. Everything around it is thin. The "
+             "docs sit behind a login, so a coding tool cannot reach them unaided. "
+             "Webhooks, the most useful capability here, have no documentation at "
+             "all, so payload shapes must be reverse-engineered. And there is no "
+             "changelog, so the first sign something changed will be your "
+             "integration breaking."),
+    (15, 15, "Full marks, and the category Tenant Turner wins outright. Nothing "
+             "stands between you and the API. If you are a customer on any plan "
+             "the key is already sitting in your portal, it costs nothing extra, "
+             "and you can start building this afternoon."),
+  ],
+  "strengths": [
+    "Free on every plan, with the key already sitting in your portal",
+    "21 signed webhook events, enough to keep a CRM current in near real time",
+    "Cursor pagination and incremental filters that behave well under test",
+    "Full write control over listings, including activate and deactivate",
+    "Public status page showing 100% uptime over 90 days",
+  ],
+  "watch": [
+    "One all-powerful key: no read-only option, no scoping, no second key",
+    "A showing cannot be cancelled or rescheduled, and a lead cannot be updated",
+    "Rent and deposit amounts write as numbers and read back as strings",
+    "No documented rate limit, and no idempotency, so a retry can double-book",
+    "Webhooks are undocumented, so payload shapes must be reverse-engineered",
+  ],
+  "bottom": "Tenant Turner has done the hard part of access exactly right: the API "
+            "is free, on every plan, and the key is already in your portal. What "
+            "you get for that is a solid read surface over your listings, leads "
+            "and showings, full write control over listings themselves, and 21 "
+            "signed webhook triggers. If your goal is getting your leasing data "
+            "out and into something else, you can build that today, though you "
+            "will be reverse-engineering the event payloads and correcting the "
+            "generated client as you go. What you cannot build is write-back "
+            "automation for the things that move fastest: any workflow ending in "
+            "'and then change it in Tenant Turner' ends with a person in the "
+            "portal instead. Read the score for what it measures. This rates API "
+            "buildability, not the product, and Tenant Turner is a leasing tool "
+            "that clearly does its job. Treat the API as a very good read-and-"
+            "notify feed with a narrow write path for listings.",
+},
+
 "Xero": {
   "score": 80, "grade": "B-",
   "meta": {"run": "Aug 27, 2026", "method": "1.1", "model": "Claude Opus 4.8",
