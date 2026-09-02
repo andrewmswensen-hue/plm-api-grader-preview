@@ -310,6 +310,92 @@ RESULTS = {
 },
 
 
+"Property Meld": {
+  "score": 49, "grade": "F",
+  "meta": {"run": "Sep 1, 2026", "method": "1.1", "model": "Claude Fable 5.1",
+           "tier": "Fully verified, controlled live", "raw": "24.38 / 50"},
+  # The re-run that replaces the superseded v2.0 result. Keep the note's second
+  # half: it is the record of why re-scoring an old run arithmetically was the
+  # wrong call, and the page should carry that rather than only the commit log.
+  "note": "This replaces the 2026-08-25 run, which was graded on a superseded "
+          "scoring model and published 76 (C). This is a fresh clean-room run: no "
+          "prior material was read or reused, and it is one of only two results "
+          "here graded Fully verified, with real writes performed on labelled "
+          "fixtures under recorded authorisation and cleanup confirmed "
+          "afterwards. The size of the gap is worth recording. Converting the old "
+          "marks arithmetically to the current weighting would have published "
+          "roughly 72 (C-). The actual re-run scores 49 (F), two grade bands "
+          "lower, because a fresh run found things the first one never looked "
+          "for: no way to cancel a work order, an assignment field that is "
+          "undocumented and untyped, field types that disagree with the published "
+          "schema, and an idempotency guide naming a header the API does not "
+          "honour. No amount of re-weighting old marks would have surfaced any of "
+          "that.",
+  "cats": [
+    (5.6, 15, "You can read everything about your maintenance operation, and you "
+              "can create work orders, complete them, and manage units, "
+              "properties, residents, owners, vendors and tags. Creating, "
+              "updating and deactivating a property and a unit worked exactly as "
+              "documented under live test. What you cannot do is cancel a work "
+              "order, and assigning a vendor or technician is possible only "
+              "through a field that is undocumented and untyped. Scheduling, "
+              "estimate approval and invoice approval all belong to the vendor's "
+              "side of this API. There are no webhooks, so automations must poll."),
+    (5.0, 10, "A clean, predictable REST design with a real status page, but your "
+              "code has to defend itself. Field types do not always match the "
+              "published schema, error bodies come in three shapes with no "
+              "machine-readable code, posting a duplicate tag name crashes with a "
+              "500 rather than a 400, page size is silently capped at 500, and "
+              "there is no way to detect a concurrent edit. Idempotency keys do "
+              "work, but only with the header spelling used in the recipe, not "
+              "the one in the guide."),
+    (2.5, 5, "You can make separate keys for separate tools and revoke any of "
+             "them yourself, both self-serve. But every key carries full read and "
+             "write power over the whole account. You cannot hand an AI agent a "
+             "read-only or limited key, and there is no sandbox, which is why "
+             "this run had to work on labelled fixtures inside the live account."),
+    (3.8, 5, "A coding assistant can load this API well: a public OpenAPI file, "
+             "an llms.txt index, and a Markdown version of every documentation "
+             "page. What is missing is human explanation. 93 of the 94 operations "
+             "carry no worked example, most have no description at all, one guide "
+             "documents an idempotency header that does not work, and the "
+             "changelog has two entries in five years."),
+    (7.5, 15, "A split decision. If you are on the Ops plan you can create a key "
+              "in seconds without talking to anyone. If you are on Core, the API "
+              "is not included at all, and getting it means moving every unit up "
+              "to the top tier."),
+  ],
+  "strengths": [
+    "One of only two results verified with real live writes, cleaned up afterwards",
+    "Public OpenAPI 3.0.3 schema plus an llms.txt index built for AI tools",
+    "Working idempotency keys, proven live on repeated creates",
+    "Multiple self-serve keys, each revocable on its own",
+    "Public status page with per-component uptime and incident history",
+  ],
+  "watch": [
+    "No way to cancel a work order through the API",
+    "Vendor assignment works only through an undocumented, untyped field",
+    "No webhooks at all, so everything has to poll",
+    "Every key has full read and write over the account, and there is no sandbox",
+    "The idempotency guide names a header the API does not honour",
+  ],
+  "bottom": "Property Meld is a maintenance-only tool and its API reflects that. "
+            "You can build reporting, reminders, dashboards and intake automations "
+            "on top of your work orders, units, residents and vendors today, you "
+            "can create work orders and mark them complete, and live testing "
+            "confirmed that creating, updating and deactivating properties, units "
+            "and tags works cleanly. You cannot cancel a work order, you cannot "
+            "reliably assign a vendor because the only field for it is "
+            "undocumented, and scheduling, estimate and invoice approvals belong "
+            "to the vendor's side of the API. The strengths are a public OpenAPI "
+            "file, an llms.txt index AI tools can read, working idempotency keys, "
+            "and self-serve keys you can revoke. The limitations are missing "
+            "webhooks, full-access-only keys with no sandbox, loose typing, a "
+            "guide documenting the wrong idempotency header, and an API sold only "
+            "with the top plan. It holds no funds, so you still need your PMS for "
+            "ledgers, owner statements and payments.",
+},
+
 "RentEngine": {
   "score": 78, "grade": "C+",
   "meta": {"run": "Sep 1, 2026", "method": "1.1", "model": "Claude Opus 4.8",
@@ -406,9 +492,9 @@ RESULTS = {
           "applicable checks were unanimous. One disagreement is left unresolved "
           "and it moves the grade: on change notification, a strict reading of the "
           "scoring band gives 69 (D+) instead of 73 (C). This is also the only "
-          "result so far graded Fully verified, meaning all eight live-test steps "
-          "ran, including real writes and a webhook delivery, with nothing graded "
-          "from documentation alone.",
+          "result here graded Fully verified on all eight live-test steps, including "
+          "real writes and an observed webhook delivery, with nothing graded from "
+          "documentation alone.",
   "cats": [
     (13.1, 15, "The strongest part of the API. Everything the product does, the "
                "API can do: start a checklist, tick tasks off, write form answers, "
@@ -713,102 +799,6 @@ RESULTS = {
 
 }
 
-
-# ---------------------------------------------------------------------------
-# AWAITING RE-RUN. Not rendered. Property Meld was graded on 2026-08-25 under
-# methodology v2.0, which scored all five categories out of 10 rather than
-# 15/10/5/5/15, and included two checks (C5.2 free sandbox, C5.4 onboarding
-# friction) that no longer exist.
-#
-# Its numbers cannot be converted. The report states no category score out of 15
-# or 5 anywhere, and Category 5 in particular earns "2 of 4" checks, two of which
-# were retired, so there is nothing in the report to convert from. Any figure put
-# in those columns would be one we calculated, not one a grading run produced.
-#
-# So the row is simply blank, like every other ungraded platform, until Peter
-# re-runs Property Meld against the current methodology file. When that lands,
-# move this entry back into RESULTS and replace score, grade, meta, and cats with
-# the new run's numbers. The prose below (strengths, watch-outs, bottom line) is
-# drawn from the v2.0 report and should be re-checked against the new one.
-#
-# Kept here rather than deleted so nothing from Peter's original run is lost.
-# ---------------------------------------------------------------------------
-AWAITING_RERUN = {
-
-"Property Meld": {
-  # DO NOT re-score this by hand. An earlier pass recomputed it to 72 (C-) under
-  # the v1.1 weighting. The arithmetic was traceable, but every resulting number
-  # was calculated rather than produced by a grading run, and the report states
-  # no category score out of 15 or 5 anywhere. Category 5 is the clearest case:
-  # the report earns "2 of 4" checks, two of which (C5.2 free sandbox, C5.4
-  # onboarding friction) no longer exist, so its v1.1 score cannot be derived
-  # from anything the report actually says. Only the published 76 (C) below is a
-  # real result. Replace this whole entry when the v1.1 re-run lands.
-  "score": 76, "grade": "C",
-  "meta": {"run": "Aug 25, 2026", "method": "2.0", "model": "Claude Opus 4.8",
-           "tier": "Baseline verified", "raw": "38.07 / 50"},
-  "legacy": {
-    "maxima": [10, 10, 10, 10, 10],
-    "note": "This run was graded under methodology v2.0, which scored all five "
-            "categories out of 10. Despite the higher number, v2.0 came before the "
-            "current file: the line ran v2.0, then v1.1, then v1.2, which weights "
-            "the categories 15 / 10 / 5 / 5 / 15. The numbers below are the ones "
-            "this run actually published, on the older scale, so they are shown "
-            "here rather than in the table, where they would invite a false "
-            "comparison against the other rows. Property Meld is queued for a "
-            "re-run against the current methodology, and this row will be replaced "
-            "with that result.",
-  },
-  # Originally run and published under methodology v2.0 (76/100, C). Re-scored
-  # here under v1.1 from the same frozen evidence packet. Not one check mark was
-  # changed; only the category weighting differs, exactly as the LeadSimple run
-  # was re-scored from v2.0 to v1.1. See "rescored" below for the reader-facing
-  # version of this note.
-  "cats": [
-    (8.8, 10, "You can build the whole maintenance workflow: intake a work order, "
-              "assign a vendor or technician, schedule it, complete it, and review "
-              "it. The only coverage limit is change detection. There are no "
-              "webhooks, so you poll for changes instead."),
-    (6.8, 10, "Modern, well typed, idempotent, paginated, and transparent about "
-              "uptime. The reliability gaps are real though: no protection against "
-              "two writes overwriting each other, no bulk export, no Retry-After "
-              "header, no documented request id for support, and error codes you "
-              "cannot branch on."),
-    (8.8, 10, "You can run several keys, revoke any of them yourself, and get a "
-              "read-limited identity. Scoping is role-based rather than "
-              "fine-grained, so you pick from set tiers rather than choosing "
-              "exactly what a key can touch."),
-    (8.8, 10, "Genuinely AI-friendly, and among the best documentation in this "
-             "group. A public OpenAPI spec plus a real llms.txt corpus, with a "
-              "Markdown twin of every page. The only weak signal is the changelog, "
-              "which has two entries and has not been touched in about three years."),
-    (5.0, 10, "Key creation is self-serve in the app, which is a real improvement, "
-              "but there is still no free sandbox to test against and the API needs "
-              "the higher Ops plan rather than the cheaper Core plan."),
-  ],
-  "strengths": [
-    "Best-in-class AI-readable docs: llms.txt plus a Markdown twin per page",
-    "Real idempotency keys on writes, with 24-hour retention",
-    "Multiple keys, self-serve create and revoke",
-    "Public status page showing 99.98% to 100% uptime",
-  ],
-  "watch": [
-    "No webhooks at all, so you have to poll for every change",
-    "No protection against two writes overwriting each other",
-    "No free sandbox, so write testing happens against production",
-    "Needs the higher Ops plan",
-    "Changelog is about three years stale",
-  ],
-  "bottom": "Property Meld is a strong, genuinely AI-friendly build target for the "
-            "full maintenance workflow, with idempotency keys, a public uptime page, "
-            "and documentation as good as any here. The reliability gaps are "
-            "real: no webhooks (you poll instead), no lost-update protection, no "
-            "bulk export, and no support-usable request id. Access still costs the "
-            "higher Ops plan with no free sandbox. Reads were live-tested, but write "
-            "behavior is graded from documentation, because there is no sandbox to "
-            "write against.",
-},
-}
 
 # ---------------------------------------------------------------------------
 # Rendering
