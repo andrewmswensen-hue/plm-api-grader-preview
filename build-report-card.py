@@ -322,15 +322,11 @@ RESULTS = {
           "prior material was read or reused, and it is one of only two results "
           "here graded Fully verified, with real writes performed on labelled "
           "fixtures under recorded authorisation and cleanup confirmed "
-          "afterwards. The size of the gap is worth recording. Converting the old "
-          "marks arithmetically to the current weighting would have published "
-          "roughly 72 (C-). The actual re-run scores 49 (F), two grade bands "
-          "lower, because a fresh run found things the first one never looked "
-          "for: no way to cancel a work order, an assignment field that is "
-          "undocumented and untyped, field types that disagree with the published "
-          "schema, and an idempotency guide naming a header the API does not "
-          "honour. No amount of re-weighting old marks would have surfaced any of "
-          "that.",
+          "afterwards. The re-run scores well below the old one because it found "
+          "things the first run never looked for: no way to cancel a work order, "
+          "an assignment field that is undocumented and untyped, field types that "
+          "disagree with the published schema, and an idempotency guide naming a "
+          "header the API does not honour.",
   "cats": [
     (5.6, 15, "You can read everything about your maintenance operation, and you "
               "can create work orders, complete them, and manage units, "
