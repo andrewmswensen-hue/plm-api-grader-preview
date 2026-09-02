@@ -275,6 +275,35 @@
      wash band later inherits it automatically. */
   .band.wash .panel,
   .band.wash .card{ background:var(--card); box-shadow:var(--shadow); }
+  /* "What gets graded": an accordion so the five categories read as a scannable
+     list of headings and point values, with the detail one click away. Native
+     <details>, so it works without JavaScript. */
+  .acc-list{ border:1px solid var(--line); border-radius:var(--radius);
+             overflow:hidden; background:var(--card); box-shadow:var(--shadow); }
+  .acc + .acc{ border-top:1px solid var(--line); }
+  .acc summary{ display:flex; align-items:center; gap:13px; cursor:pointer;
+                padding:16px 18px; list-style:none; transition:background .13s ease; }
+  .acc summary::-webkit-details-marker{ display:none; }
+  .acc summary:hover{ background:var(--wash-soft); }
+  .acc summary:focus-visible{ outline:2px solid var(--primary); outline-offset:-2px; }
+  .acc-n{ flex:none; width:26px; height:26px; border-radius:50%; background:var(--wash);
+          color:var(--primary-dark); font-size:13px; font-weight:800;
+          display:flex; align-items:center; justify-content:center; }
+  .acc-t{ flex:1; font-weight:800; font-size:15.5px; color:var(--navy); line-height:1.3; }
+  .acc summary .cat-pts{ margin-left:0; flex:none; }
+  /* Chevron, drawn rather than typed so it stays crisp in the body font. */
+  .acc summary::after{ content:""; flex:none; width:8px; height:8px; margin-left:2px;
+                       border-right:2px solid var(--muted); border-bottom:2px solid var(--muted);
+                       transform:rotate(45deg) translate(-2px,-2px);
+                       transition:transform .18s ease; }
+  .acc[open] summary::after{ transform:rotate(225deg) translate(-3px,-3px); }
+  .acc-body{ padding:0 18px 18px 57px; }
+  .acc-body p{ margin:0; color:var(--muted); font-size:15px; line-height:1.62; }
+  @media (max-width:560px){
+    .acc summary{ flex-wrap:wrap; gap:9px; }
+    .acc-t{ flex:1 1 100%; order:3; }
+    .acc-body{ padding-left:18px; }
+  }
 </style>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DRCVXMNK1D"></script>
@@ -460,35 +489,57 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
 
       <h3 style="margin:38px 0 0;font-size:20px;">What gets graded</h3>
       <p class="sub" style="margin:6px 0 0;">Five categories, each worth a fixed share of the 100 points. A category earns the fraction of its checks it passes, times its maximum.</p>
+      <div class="acc-list mt-md">
+        <details class="acc">
+          <summary>
+            <span class="acc-n">1</span>
+            <span class="acc-t">Functional Coverage and Usefulness</span>
+            <span class="cat-pts">15 pts</span>
+          </summary>
+          <div class="acc-body"><p>Can you get the data and take the actions your business runs on, and change them, not just read them? Coverage is scored against a predetermined critical, important, and optional weighting.</p></div>
+        </details>
+        <details class="acc">
+          <summary>
+            <span class="acc-n">2</span>
+            <span class="acc-t">API Design, Reliability, and Operability</span>
+            <span class="cat-pts">10 pts</span>
+          </summary>
+          <div class="acc-body"><p>Is the API built so your code, no-code tools, and AI agents behave predictably instead of breaking, across typing, errors, idempotency, rate limits, pagination, bulk export, webhook security, concurrency, versioning, traceability, and uptime transparency?</p></div>
+        </details>
+        <details class="acc">
+          <summary>
+            <span class="acc-n">3</span>
+            <span class="acc-t">Access Control and Safe Automation</span>
+            <span class="cat-pts">5 pts</span>
+          </summary>
+          <div class="acc-body"><p>Can you safely hand a limited slice of access to an app or an AI agent, and shut it off?</p></div>
+        </details>
+        <details class="acc">
+          <summary>
+            <span class="acc-n">4</span>
+            <span class="acc-t">Documentation and AI-Agent Readiness</span>
+            <span class="cat-pts">5 pts</span>
+          </summary>
+          <div class="acc-body"><p>Can a developer, or an AI coding tool, understand the API and build against it correctly?</p></div>
+        </details>
+        <details class="acc">
+          <summary>
+            <span class="acc-n">5</span>
+            <span class="acc-t">Accessibility and Cost</span>
+            <span class="cat-pts">15 pts</span>
+          </summary>
+          <div class="acc-body"><p>Can you get access without a sales call or a forced upgrade?</p></div>
+        </details>
+      </div>
+
       <div class="grid g2 mt-md">
-        <div class="card">
-          <div class="step-head"><div class="num-badge">1</div><h3>Functional Coverage and Usefulness <span class="cat-pts">15 pts</span></h3></div>
-          <p>Can you get the data and take the actions your business runs on, and change them, not just read them? Coverage is scored against a predetermined critical, important, and optional weighting.</p>
-        </div>
-        <div class="card">
-          <div class="step-head"><div class="num-badge">2</div><h3>API Design, Reliability, and Operability <span class="cat-pts">10 pts</span></h3></div>
-          <p>Is the API built so your code, no-code tools, and AI agents behave predictably instead of breaking, across typing, errors, idempotency, rate limits, pagination, bulk export, webhook security, concurrency, versioning, traceability, and uptime transparency?</p>
-        </div>
-        <div class="card">
-          <div class="step-head"><div class="num-badge">3</div><h3>Access Control and Safe Automation <span class="cat-pts">5 pts</span></h3></div>
-          <p>Can you safely hand a limited slice of access to an app or an AI agent, and shut it off?</p>
-        </div>
-        <div class="card">
-          <div class="step-head"><div class="num-badge">4</div><h3>Documentation and AI-Agent Readiness <span class="cat-pts">5 pts</span></h3></div>
-          <p>Can a developer, or an AI coding tool, understand the API and build against it correctly?</p>
-        </div>
-        <div class="card">
-          <div class="step-head"><div class="num-badge">5</div><h3>Accessibility and Cost <span class="cat-pts">15 pts</span></h3></div>
-          <p>Can you get access without a sales call or a forced upgrade?</p>
-        </div>
         <div class="card" style="background:var(--wash-soft);">
           <h3 style="font-size:18px;margin-bottom:8px;">Every submission is graded three times</h3>
           <p>The first run collects the evidence and scores it. The next two re-grade the evidence already collected, then any disagreement between the runs is resolved against that evidence instead of being averaged. That is what catches a bad assumption in a single run, and it is why we ask for it. Where a disagreement cannot be settled from the evidence, we publish it rather than hide it, along with what the score would have been under the other reading.</p>
         </div>
-
         <div class="card" style="background:var(--wash-soft);">
           <h3 style="font-size:18px;margin-bottom:8px;">How the grade is calculated</h3>
-          <p>The five category scores add up to a raw total out of 50, which is doubled to a score out of 100 and mapped to a letter grade: A+ at 97 and above, down to F below 60. Scores are absolute, never curved against other platforms. A number is only published when the run clears the methodology's verification bar; otherwise the score is withheld.</p>
+          <p>The five category scores add up to a raw total out of 50, which is doubled to a score out of 100 and mapped to a letter grade: A+ at 97 and above, down to F below 60. Scores are absolute, never curved against other platforms. A number is only published when the run clears the methodology&#x27;s verification bar; otherwise the score is withheld.</p>
         </div>
       </div>
     </div>
@@ -518,24 +569,14 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
     </div>
   </section>
 
-  <!-- HELP GRADE -->
-  <section class="band tight wash">
-    <div class="wrap center">
-      <h2 class="h-lead">Help us grade a platform.</h2>
-      <p class="sub" style="margin:10px auto 22px;max-width:78ch;">Want to help grade a platform we haven&#x27;t covered? We&#x27;re looking for operators to run this process against the tools they use daily. Submissions stay anonymous.</p>
-      <!-- SWAP: tester-guide - points at /contact for now. Swap to /api-grader-guide
-           once that page is meant to be discoverable; it is deliberately hidden today. -->
-      <a class="btn btn-primary" href="https://www.peterlohmann.com/contact">Get in touch</a>
-    </div>
-  </section>
 
   <!-- VENDOR RESPONSE -->
-  <section class="band tight" id="rescore">
+  <section class="band tight wash" id="rescore">
     <div class="wrap">
       <div class="panel" style="max-width:1000px;margin-inline:auto;">
         <h2 class="h-lead" style="font-size:clamp(24px,3.2vw,32px);">Don&#x27;t like your score?</h2>
         <p class="sub" style="margin-top:12px;">Then change it. Every score here is a snapshot of what an API did on the day it was graded, and every gap behind it is written out in plain language: what is missing, and what a property manager cannot build because of it. Nothing is hidden, and the grading file is public so you can run it yourself first.</p>
-        <p class="sub" style="margin-top:14px;">If you ship improvements, tell us. We will run the same file against your API again and publish the new result. That has already happened on this page: LeadSimple added read-only keys, multiple keys, per-key revoke and public documentation, and its score moved from 78 to 87.</p>
+        <p class="sub" style="margin-top:14px;"><strong>If you ship improvements, tell us. We will run the same file against your API again and publish the new result.</strong></p>
         <p style="margin-top:20px;"><a class="btn btn-primary" href="mailto:peter@rlpmg.com?subject=API%20Report%20Card%3A%20re-run%20request">Email peter@rlpmg.com</a></p>
       </div>
     </div>
