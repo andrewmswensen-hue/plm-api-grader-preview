@@ -230,26 +230,30 @@ RESULTS = {
 },
 
 "Column": {
-  "score": 86, "grade": "B",
+  "score": 94, "grade": "A",
   "meta": {"run": "Sep 2, 2026", "method": "1.1", "model": "Claude Opus 5",
-           "tier": "Fully verified, sandbox", "raw": "43.13 / 50"},
+           "tier": "Fully verified, sandbox", "raw": "46.88 / 50"},
   # Column sponsors this page, so this note leads with the audit trail rather
   # than the score. The decisive fact is that reconciliation went AGAINST the
   # sponsor: both blind graders would have published an A and the run held a B.
-  "note": "Column sponsors this report, so the scoring deserves scrutiny. Here is "
-          "exactly what the three runs did. The first scored 85. Two independent "
-          "graders then worked blind from the frozen evidence, with no sight of "
-          "the first run's marks, and scored 95 and 92. The published 86 is the "
-          "reconciled result, and on the one check worth eight points, commercial "
-          "gating, the reconciliation went against Column: both blind graders "
-          "marked it a pass, which would have published 94 and an A, and the run "
-          "held it at partial because Column publishes no pricing at all and "
-          "several API capabilities require contacting them to enable. That "
-          "disagreement is unresolved and recorded rather than averaged away. A "
-          "reader who takes gated to mean strictly a purchasable plan ladder "
-          "should read this as an A. Every write in this run happened inside "
-          "Column's sandbox on a test key, which is why it is graded Fully "
-          "verified.",
+  "note": "Column sponsors this report, so the scoring deserves scrutiny, and "
+          "this row has changed. The full trail: the first run scored 85, and two "
+          "independent graders working blind from the frozen evidence scored 95 "
+          "and 92, both marking commercial gating as a pass. The run held that "
+          "check at partial and published 86 (B), on two grounds. First, that "
+          "Column publishes no pricing. Second, that production access is not "
+          "self-serve. Column has since confirmed in writing that the API is free "
+          "to use in both sandbox and production, which answers the first. The "
+          "second was a mistake in the original run: the step it describes is KYC "
+          "and KYB, which the methodology explicitly excludes from this check "
+          "because it is a legal requirement for opening a bank account rather "
+          "than a commercial condition, and the report excluded it in one "
+          "sentence then counted it in the next. With both grounds gone the check "
+          "resolves as a pass and the score is 94 (A), which is the exact figure "
+          "the original report already recorded as its alternative. The order of "
+          "events matters here: the two blind graders reached this mark "
+          "independently, before Column commented. The correction settled a "
+          "disagreement that already existed; it did not invent a new score.",
   "cats": [
     (15, 15, "The strongest part of the API. Everything a business runs on "
              "financially is reachable in code, and you can act on it rather than "
@@ -285,14 +289,16 @@ RESULTS = {
              "URL that no longer works, so build from the API reference rather "
              "than the narrative guides, and the changelog has gone quiet, with a "
              "single entry in all of 2026."),
-    (11.3, 15, "Getting in to experiment is free and takes minutes, and the "
-               "sandbox is a real, complete copy of the bank, which is unusually "
-               "generous. Production is another matter. Column publishes no price "
-               "anywhere, you cannot flip yourself live, and pulling rent by ACH "
-               "debit means parking locked cash equal to your rolling 60-day "
-               "debit volume. That last one is the practical catch for a property "
-               "manager, because pulling rent is exactly the use case and the "
-               "collateral scales with your rent roll."),
+    (15, 15, "Free to use, in both the sandbox and in production, confirmed "
+             "directly by Column. There are no plans or tiers to climb, and the "
+             "sandbox is a complete copy of the bank rather than a stub, so you "
+             "can build the whole thing before touching real money. Going live "
+             "needs KYC and KYB, which is a legal requirement for opening a bank "
+             "account and carries no fee. One caveat if you want Column itself to "
+             "pull rent by ACH debit, rather than running rent through your PMS "
+             "as most operators do: that needs a reserve balance, sized on your "
+             "volume, your historical return rates and industry factors, not on a "
+             "fixed multiple of your rent roll."),
   ],
   "strengths": [
     "Scoped keys down to a single rail on a single account, plus human approval",
@@ -305,8 +311,8 @@ RESULTS = {
     "No published rate limits, no Retry-After, and no backoff guidance",
     "Not-found returns HTTP 400, contradicting Column's own documentation",
     "No protection against two processes overwriting the same record",
-    "No published pricing anywhere, and no self-serve path to production",
-    "Collecting rent by ACH debit requires locked collateral against 60-day volume",
+    "Pricing is not published on the site; Column confirms API access is free",
+    "Direct ACH debit origination needs a reserve balance, sized case by case",
   ],
   "bottom": "Column is a real, nationally chartered bank with one of the best "
             "banking APIs you can build on, and unlike almost every banking API "
@@ -671,7 +677,7 @@ RESULTS = {
   # No cross-category caveat here. The table groups by software type, so this is
   # read against the other phone systems, which is the whole reason the grouping
   # exists. A note explaining that would only undercut the score.
-  "note": "The highest score graded so far, and the first A. Graded three "
+  "note": "The first A on this board. Graded three "
           "independent times, and all three runs landed on 93. 25 of the 27 "
           "checks were unanimous, and the two that split sat in the same category "
           "and offset each other exactly, so the total is 93 under either "
@@ -710,7 +716,7 @@ RESULTS = {
              "premium tier to unlock and no sales call."),
   ],
   "strengths": [
-    "The highest score graded so far, and the only A",
+    "The first A graded on this board",
     "Read-only and finely scoped keys, proven on the key used for this run",
     "A real sandbox with its own accounts and isolated data",
     "OpenAPI spec plus maintained SDKs in eight languages",
