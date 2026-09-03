@@ -202,8 +202,8 @@ RESULTS = {
               "an agent has to consume the OpenAPI file itself."),
     (7.5, 15, "One real barrier, and it is cost. Key creation is fully self-serve "
               "with no sales call, but the API is exclusive to the Premium plan at "
-              "$400 a month. On Essential ($62) or Growth ($192) you cannot use it "
-              "at all."),
+              "$400 a month, above Essential at $62 and Growth at $192. On those two "
+              "plans the run found no API access."),
   ],
   "strengths": [
     "The most complete object coverage of any API graded so far",
@@ -213,7 +213,7 @@ RESULTS = {
     "Changelog running monthly since 2020",
   ],
   "watch": [
-    "Premium plan only, $400/month, so most operators are locked out",
+    "Buildium's pricing page lists the API as Premium-plan only, $400/month",
     "No idempotency keys, so a retried payment can post twice",
     "Error responses never populate a machine-readable code",
     "No optimistic concurrency, so two writers can silently overwrite",
@@ -295,10 +295,11 @@ RESULTS = {
              "can build the whole thing before touching real money. Going live "
              "needs KYC and KYB, which is a legal requirement for opening a bank "
              "account and carries no fee. One caveat if you want Column itself to "
-             "pull rent by ACH debit, rather than running rent through your PMS "
-             "as most operators do: that needs a reserve balance, sized on your "
-             "volume, your historical return rates and industry factors, not on a "
-             "fixed multiple of your rent roll."),
+             "pull rent by ACH debit rather than running it through your PMS: that "
+             "needs a reserve balance. Column says it is sized on volume, "
+             "historical return rates and industry factors rather than a fixed "
+             "multiple of your rent roll, and that PM operators more often collect "
+             "rent through their PMS than through the bank directly."),
   ],
   "strengths": [
     "Scoped keys down to a single rail on a single account, plus human approval",
@@ -381,15 +382,18 @@ RESULTS = {
              "against it without an account. Two gaps remain: no llms.txt for AI "
              "retrieval, and no API-specific changelog, only a product-wide one."),
     (15, 15, "Full marks. You enable the API and create keys yourself with no "
-             "sales call, and the REST surface you need is included in the plan "
-             "rather than locked behind the top tier."),
+             "sales call. On the gating question the run relied on the operator "
+             "confirming the REST surface they use is available on their own plan, "
+             "plus LeadSimple's pricing page gating no API rows by plan. LeadSimple "
+             "does market an Enhanced API access tier for higher rate limits, so "
+             "confirm your own plan rather than assuming this one."),
   ],
   "strengths": [
     "Gained 9 points by shipping fixes to its two weakest categories",
     "Read-only keys, multiple named keys, and per-key revoke, all self-serve",
     "Public OpenAPI 3.0 spec and reference, no login required",
     "Full coverage of contacts, deals, and processes, with webhooks",
-    "API access included in the plan, not gated to the top tier",
+    "The operator confirmed the REST surface they use is on their plan",
   ],
   "watch": [
     "Money fields come back as text, not numbers",
@@ -461,9 +465,11 @@ RESULTS = {
              "documents an idempotency header that does not work, and the "
              "changelog has two entries in five years."),
     (7.5, 15, "A split decision. If you are on the Ops plan you can create a key "
-              "in seconds without talking to anyone. If you are on Core, the API "
-              "is not included at all, and getting it means moving every unit up "
-              "to the top tier."),
+              "in seconds without talking to anyone. Property Meld's pricing page "
+              "lists API access under Miscellaneous as Ops only, and prices Ops "
+              "at $2.00 per unit per month against Core at $1.60. What that "
+              "difference costs a Core customer in practice was not established "
+              "by the run."),
   ],
   "strengths": [
     "Verified with real live writes on labelled fixtures, cleaned up afterwards",
@@ -632,11 +638,13 @@ RESULTS = {
              "AI-specific files are only link indexes, and the overview contains at "
              "least two statements that live testing disproved."),
     (11.3, 15, "Getting in the door is easy and free. You create keys yourself, and "
-               "the whole API works on the entry plan. The catch is on paper rather "
-               "than in practice: the Startup plan officially allows 50 API calls a "
-               "month, which would be useless for real automation, though nothing "
-               "enforced that limit during testing. Confirm your actual quota before "
-               "building anything business critical, and note that scoped keys are "
+               "the whole API works on the entry plan. The published plan matrix lists "
+               "50 API calls a month on Startup, which would not support real "
+               "automation. During this run about 90 calls went through on a "
+               "Startup account with no payment-required error, so that cap was "
+               "not enforced on that one organization; the run does not establish "
+               "how it is applied generally. Confirm your own quota before building "
+               "anything business critical, and note that scoped keys are "
                "Enterprise only."),
   ],
   "strengths": [
