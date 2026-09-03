@@ -521,9 +521,9 @@ RESULTS = {
           "was generous rather than harsh: the run scored property-management "
           "objects by their accounting equivalents, counting tenants as "
           "Customers, properties as Classes or Departments, and the lease ledger "
-          "as AR transactions. Graded strictly, with no such mapping, those "
-          "objects would simply be absent and the score would be lower. The D is "
-          "what remains after giving QuickBooks that credit. Writes were "
+          "as AR transactions. That mapping is why objects a PMS would have "
+          "natively are marked present or partial here rather than absent. Writes "
+          "were "
           "exercised in an Intuit sandbox company; only the webhook delivery step "
           "could not be run, because subscriptions are configured in the portal "
           "and need a public endpoint.",
