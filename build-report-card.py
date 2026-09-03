@@ -190,7 +190,7 @@ RESULTS = {
               "post), there is no lock stopping two writes from overwriting each "
               "other, and the only per-request trace id is an AWS header rather than "
               "a Buildium one."),
-    (5, 5, "A perfect score, matched only by RingCentral and Column. Issue a "
+    (5, 5, "A perfect score. Issue a "
            "read-only key for a reporting agent, scope a key to just the data an app "
            "needs, make one key per integration, and rotate or delete any of them "
            "yourself. A real sandbox exists and its keys cannot touch production."),
@@ -275,7 +275,7 @@ RESULTS = {
               "there is no protection against two processes overwriting each "
               "other, and the request id you would hand support is real but "
               "undocumented."),
-    (5, 5, "Best in class, and the category that matters most if you ever point "
+    (5, 5, "A perfect score, and the category that matters most if you ever point "
            "an AI agent at a bank account. You can mint a key that reads balances "
            "and nothing else, or one that pays vendors by ACH but is structurally "
            "incapable of sending a wire, scoped to a single account. You can "
@@ -801,6 +801,136 @@ RESULTS = {
             "property-specific objects in the API.",
 },
 
+"Rentvine": {
+  "score": 69, "grade": "D+",
+  "meta": {"run": "Sep 2, 2026", "method": "1.1", "model": "Claude Opus 5",
+           "tier": "Baseline verified", "raw": "34.38 / 50"},
+  # The widest category split on the board: 15/15 on access and 5/5 on access
+  # control, against 2.5/10 on design and reliability. The report is explicit
+  # that the grade measures engineering discipline, not the product.
+  "note": "Graded three independent times. The runs scored 70, 70 and 69 and "
+          "agreed on 24 of the 27 checks, including every check in four of the "
+          "five categories. All three disagreements sat in Design and "
+          "Reliability, all three were resolved against the frozen evidence "
+          "rather than averaged, and all three moved the score down. The "
+          "reconciled 69 matches the strictest run exactly. Two things about the "
+          "evidence. Writes were tested live but only on one throwaway inventory "
+          "record, created, updated and deleted with cleanup verified; the "
+          "money-moving writes, posting a charge or a payment to a real trust "
+          "ledger, were graded from documentation because the protocol forbids "
+          "running them. And two checks in Functional Coverage cleared their "
+          "threshold by about a point: object coverage scored 85.5% against an "
+          "85% bar. The report records that a defensible stricter reading lands "
+          "near 65 (D), and that one evaluator's alternative view of the ledger "
+          "void question lands near 76 (C). The honest band is roughly 65 to 76.",
+  "cats": [
+    (9.4, 15, "The strongest part of the API and the reason it is worth building "
+              "on. Essentially everything your business runs on is reachable: "
+              "properties, units, leases, tenants, owners, work orders, bills, "
+              "screening, and the full trust ledger, and most of it can be "
+              "created and changed, not just read. Three gaps matter. The API can "
+              "post money to a lease but cannot take it back: there is no way to "
+              "void or reverse a charge or payment, even though Rentvine can void "
+              "a bill or a deposit. You cannot post a journal entry or add a "
+              "general-ledger account, so accounting corrections stay manual. And "
+              "change notifications are lopsided, firing for properties, units, "
+              "leases and work orders but never when money moves."),
+    (2.5, 10, "This is where the API is weakest, and it is the part that decides "
+              "how much maintenance your automations need. Paging through big "
+              "lists works properly, and four export endpoints let you pull "
+              "leases, properties, units and applications and then fetch only "
+              "what changed. The problems are the unglamorous kind that cause 2am "
+              "failures. Every number and yes-or-no value arrives as text, and "
+              "Rentvine's own published blueprint says some of them are numbers, "
+              "so code generated from it misreads your core records. Failures "
+              "come back in five different formats, one of them a bare sentence "
+              "and one a blank server error, and a missing property returns the "
+              "wrong kind of error. No rate limit is published. Nothing stops a "
+              "retried charge from posting twice, or two of your tools from "
+              "silently overwriting each other on the same lease. There is no "
+              "version contract and no status page."),
+    (5, 5, "Full marks, and genuinely good news for anyone pointing an AI agent at "
+           "their data. You can create a separate key for every tool you connect, "
+           "give each one only the permissions it actually needs including "
+           "view-only, and restrict it to part of your portfolio. The permissions "
+           "are specific enough that Rentvine's own documentation names which one "
+           "each operation needs, right down to Add Charge. If a vendor "
+           "relationship ends or a key leaks, you regenerate the secret or delete "
+           "the key yourself in seconds. The one real absence is a practice "
+           "environment: there is no sandbox, so any testing happens in your live "
+           "account."),
+    (2.5, 5, "The documentation is better than most property management software "
+             "offers and it is completely public, with no login and no sales "
+             "call, and each endpoint explains what it is for and which "
+             "permission it needs. But it is not something to hand an AI coding "
+             "tool and trust blindly. Parts of the API are missing from it "
+             "entirely: bank accounts work but are undocumented, and webhooks are "
+             "described only in the customer help articles. Some of what it says "
+             "is wrong, including 26 endpoints it points developers at that do "
+             "not exist. Expect a developer or an AI assistant to get roughly 80% "
+             "of the way from the docs and to discover the rest by testing "
+             "against your live account."),
+    (15, 15, "Full marks, and this is the check most property management vendors "
+             "fail. You are already paying for the API. It is in the one plan at "
+             "no extra cost, with no premium tier to unlock and no integration "
+             "fee, and you can issue your own key in about two minutes without "
+             "asking anyone. For an operator who wants to build their own tools, "
+             "getting in the door immediately and at no marginal cost is worth a "
+             "great deal."),
+  ],
+  "strengths": [
+    "One plan with the API included, and a self-serve key in about two minutes",
+    "Action-level key permissions, including view-only, restrictable to part of your portfolio",
+    "The full trust ledger is reachable, alongside properties, units, leases, tenants, owners and work orders",
+    "A public OpenAPI 3.1 spec with no login, naming the permission each operation requires",
+    "Pagination that works, with eight populated headers and live-verified page traversal",
+    "Four export endpoints with an updated-since filter, live-verified",
+    "A first-party MCP server included in the plan, though still in beta and read-only",
+  ],
+  "watch": [
+    "The API can post a charge or payment to a lease but cannot void or reverse one",
+    "No journal-entry posting and no chart-of-accounts writes, so corrections stay manual",
+    "No idempotency anywhere, so a retried charge can post twice to a real trust ledger",
+    "Numbers and booleans return as text, and the published spec declares some of them numbers",
+    "Five error formats, including one unparseable and one empty server error",
+    "No published rate limit and no rate-limit headers of any kind",
+    "No concurrency control, so two tools can silently overwrite each other on the same lease",
+    "No API version contract, and the terms allow changes at any time without notice",
+    "No status page: status.rentvine.com is an application portal, not an availability signal",
+    "Webhooks cover four object types and nothing on the money side",
+  ],
+  "bottom": "Rentvine's API is genuinely open in the way that matters most: it is "
+            "included in the one plan at no extra cost, you can issue your own key "
+            "in two minutes without a sales call, and the permission controls are "
+            "excellent, with a separate least-privilege key for every tool or AI "
+            "agent, revocable in seconds. Its functional reach is real too. "
+            "Properties, units, leases, tenants, owners, work orders, bills, "
+            "screening and the full trust ledger are all reachable, and most of it "
+            "is changeable. What you can build today is substantial: nightly "
+            "portfolio syncs, custom dashboards and reporting, renewal and "
+            "delinquency tracking, maintenance automation, and AI assistants that "
+            "read your live data. What you cannot build safely today is anything "
+            "that posts money unattended. The API will post a charge or payment to "
+            "a lease but offers no way to void or reverse one, no protection "
+            "against a retried request posting twice, and no journal-entry posting "
+            "for corrections. That work belongs in the web application with a "
+            "human. The score is held down not by what the API can do but by the "
+            "guarantees it does not make: text-typed numbers that contradict the "
+            "published schema, five error formats including two that cannot be "
+            "parsed, no published rate limit, no way to stop two tools overwriting "
+            "each other, no export or change filter for work orders and bills, no "
+            "version contract, and no status page. Integrations here need more "
+            "babysitting than the feature list suggests. Rentvine is a "
+            "property-management system of record with documented trust-accounting "
+            "workflows, and it is not a bank: it accounts for money held in trust "
+            "accounts you open in your own name at your own institution, so you "
+            "still need that bank, a payment processor, and the web application "
+            "for corrections the API cannot make. A D+ is a grade for API "
+            "engineering discipline, not a verdict on the product. On openness and "
+            "cost of entry, where most competitors fail outright, Rentvine scores "
+            "full marks.",
+},
+
 "RingCentral": {
   "score": 93, "grade": "A",
   "meta": {"run": "Sep 1, 2026", "method": "1.1", "model": "Claude Opus 4.8",
@@ -831,7 +961,7 @@ RESULTS = {
               "so guard your own retries or a text can send twice. And there is "
               "no optimistic concurrency: the API does return a conflict on "
               "competing writes, but nothing stops a lost update."),
-    (5, 5, "A perfect score, and the safest platform here to hand to an app or an "
+    (5, 5, "A perfect score, and about as safe as it gets to hand to an app or an "
            "AI agent. You can issue a read-only, narrowly scoped key, which is "
            "exactly what this run used, run a separate key per integration, test "
            "against a real sandbox with its own isolated data, and revoke access "
