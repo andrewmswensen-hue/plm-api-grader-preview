@@ -91,7 +91,7 @@ RESULTS = {
           "ambiguities the score stays between 45 and 56, so the letter grade is F "
           "under all of them. Worth being precise about what that means: this is "
           "not a verdict on engineering quality. On design and reliability alone "
-          "AppFolio scores 7.9 out of 10, behind only QuickBooks Online. The F comes from the other half of the question, which is what "
+          "AppFolio scores 7.9 out of 10, among the stronger marks here. The F comes from the other half of the question, which is what "
           "an operator is actually allowed to build.",
   "cats": [
     (5.6, 15, "You can read everything and be notified about nearly everything, and "
@@ -127,7 +127,7 @@ RESULTS = {
               "representative."),
   ],
   "strengths": [
-    "Strong Design and Reliability, 7.9 out of 10, second only to QuickBooks",
+    "Strong Design and Reliability, 7.9 out of 10",
     "Real idempotency keys, with replay headers and documented error codes",
     "Signed webhooks across 20 topics, with a public key set",
     "A Reports API exposing trust account, deposit, ledger and 1099 data",
@@ -595,84 +595,114 @@ RESULTS = {
 },
 
 "RentEngine": {
-  "score": 78, "grade": "C+",
-  "meta": {"run": "Sep 1, 2026", "method": "1.1", "model": "Claude Opus 4.8",
-           "tier": "Baseline verified", "raw": "38.83 / 50"},
-  # Supersedes the 2026-08-27 run (74, C). Four of five categories moved, mostly
-  # because the earlier run missed first-party evidence that exists: a status
-  # page, a changelog, and a written compatibility policy. RentEngine also
-  # shipped spec 1.3.0 in between.
-  "note": "This replaces an earlier run from 2026-08-27 that scored 74 (C). Two "
-          "things changed. The first run reported no status page and no changelog; "
-          "both exist, along with a written compatibility policy promising 30 days "
-          "notice before a breaking change, which is why Design and Reliability "
-          "rose from 4.6 to 7.1. RentEngine also shipped a new API version in "
-          "between. This run was graded three times against the same frozen "
-          "evidence, with unreconciled totals of 75, 81 and 78, and the published "
-          "78 is recomputed from the reconciled marks rather than averaged. "
-          "Categories 2, 3 and 5 were unanimous. Two checks carry residual "
-          "sensitivity, so the honest band is 74 to 82, centred on 78.",
+  "score": 75, "grade": "C",
+  "meta": {"run": "Sep 3, 2026", "method": "1.1", "model": "Claude Opus 5",
+           "tier": "Baseline verified", "raw": "37.54 / 50"},
+  # Third RentEngine run: 74 (Aug 27) -> 78 (Sep 1) -> 75 (Sep 3). Three of the
+  # five categories went UP this time and the total still fell, because this run
+  # adopted the methodology's default leasing classification verbatim and fixed
+  # it in writing before looking at the API. Under that classification the
+  # critical objects are applications, screening and lease lifecycle, and all
+  # three are read-only. The write surface RentEngine does have sits outside the
+  # classified core, so it cannot be counted toward it.
+  "note": "This replaces the 2026-09-01 run that scored 78 (C+), which itself "
+          "replaced a 2026-08-27 run that scored 74. Worth understanding why the "
+          "number went down when the API got better. Three of the five categories "
+          "improved: Design and Reliability 7.1 to 7.9, Access Control 3.0 to "
+          "4.0, and Documentation 4.4 to a perfect 5.0. What fell is functional "
+          "coverage, 9.4 to 5.6, and that is a grading change rather than a "
+          "product change. This run adopted the methodology's default "
+          "leasing-and-screening classification word for word and committed it to "
+          "a file before the API was examined. Under it the critical objects are "
+          "applications, screening decisions and the lease lifecycle, and all "
+          "three are read-only. RentEngine's real write surface, units, prospects, "
+          "showings, lockboxes and notes, sits outside that classified core, so "
+          "the rubric cannot count it there. Two other things belong on the "
+          "record. RentEngine sent a written response to the earlier report card, "
+          "and the run used it only to decide where to look: no check was marked "
+          "on the vendor's say-so, and every mark cites first-party documentation "
+          "or a live observation. And three showing endpoints the vendor said "
+          "would ship that afternoon returned 404 when the evidence was frozen, so "
+          "they were not credited.",
   "cats": [
-    (9.4, 15, "You can read essentially everything RentEngine knows: leads, units, "
-              "showings, applications, screening results, calls, messages, and "
-              "reports. That is the coverage that matters most for a leasing "
-              "integration. You can also push new leads, schedule showings, manage "
-              "unit inventory, and add notes and follow-ups. The limits are on "
-              "changing state. You cannot update a prospect's fields at all, stage "
-              "advancement is limited to two event types, there is no delete and no "
-              "showing cancel, and the approve or reject decision lives in your PMS."),
-    (7.1, 10, "Built to run in production, and confirmed live. Rate-limit headers, "
-              "a real Retry-After, request ids you can quote to support, a clear "
-              "versioning and deprecation contract, and a public status page are "
-              "all present. The gaps are manageable: errors carry no stable machine "
-              "code so you match on status and message text, there is no "
-              "idempotency key, there is no protection against two writers "
-              "overwriting each other, and webhook verification is an optional "
-              "shared secret rather than a real signature."),
-    (3.0, 5, "You can create several named keys and revoke them yourself, which is "
-             "good for separating integrations and cutting off access fast. The "
-             "weakness is blast radius. Every key carries the full permissions of "
-             "the user who created it, and there is no read-only or "
-             "resource-scoped option. To give an AI agent or a third party a narrow "
-             "slice, your only lever is to create a limited RentEngine user and "
-             "mint the token as that user. Treat every token like a password."),
-    (4.4, 5, "A real strength. A developer or an AI coding tool can build straight "
-             "from the public OpenAPI 3.1 spec without reverse-engineering, the "
-             "guides for auth, pagination, rate limits and webhooks are clear, and "
-             "the changelog was current to the day before this run. The one gap is "
-             "a purpose-built AI retrieval corpus: the llms.txt file is an index "
-             "only, so an AI tool leans on the spec instead."),
-    (15, 15, "Full marks, and the opposite of the call-sales-to-unlock pattern "
-             "common in this industry. If you are a customer you create your own "
-             "key in the portal in minutes. API access is part of the standard "
-             "platform on transaction pricing, with no premium tier gating it."),
+    (5.6, 15, "You can see everything and change almost nothing that matters most "
+              "in a leasing tool. Reading is excellent: applications, screening "
+              "status, the whole funnel, and rich webhooks that tell you the "
+              "moment an application is approved or a lease is signed. But you "
+              "cannot submit an application, record a screening decision, approve "
+              "or reject an applicant, or move a prospect through a lease stage "
+              "from your own code. RentEngine says this is deliberate and "
+              "compliance-driven for screening, which is a fair reason, but the "
+              "effect on what you can build is the same: your automations can "
+              "watch and report, not decide and act."),
+    (7.9, 10, "The strongest part of the API and genuinely well built. Errors are "
+              "machine-readable, rate limiting degrades cleanly with a Retry-After "
+              "you can obey, every response is traceable to a log id you can quote "
+              "to support, and the versioning promise is written down with 30 days "
+              "notice before a breaking change. Three gaps will cost you "
+              "engineering time: no documented ordering on paged lists, so a long "
+              "sync while records change can miss or repeat rows; no bulk export, "
+              "so a full extract means paging everything; and webhooks that are "
+              "not cryptographically signed, so you cannot prove a payload is "
+              "genuine, only that the caller knew a static secret."),
+    (4.0, 5, "The basics are covered. You can mint several keys, hand an "
+             "integration a read-only one, and kill any of them yourself in "
+             "seconds. Two things to plan around. A key is only ever as narrow as "
+             "the user who made it, so create API keys from a purpose-built "
+             "limited user rather than from your own admin login. And staging "
+             "exists on paper but is not documented well enough to trust as a "
+             "rehearsal space, and it is running behind production, so treat "
+             "production as your only real environment and test carefully."),
+    (5.0, 5, "Full marks, and the reason a project here is predictable to scope. "
+             "Everything a developer or an AI coding tool needs is public, "
+             "current, and machine-readable: a real OpenAPI 3.1 file you can "
+             "generate a client from, an llms.txt, and a live documentation server "
+             "an AI agent can query directly. The changelog was updated the "
+             "morning this was run. If you hand this API to a contractor or to an "
+             "AI coding assistant, they will not be guessing."),
+    (15, 15, "No barrier at the door. If you are a RentEngine customer the API is "
+             "part of what you already pay for, and you can issue yourself a key "
+             "in under a minute without asking anyone. This is the cleanest "
+             "possible result on access, and it is worth noting that this category "
+             "carries the same 15-point weight as functional coverage."),
   ],
   "strengths": [
-    "API access included on standard pricing, with self-serve keys",
-    "Public OpenAPI 3.1 spec, downloadable as JSON and YAML",
-    "A written compatibility policy with 30 days notice before breaking changes",
-    "Changelog current to the day before the run, and a public status page",
-    "Request ids you can quote to support, echoed back if you supply your own",
+    "A perfect documentation score: public OpenAPI 3.1, an llms.txt, and a first-party docs server an AI agent can query",
+    "Changelog updated the morning of the run, with the served spec version matching",
+    "A written promise of 30 days notice before any breaking change",
+    "Read-only keys, multiple named keys, and self-serve revoke",
+    "Machine-readable error codes, verified live on four separate error classes",
+    "Rate limiting that degrades cleanly: a real Retry-After plus remaining and reset headers",
+    "API access included in the standard plan, with a self-serve key in under a minute",
   ],
   "watch": [
-    "No endpoint updates a prospect's fields, and stage advance covers two events",
-    "No delete anywhere, and no showing cancel",
-    "Every key carries its creator's full permissions; no read-only option",
-    "No idempotency key and no concurrency control, so retries and races need care",
-    "Webhook verification is an optional shared secret, not a signature",
+    "Applications and screening are read-only: no submit, no approve, no reject",
+    "Lease stage advance is unit status only; the events endpoint accepts 2 of 45 event types",
+    "No DELETE verb exists anywhere in the API",
+    "Webhooks are unsigned; verification is an optional static shared secret",
+    "No bulk export, and the updated-since filter reaches only three of roughly twenty list endpoints",
+    "No documented ordering on paged lists, so a long sync can skip or repeat rows",
+    "No concurrency control: two writers to the same unit are last-write-wins",
+    "Keys inherit the creating user's permissions, with no per-resource scoping",
+    "One endpoint bills you: the market comps call is metered at $0.50 per successful request",
   ],
-  "bottom": "RentEngine gives you a real, modern, well-documented leasing API you "
-            "can get into today without a sales call, and it is genuinely strong at "
-            "reading your leasing data and feeding it: leads in, showings "
-            "scheduled, and change events out by webhook for the core objects. Its "
-            "biggest strength is buildability and access, with a clean OpenAPI 3.1 "
-            "spec, production-grade operability signals, and self-serve keys that "
-            "are not paywalled. Its biggest limitation is write depth and safety. "
-            "You cannot update a prospect or approve applications through the API, "
-            "there is no delete, and there is no idempotency key, no concurrency "
-            "control, and no read-only credential. It is a top-of-funnel leasing "
-            "system, not a bank, PMS or trust-accounting platform, so you will "
-            "still run accounting and the signed-lease lifecycle in your PMS.",
+  "bottom": "Today you can build reliable read-and-report automation on RentEngine "
+            "and very little else. Pull your units, prospects, showings, "
+            "applications and screening outcomes, receive webhooks the moment an "
+            "application is approved or a lease is signed, and push units, "
+            "prospects, showings, lockbox codes and notes back in. What you cannot "
+            "do from your own code is the part that decides anything: submit an "
+            "application, obtain or record a screening decision, or approve, "
+            "reject or advance an applicant. RentEngine says the screening path is "
+            "deliberately closed for compliance, which is a legitimate reason, but "
+            "the practical result is that your automations can watch and report "
+            "while a human still clicks the buttons that matter. The API's biggest "
+            "strength is craftsmanship everywhere except coverage: genuinely "
+            "excellent documentation, a current OpenAPI spec, machine-readable "
+            "errors, honest rate limiting, request ids you can quote to support, a "
+            "written 30-day breaking-change promise, and no cost or sales barrier "
+            "to getting a key. Its biggest limitation is that it is observational "
+            "at its core, compounded by unsigned webhooks and no bulk export.",
 },
 
 "Process Street": {
@@ -953,7 +983,7 @@ RESULTS = {
   "meta": {"run": "Sep 1, 2026", "method": "1.1", "model": "Claude Opus 5",
            "tier": "Baseline verified", "raw": "25.42 / 50"},
   # Sits directly under RentEngine in the same category, which is the comparison
-  # that matters: 51 against 78 for two leasing tools graded on the same rubric.
+  # that matters: 51 against 75 for two leasing tools graded on the same rubric.
   "note": "Graded three independent times. The runs scored 56, 50 and 51 before "
           "reconciliation and agreed on 23 of the 26 applicable checks; the three "
           "splits were each resolved against the evidence rather than averaged, "
