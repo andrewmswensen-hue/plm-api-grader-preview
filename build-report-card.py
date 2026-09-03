@@ -91,8 +91,7 @@ RESULTS = {
           "ambiguities the score stays between 45 and 56, so the letter grade is F "
           "under all of them. Worth being precise about what that means: this is "
           "not a verdict on engineering quality. On design and reliability alone "
-          "AppFolio scores 7.9 out of 10, tied for the highest of any platform graded "
-          "so far. The F comes from the other half of the question, which is what "
+          "AppFolio scores 7.9 out of 10, behind only QuickBooks Online. The F comes from the other half of the question, which is what "
           "an operator is actually allowed to build.",
   "cats": [
     (5.6, 15, "You can read everything and be notified about nearly everything, and "
@@ -128,7 +127,7 @@ RESULTS = {
               "representative."),
   ],
   "strengths": [
-    "Second-highest Design and Reliability score of any platform graded so far",
+    "Strong Design and Reliability, 7.9 out of 10, second only to QuickBooks",
     "Real idempotency keys, with replay headers and documented error codes",
     "Signed webhooks across 20 topics, with a public key set",
     "A Reports API exposing trust account, deposit, ledger and 1099 data",
@@ -508,6 +507,91 @@ RESULTS = {
             "guide documenting the wrong idempotency header, and an API sold only "
             "with the top plan. It holds no funds, so you still need your PMS for "
             "ledgers, owner statements and payments.",
+},
+
+"QuickBooks Online": {
+  "score": 64, "grade": "D",
+  "meta": {"run": "Sep 2, 2026", "method": "1.1", "model": "Claude Fable 5",
+           "tier": "Baseline verified", "raw": "32.04 / 50"},
+  # Sits under Xero in the same category, which is the comparison that matters:
+  # 64 against 80 for two general-ledger platforms on the same rubric.
+  "note": "Graded three independent times against the same frozen evidence, with "
+          "every disagreement resolved against that evidence before scoring and "
+          "none left open. Worth knowing how coverage was judged here, because it "
+          "was generous rather than harsh: the run scored property-management "
+          "objects by their accounting equivalents, counting tenants as "
+          "Customers, properties as Classes or Departments, and the lease ledger "
+          "as AR transactions. Graded strictly, with no such mapping, those "
+          "objects would simply be absent and the score would be lower. The D is "
+          "what remains after giving QuickBooks that credit. Writes were "
+          "exercised in an Intuit sandbox company; only the webhook delivery step "
+          "could not be run, because subscriptions are configured in the portal "
+          "and need a public endpoint.",
+  "cats": [
+    (7.5, 15, "Everything the ledger runs on is fully readable and writable, and "
+              "the write path was exercised live in a sandbox company. The "
+              "problem is fit. Property-management concepts exist only as "
+              "accounting workarounds: units are sub-classes or sub-customers, a "
+              "lease is a recurring-transaction proxy, and work orders have no "
+              "equivalent at all. Reconciliation status is invisible to the API, "
+              "so you cannot tell from code whether an account has been "
+              "reconciled."),
+    (9.2, 10, "The highest Design and Reliability score on this board, and by a "
+              "clear margin. Automations get signed webhooks with a documented "
+              "retry ladder, duplicate suppression that was proven live, "
+              "optimistic locking that actually rejected a stale write, trace ids "
+              "on every response, and a real status page with a status API. The "
+              "rough edges are legacy conventions, with create, update, delete "
+              "and void all going through POST, and a thin version-compatibility "
+              "contract."),
+    (3.5, 5, "The weak point for anyone automating. The Accounting API has "
+             "exactly one scope, and it grants read and write together, so you "
+             "cannot hand an integration or an AI agent a key that reads your "
+             "books without also being able to post journal entries to them. You "
+             "do get multiple apps with separate credentials, self-serve "
+             "revocation, and genuinely isolated sandbox companies."),
+    (4.4, 5, "A developer or an AI coding tool can build against this from public "
+             "documentation alone: a complete per-entity reference with worked "
+             "request and response samples, maintained SDKs for Java, .NET and "
+             "PHP, and four dated release-note streams. The gap is AI retrieval. "
+             "There is no llms.txt and no downloadable corpus, so an AI tool has "
+             "to scrape page by page rather than ingest the whole thing."),
+    (7.5, 15, "You can build against a sandbox today for free, and the core "
+              "Accounting API is included with any QuickBooks Online "
+              "subscription. Two things hold it back. Development keys are "
+              "instant, but production credentials go through an Intuit "
+              "questionnaire and its approval. And Intuit's premium-APIs page "
+              "lists Projects, the 12-field Custom Fields API, Sales Tax, "
+              "Dimensions and Payroll Compensation as requiring Silver, Gold or "
+              "Platinum partner tiers."),
+  ],
+  "strengths": [
+    "The highest Design and Reliability score on the board, 9.2 out of 10",
+    "Optimistic locking that works: a stale-token write was rejected live",
+    "Duplicate suppression proven live, two identical creates returned one record",
+    "Signed webhooks with a documented retry ladder from 10 seconds to 6 hours",
+    "Public status page with per-service 90-day uptime and a status API",
+  ],
+  "watch": [
+    "One scope for the whole Accounting API: any key you issue can post entries",
+    "No property, unit, lease, work-order or reconciliation objects",
+    "Production credentials need Intuit to approve a questionnaire",
+    "Minor versions 1 to 74 were retired at once, and old pins are now ignored",
+    "No llms.txt or downloadable corpus, so AI tools scrape page by page",
+  ],
+  "bottom": "You can build real automations on this API today: read and post "
+            "anything on the ledger, get signed webhooks when data changes, sync "
+            "full datasets incrementally, and retry writes safely thanks to "
+            "duplicate suppression that was proven live. The engineering "
+            "fundamentals are genuinely strong, and the Design and Reliability "
+            "score is the best on this board. What drags the grade down is fit "
+            "and access. There are no property, unit, lease, work-order or "
+            "reconciliation objects, so QuickBooks Online can only ever be the "
+            "general-ledger layer behind a PMS, and the all-or-nothing read and "
+            "write scope means any integration or AI agent you connect can write "
+            "to your books. It is not a substitute for a PMS or a trust-"
+            "accounting system, and nothing in the API evidences trust or "
+            "fiduciary workflows.",
 },
 
 "RentEngine": {
