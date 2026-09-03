@@ -159,6 +159,130 @@ RESULTS = {
             "posting payments and reconciliation stay in the interface.",
 },
 
+"Aptly": {
+  "score": 58, "grade": "F",
+  "meta": {"run": "Sep 3, 2026", "method": "1.1", "model": "Claude Opus 5",
+           "tier": "Fully verified, controlled live", "raw": "29.09 / 50"},
+  # Second Fully verified run on the board. Perfect scores in Documentation and
+  # Access Control sitting next to an F, because half of the heaviest category
+  # is lost to a premium gate with no published price.
+  "note": "Graded Fully verified, with writes exercised for real: a labelled fixture card was "
+          "created, updated, moved through a stage transition and archived on a "
+          "production board, with containment checked across every API-enabled "
+          "board and the card count restored to its baseline afterward. Two "
+          "checks could not be observed and both are disclosed rather than "
+          "guessed. There is no idempotency mechanism to test, so that check was "
+          "graded from documented absence. And webhooks could not be established "
+          "either way: Aptly's developer portal contains no webhook content at "
+          "all across a 250,000-byte corpus, while its customer help centre "
+          "carries one row that reads like an outbound event. The report "
+          "computed the score both ways and it is 58 either way, so the "
+          "unresolved check changes nothing.",
+  "cats": [
+    (7.5, 15, "You can read everything on an Aptly board and create and change "
+              "cards reliably, all of it verified live. What you cannot do is "
+              "manage the automation layer through the API, and you cannot be "
+              "notified when something changes. Every integration has to poll on "
+              "a timer and ask what changed since last time. That works, and the "
+              "updated-since filter is honest at hour granularity, but two things "
+              "need care: send a malformed timestamp and Aptly quietly hands back "
+              "every record instead of erroring, and the built-in text search did "
+              "not reliably find cards that plainly existed. There is also no way "
+              "to delete a card through the API, only archive, so a mistaken "
+              "record has to be cleaned up by hand."),
+    (4.1, 10, "The weakest part of the API, and weak in a specific way: the "
+              "everyday experience is good, and the guarantees you would want "
+              "before trusting it with unattended automation are missing. Errors "
+              "come back clean and machine-readable, paging through cards is "
+              "solid, and pulling a full dataset or just what changed is easy. "
+              "What is missing matters. If a write times out and your code "
+              "retries, you can get a duplicate card, because there is no way to "
+              "say this is the same request. If two automations touch the same "
+              "card at once, the second silently wins: the run proved it by "
+              "sending a deliberately out-of-date update and watching Aptly "
+              "accept it. There is no version number on the API and no published "
+              "breaking-change policy, and no working status page. One practical "
+              "quirk: after a write, reading the card back immediately can still "
+              "show the old value for a minute or two."),
+    (5, 5, "Full marks, and the part that matters most for handing access to an "
+           "AI agent. You can issue a key that can only read, only on the boards "
+           "you name, and nothing else, and you can kill it yourself in seconds "
+           "without emailing anyone. Requests outside a key's boards or "
+           "permissions come back as a 403. The one gap is that there is no "
+           "practice environment, only your live account, which is why the write "
+           "testing in this run was confined to a single labelled fixture that "
+           "was created and then archived."),
+    (5, 5, "Full marks, and not a close call. The documentation is complete, "
+           "public, and specifically built so an AI assistant can read it and "
+           "write correct code: a real OpenAPI file, a per-endpoint reference, "
+           "every page retrievable as Markdown, and a single file containing the "
+           "entire API that you can paste into a chat. Aptly also runs its own "
+           "MCP server with real write tools. Two things to know: one link Aptly "
+           "advertises as an OpenAPI file actually serves an unrelated sample "
+           "document, and the customer help centre is months out of date and "
+           "contradicts the developer docs in three places, so trust the "
+           "developer portal."),
+    (7.5, 15, "Half marks on the heaviest category in the rubric, and the single "
+              "biggest reason for the grade. Creating a key is genuinely "
+              "self-serve, with no sales call and no approval step. But API "
+              "access requires Aptly's Premium plan, and Aptly publishes no plan "
+              "tiers or prices at all, so an operator cannot work out what API "
+              "entitlement costs without a sales conversation. Worth knowing for "
+              "a practical reason too: if a subscription is ever downgraded, the "
+              "API and every automation built on it stop working, and nothing in "
+              "the developer documentation warns of that dependency."),
+  ],
+  "strengths": [
+    "Fully verified: a fixture card was created, updated, stage-changed and archived on a live board",
+    "Documentation built for AI retrieval, including one file containing the entire API",
+    "A real OpenAPI 3.0.3 spec plus a first-party MCP server with write tools",
+    "A dated changelog current to ten days before the run, with per-endpoint entries",
+    "Keys scoped to named boards and to read, insert or update, enforced with a 403",
+    "Self-serve keys with optional expiration, revocable by you in seconds",
+    "Published numeric rate limits with a worked backoff example",
+    "Exemplary card pagination: stable ordering verified across repeat and adjacent pages",
+  ],
+  "watch": [
+    "API access requires a Premium plan, and Aptly publishes no prices at all",
+    "No webhooks, so every integration polls on a timer",
+    "No idempotency: a timeout followed by a retry can create a duplicate card",
+    "No concurrency control: a deliberately stale update was accepted and applied",
+    "No delete anywhere in the API; cards can only be archived",
+    "A malformed updated-since value returns 200 and every record instead of an error",
+    "No version identifier on any endpoint, and no breaking-change policy",
+    "No working status page: status.getaptly.com serves a redirect loop",
+    "Reads immediately after a write can show the old value for a minute or two",
+    "No sandbox, so every test happens in the live account",
+  ],
+  "bottom": "Aptly's API is unusually well documented and unusually lightly "
+            "guaranteed: a genuinely useful tool with almost none of the safety "
+            "rails you would want around unattended automation. You can read "
+            "every board, card, contact and task, create and update cards, fire "
+            "your board workflows by changing a card's stage, and pull either a "
+            "full dataset or just what changed since last night. All of it was "
+            "verified against a live account, including creating, updating and "
+            "archiving a card on a production board. The documentation is "
+            "outstanding and the access controls are excellent, letting you hand "
+            "an AI agent a key that can only read, only on the boards you choose, "
+            "revocable in seconds. What you cannot build is anything that needs "
+            "to react the moment something happens, or anything that must not be "
+            "allowed to go wrong quietly. There are no webhooks, so every "
+            "integration polls. There is no way to mark a write as a retry, so a "
+            "timeout can produce a duplicate. There is no protection against two "
+            "automations overwriting each other, proven live with a deliberately "
+            "stale update. No version number, no breaking-change policy, no "
+            "working status page, and no practice environment. The F lands there "
+            "for two concrete reasons: those write and reliability guarantees, "
+            "and the fact that the API sits behind an unpublished Premium plan. "
+            "None of that makes Aptly the wrong tool. It is a "
+            "property-management-specialized workflow and communication layer and "
+            "that is the job it does. But it is not a system of record and not a "
+            "bank: it holds no funds, has no ledger, and documents no trust, "
+            "escrow or security-deposit accounting. Use it to read and write "
+            "workflow state on a schedule, with a read-only key wherever one will "
+            "do, and pause before verifying a write.",
+},
+
 "Buildium": {
   "score": 78, "grade": "C+",
   "meta": {"run": "Sep 1, 2026", "method": "1.1", "model": "Claude Opus 4.8",
@@ -709,8 +833,10 @@ RESULTS = {
   "score": 73, "grade": "C",
   "meta": {"run": "Aug 31, 2026", "method": "1.1", "model": "Claude Opus 5",
            "tier": "Fully verified, controlled live", "raw": "36.25 / 50"},
-  # The only Fully verified run so far. (It is no longer the only three-run
-  # result: Buildium, Tenant Turner and ShowMojo were graded three times too.)
+  # Four entries are Fully verified (Column, Property Meld, Aptly, this one) and
+  # several were graded three times, so neither is a distinguishing claim. What
+  # IS unique: all eight battery steps run against a LIVE account. Column also
+  # ran all eight, but in a sandbox.
   # The note below is not optional colour: the report leaves one disagreement
   # unresolved that moves the letter grade, so publishing 73 without it would
   # present a contested number as settled.
@@ -771,7 +897,7 @@ RESULTS = {
                "Enterprise only."),
   ],
   "strengths": [
-    "The only Fully verified result so far: all eight live-test steps run, writes included",
+    "All eight live-test steps run against a live account, writes and a real webhook delivery included",
     "Graded three independent times, every disagreement resolved against the evidence",
     "Full OpenAPI 3.1 spec, public and free, no login required",
     "A first-party MCP server, so Claude can drive the account directly",
