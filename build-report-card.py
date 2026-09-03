@@ -283,6 +283,140 @@ RESULTS = {
             "do, and pause before verifying a write.",
 },
 
+"Boom": {
+  "score": 64, "grade": "D",
+  "meta": {"run": "Sep 3, 2026", "method": "1.1", "model": "Claude Opus 5",
+           "tier": "Baseline verified", "raw": "31.88 / 50"},
+  # The largest run-1 bias recorded on this board: the discovering evaluator
+  # published 80 (B-) and the two cold-start graders, who never saw each other's
+  # work, landed at 64 and 63. Run 1 was the outlier on four of six splits and
+  # was corrected on all four in the same direction, by grading against what
+  # Boom has rather than against the classification fixed before inspection.
+  "note": "Graded three independent times, and the three runs disagreed sharply. "
+          "The discovering evaluator published 80 (B-). The two cold-start "
+          "graders, who never saw run 1's marks or each other's, landed at 64 and "
+          "63. The reconciled result is 64. Run 1 was the outlier on four of the "
+          "six splits and was corrected on all four in the same direction: it "
+          "graded against the capabilities Boom happens to have rather than "
+          "against the classification fixed before inspection, which is the "
+          "adjust-to-fit error the methodology exists to prevent. It also carried "
+          "one plain factual error the independents caught, listing decision "
+          "reversal as present when no endpoint in either specification performs "
+          "it. Four disagreements are recorded rather than averaged away, and one "
+          "of them moves the grade: scoring lease lifecycle 0.0 instead of 0.5 "
+          "would give 56 (F). The report flags that question as the one deserving "
+          "a methodology ruling, namely what lease lifecycle should demand of a "
+          "screening tool that deliberately hands the lease to a system of "
+          "record. The honest band is 56 to 65. Four checks were "
+          "documentation-graded because live write testing was not authorized and "
+          "no sandbox credential was available.",
+  "cats": [
+    (7.5, 15, "You can run the whole screening funnel from your own code: create "
+              "a lead, turn it into an application, pull the credit, criminal, "
+              "eviction and income reports, read Boom's recommendation, approve "
+              "or reject with your own reasons, and have Boom push the approved "
+              "applicant into your PMS. You can also enroll residents in rent "
+              "reporting, keep lease terms current, and close them out at "
+              "move-out. What you cannot do is manage a lease, since there is no "
+              "lease record here at all, configure the screening rules, upload or "
+              "sign a document, or undo a decision through the API even though a "
+              "person can do it in the portal. Plan on a person in the Boom "
+              "portal for setup and reversals, and your code for everything in "
+              "between."),
+    (5.0, 10, "The API works, and the parts you touch first are pleasant: clean "
+              "REST, real pagination with totals that survived a repeat-and-"
+              "overlap test, validation errors that name the offending field, and "
+              "a status page with genuine incident history. The weakness is "
+              "everything you need when an integration runs unattended. No "
+              "request id to quote when something goes wrong, no ETag to stop two "
+              "jobs overwriting each other, no Retry-After to back off against, "
+              "and no idempotency key on the call that files rent payments to the "
+              "credit bureaus. Budget for defensive code: log your own "
+              "correlation ids, serialize your writes, deduplicate webhooks "
+              "yourself, and parse what the API actually returns rather than "
+              "trusting the published rent-reporting schema."),
+    (5, 5, "The best part of the API and the reason it is safe to automate "
+           "against at all. You can mint a key that is read-only and limited to a "
+           "single owner's property group, hand it to an agent, a reporting tool "
+           "or a third party, watch it in a list with the date and the person who "
+           "made it, and kill it with one toggle. There is also a real sandbox "
+           "with its own credentials that cannot reach the credit bureaus. One "
+           "boundary worth knowing: owner scoping does not reach Boom's own "
+           "billing objects, so a read-only key can still see your Boom invoices "
+           "and your payout account details. Scope by what the key is for, and do "
+           "not treat read-only as harmless."),
+    (3.1, 5, "Point your developer, or your coding assistant, at the OpenAPI file "
+             "on GitHub rather than the documentation site's endpoint pages. The "
+             "screening spec is accurate, current and complete enough to generate "
+             "a working client. The rent-reporting half will cost you a day of "
+             "trial and error: its spec points at the sandbox host, describes "
+             "form-encoded bodies the live API does not use, and calls numbers "
+             "and booleans strings. All thirteen endpoint pages in the docs "
+             "navigation have pointed at a developer's dead tunnel since March "
+             "2024. The same warning applies to AI tools, because the AI-readable "
+             "corpus looks authoritative and will quietly hand an agent an "
+             "endpoint list that does not exist. The redeeming feature is that "
+             "Boom clearly maintains this: the changelog is weekly and the spec "
+             "repo was updated a week before the run."),
+    (11.3, 15, "If you are already a Boom customer you are minutes from a working "
+               "key: Settings, API, name it, pick read-only if that is all you "
+               "need, save. Nobody to ask and no ticket to file. What you cannot "
+               "find out from anything Boom publishes is what it costs. There is "
+               "no pricing page anywhere and every pricing question routes to a "
+               "sales form, so while nothing evidences a premium gate, nothing "
+               "establishes that API access is included or free either. Confirm "
+               "in writing that API use carries no charge before you build a "
+               "dependency on it, and expect to email Boom if you want a sandbox "
+               "to develop against."),
+  ],
+  "strengths": [
+    "Read-only keys scoped to specific owners or property groups, which is unusual in this category",
+    "Multiple named keys with creator and date, each revocable by you with one toggle",
+    "A real sandbox with separate credentials that cannot reach the credit bureaus",
+    "The whole screening funnel is scriptable, from lead to decision to PMS push",
+    "A public status page with 11 components and nine resolved incidents",
+    "A weekly changelog current to the day before the run, plus a spec repo with dated commits",
+    "The screening OpenAPI spec is accurate and complete enough to generate a working client",
+    "Pagination with real total counts, verified repeatable and non-overlapping live",
+  ],
+  "watch": [
+    "No pricing published anywhere, so you cannot tell what API access costs",
+    "The rent-reporting spec disagrees with the live API on rent amounts, booleans and arrays",
+    "All thirteen endpoint pages in the docs point at a developer's dead tunnel from March 2024",
+    "No idempotency on the call that files rent payments to three credit bureaus",
+    "No concurrency control, so two jobs can silently overwrite each other",
+    "No request id on any successful response, so there is nothing to quote to support",
+    "No Retry-After on any response, even though a 429 is documented",
+    "No lease record, no document upload and no e-signature anywhere in the API",
+    "No endpoint reverses a decision, though a person can undo one in the portal",
+    "Owner scoping does not cover billing, so a read-only key can still read payout account details",
+  ],
+  "bottom": "You can build real automation on the screening half today: pull "
+            "applications with their credit, criminal, eviction and income "
+            "reports, decide with your own criteria, and push approved applicants "
+            "into your PMS. You can enroll residents in rent reporting too. But "
+            "there is no lease record, no document upload and no e-signature "
+            "anywhere in this API, so approval is where Boom stops and your "
+            "system of record begins. Its biggest strength is access control: "
+            "read-only keys scoped to a single owner's property group, plus a "
+            "sandbox that cannot touch the credit bureaus, make this genuinely "
+            "safe to hand to an AI agent or an outside vendor. Its biggest "
+            "limitation is that the rent-reporting half is unreliable to build "
+            "against. The published schema disagrees with what the endpoint "
+            "actually returns on rent amounts and booleans, the documentation's "
+            "endpoint pages have pointed at a dead developer tunnel since March "
+            "2024, and there is no request id, concurrency control, retry "
+            "guidance or idempotency key for unattended jobs. Boom is not a bank, "
+            "no first-party material names any bank, processor or money "
+            "transmitter behind it, and it documents no trust-accounting, "
+            "client-fund, security-deposit or escrow workflow. Its financial "
+            "endpoints concern Boom's own billing to you, not money you hold for "
+            "owners. The score reflects a narrow API with unreliable "
+            "documentation rather than a weak product: treat Boom as a screening "
+            "and credit-reporting layer beside your PMS, your trust accounting "
+            "and your bank rather than a replacement for any of them.",
+},
+
 "Buildium": {
   "score": 78, "grade": "C+",
   "meta": {"run": "Sep 1, 2026", "method": "1.1", "model": "Claude Opus 4.8",
