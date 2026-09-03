@@ -679,7 +679,8 @@ RESULTS = {
   "score": 73, "grade": "C",
   "meta": {"run": "Aug 31, 2026", "method": "1.1", "model": "Claude Opus 5",
            "tier": "Fully verified, controlled live", "raw": "36.25 / 50"},
-  # The only Fully verified run so far, and the only one graded three times.
+  # The only Fully verified run so far. (It is no longer the only three-run
+  # result: Buildium, Tenant Turner and ShowMojo were graded three times too.)
   # The note below is not optional colour: the report leaves one disagreement
   # unresolved that moves the letter grade, so publishing 73 without it would
   # present a contested number as settled.
@@ -845,6 +846,108 @@ RESULTS = {
             "and the stale changelog, so verify against the live reference.",
 },
 
+"ShowMojo": {
+  "score": 51, "grade": "F",
+  "meta": {"run": "Sep 2, 2026", "method": "1.1", "model": "Claude Opus 5",
+           "tier": "Baseline verified", "raw": "25.63 / 50"},
+  # Widest three-run spread on the board so far: 62 / 51 / 54. The discovering
+  # evaluator was the outlier on five of the six splits and generous on every
+  # one of them, which the report calls out as its own systematic bias rather
+  # than averaging it away.
+  "note": "Graded three independent times. The runs scored 62, 51 and 54 before "
+          "reconciliation and agreed on 21 of the 27 checks; the six splits were "
+          "each resolved against the frozen evidence rather than averaged, "
+          "landing on 51. The report records that the discovering evaluator was "
+          "the outlier on five of those six and generous in every case. The F "
+          "holds across every combination of the unresolved positions, which "
+          "move the score only within roughly 50 to 55. Two caveats worth "
+          "knowing. The account owner declined live write testing in advance, so "
+          "four checks were graded from ShowMojo's documentation rather than "
+          "observed, and no write, import or webhook-registration call was made "
+          "at any point. And one check is unverified: whether an account can "
+          "hold several separately revocable tokens, because that page is behind "
+          "a login. Resolved either way, the grade stays F.",
+  "cats": [
+    (1.9, 15, "You can push listings into ShowMojo from your PMS and pull leasing "
+              "activity back out in bulk. Beyond that the API does not let you "
+              "operate the product. Every showing action your staff performs all "
+              "day, confirm, cancel, reschedule, mark a no-show, is something the "
+              "API will tell you happened and will not let you cause. There is "
+              "also no way to create or update a lead. And because listings have "
+              "no updated-since filter and no webhook of their own, detecting "
+              "that a listing changed means re-pulling the whole collection."),
+    (6.7, 10, "The strongest category, and the parts that exist are mostly well "
+              "built: clean typing that matched live responses field for field, "
+              "an honest status page, a request id on every response, and an "
+              "export that genuinely honors date ranges. The operational gaps are "
+              "what bite in production. No rate limit is documented and 60 rapid "
+              "requests returned no rate-limit headers at all, so you cannot tell "
+              "what the ceiling is or what happens when you hit it. The main "
+              "listings call returns everything in one unbounded response. A "
+              "failed authentication hands your code an empty body instead of an "
+              "error."),
+    (0.8, 5, "The weakest area and the one with real risk attached. There is "
+             "exactly one kind of key, it can do everything the API can do "
+             "including overwriting your entire listing portfolio, and the "
+             "account owner confirmed there is no read-only option. So if you "
+             "want to give a contractor, a vendor or an AI agent access to read "
+             "your showing data, the only credential you can hand over is one "
+             "that can also rewrite your listings. You can generate a fresh token "
+             "yourself, but nothing documents that doing so kills the old one."),
+    (1.3, 5, "A developer can read the listings and properties documentation and "
+             "build against it. Pointing an AI coding assistant at it is another "
+             "matter: no OpenAPI spec, no SDK in any language, no MCP server, and "
+             "no llms.txt. The endpoint details are client-rendered, so fetching "
+             "a documentation page returns prose with the parameter and schema "
+             "tables missing, which is exactly how a coding tool reads a page. "
+             "The report export, the highest-value data path, publishes no column "
+             "documentation at all."),
+    (15, 15, "Full marks. Credential creation is self-serve, with no sales call, "
+             "support ticket or approval step. The pricing page itemizes every "
+             "other add-on, down to per-device hardware fees, and never lists the "
+             "API as a tier feature or upsell. This single category accounts for "
+             "nearly two-thirds of the points ShowMojo earned."),
+  ],
+  "strengths": [
+    "Self-serve token in settings, on any plan, with no API add-on or upsell",
+    "Eight named bulk exports in JSON or CSV, with date filtering that works",
+    "A webhook enumerating 120-plus lead and showing events, with a documented retry ladder",
+    "Precisely typed listing schema that matched live responses field for field",
+    "Public status page with uptime percentages and a real dated incident history",
+  ],
+  "watch": [
+    "One all-powerful token: no read-only option, no scoping, no documented revocation",
+    "No API endpoint confirms, cancels, reschedules or no-shows a showing",
+    "No way to create or update a lead through the API",
+    "Listings ignore page, per_page and every updated-since parameter tested",
+    "Webhooks authenticate with a replayable static bearer token, not a signature",
+    "No rate limit documented anywhere, and no rate-limit headers returned under load",
+    "No OpenAPI spec, no SDK, no MCP server, and no AI-readable documentation",
+    "The support knowledge base ShowMojo's own links point to is dead, returning HTTP 402",
+  ],
+  "bottom": "ShowMojo's API is a one-way street, and you should plan around that. "
+            "You can push your listings in and pull your leasing activity back "
+            "out, leads, showings, no-shows, pre-screening answers, lockbox "
+            "access and performance metrics, all date-filterable in JSON or CSV. "
+            "What you cannot do is make ShowMojo act. There is no way to confirm, "
+            "cancel or reschedule a showing through the API, and no way to create "
+            "or update a lead, so the automations most operators actually want "
+            "are not buildable today. What you can build is good reporting, a "
+            "warehouse sync, and real-time reaction to leasing events, because "
+            "the webhook coverage of showing and prospect activity is genuinely "
+            "thorough and the export path works exactly as documented. Two "
+            "limitations do most of the damage. Access control: one kind of key, "
+            "not scopable, not read-only, able to overwrite your whole listing "
+            "portfolio. And listing sync: no updated-since filter, no listing "
+            "webhook, no pagination on the listings call, so noticing that a "
+            "listing changed means re-pulling everything. Against that, the thing "
+            "ShowMojo gets clearly right is access. No sales call, no upgrade, no "
+            "approval, and that alone accounts for nearly two-thirds of the "
+            "points it earned. Read the score for what it measures. This grades "
+            "how buildable the API is for an operator, not whether the product "
+            "does its job.",
+},
+
 "Tenant Turner": {
   "score": 51, "grade": "F",
   "meta": {"run": "Sep 1, 2026", "method": "1.1", "model": "Claude Opus 5",
@@ -891,7 +994,7 @@ RESULTS = {
              "all, so payload shapes must be reverse-engineered. And there is no "
              "changelog, so the first sign something changed will be your "
              "integration breaking."),
-    (15, 15, "Full marks, and the category Tenant Turner wins outright. Nothing "
+    (15, 15, "Full marks. Nothing "
              "stands between you and the API. If you are a customer on any plan "
              "the key is already sitting in your portal, it costs nothing extra, "
              "and you can start building this afternoon."),
