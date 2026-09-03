@@ -286,19 +286,19 @@
   .acc summary::-webkit-details-marker{ display:none; }
   .acc summary:hover{ background:var(--wash-soft); }
   .acc summary:focus-visible{ outline:2px solid var(--primary); outline-offset:-2px; }
-  .acc-n{ flex:none; width:26px; height:26px; border-radius:50%; background:var(--wash);
-          color:var(--primary-dark); font-size:13px; font-weight:800;
+  .acc-n{ flex:none; width:30px; height:30px; border-radius:50%; background:var(--wash);
+          color:var(--primary-dark); font-size:14.5px; font-weight:800;
           display:flex; align-items:center; justify-content:center; }
-  .acc-t{ flex:1; font-weight:800; font-size:15.5px; color:var(--navy); line-height:1.3; }
-  .acc summary .cat-pts{ margin-left:0; flex:none; }
+  .acc-t{ flex:1; font-weight:800; font-size:17.5px; color:var(--navy); line-height:1.3; }
+  .acc summary .cat-pts{ margin-left:0; flex:none; font-size:13px; padding:3px 10px; }
   /* Chevron, drawn rather than typed so it stays crisp in the body font. */
   .acc summary::after{ content:""; flex:none; width:8px; height:8px; margin-left:2px;
                        border-right:2px solid var(--muted); border-bottom:2px solid var(--muted);
                        transform:rotate(45deg) translate(-2px,-2px);
                        transition:transform .18s ease; }
   .acc[open] summary::after{ transform:rotate(225deg) translate(-3px,-3px); }
-  .acc-body{ padding:0 18px 18px 57px; }
-  .acc-body p{ margin:0; color:var(--muted); font-size:15px; line-height:1.62; }
+  .acc-body{ padding:0 18px 20px 61px; }
+  .acc-body p{ margin:0; color:var(--muted); font-size:17px; line-height:1.62; }
   @media (max-width:560px){
     .acc summary{ flex-wrap:wrap; gap:9px; }
     .acc-t{ flex:1 1 100%; order:3; }
@@ -473,7 +473,7 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
         </div>
       </div>
 
-      <h3 style="margin:38px 0 0;font-size:20px;">What gets graded</h3>
+      <h3 style="margin:38px 0 0;font-size:23px;">What gets graded</h3>
       <p class="sub" style="margin:6px 0 0;">Five categories, each worth a fixed share of the 100 points. A category earns the fraction of its checks it passes, times its maximum.</p>
       <div class="acc-list mt-md">
         <details class="acc">
