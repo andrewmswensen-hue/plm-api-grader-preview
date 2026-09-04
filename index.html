@@ -262,13 +262,31 @@
 
   /* Intro-video slot. Holds 16:9 so dropping the real embed in later cannot
      move the page around. */
-  /* Capped so the 16:9 frame lands near the height of the copy beside it,
-     rather than running 90px taller and pulling the hero out of balance. */
-  .vid-ph{ aspect-ratio:16/9; max-width:400px; border-radius:var(--radius); background:var(--navy);
+  /* Capped rather than free: the column is wider than the frame wants to be,
+     and an uncapped 16:9 ran far taller than the copy beside it. */
+  .vid-ph{ aspect-ratio:16/9; max-width:520px; border-radius:var(--radius); background:var(--navy);
            display:flex; align-items:center; justify-content:center; text-align:center;
            padding:24px; box-shadow:var(--shadow-lg); }
   .vid-ph p{ margin:10px 0 0; color:#cfdce6; font-size:15.5px; max-width:34ch; }
-  .page-hero .split{ align-items:center; }
+  /* Subhead left, sponsor right, wrapping to its own line when tight. */
+  .hero-lead-row{ display:flex; flex-wrap:wrap; align-items:center;
+                  justify-content:space-between; gap:14px 32px; }
+  .hero-lead-row .lead{ flex:1 1 420px; margin-bottom:0; }
+  .hero-lead-row .presented-by{ flex:none; margin:0; }
+
+  /* Areas rather than source order, so the phone gets paragraph, video,
+     buttons while the desktop keeps the video in one tall right column. */
+  .hero-grid{ display:grid; margin-top:32px; gap:22px 30px;
+              grid-template-columns:1fr 1fr;
+              grid-template-areas:"copy video" "btns video";
+              align-items:start; }
+  .hg-copy{ grid-area:copy; margin-top:0; }
+  .hg-video{ grid-area:video; align-self:center; }
+  .hg-btns{ grid-area:btns; display:flex; flex-wrap:wrap; gap:12px; align-self:start; }
+  @media (max-width:820px){
+    .hero-grid{ grid-template-columns:1fr;
+                grid-template-areas:"copy" "video" "btns"; }
+  }
   .vid-ph-tag{ display:inline-block; background:rgba(255,255,255,.15); color:#fff;
                border-radius:999px; padding:3px 12px; font-size:11.5px; font-weight:800;
                letter-spacing:.09em; text-transform:uppercase; }
@@ -327,22 +345,20 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
     <div class="wrap">
       <div class="ticks" aria-hidden="true"><i></i><i></i><i></i></div>
       <h1>The PM API Report Card</h1>
-      <p class="lead">Grading the property management platforms we all use, on whether they&#x27;ll actually let you access your own data.</p>
-      <a class="presented-by" href="https://column.com/property-management/?utm_source=peter-lohmann&amp;utm_medium=plm-api-grader" target="_blank" rel="noopener">Presented by <img src="column-logo.png" alt="Column" /></a>
+      <!-- Subhead and sponsor share a row on desktop; the sponsor drops below
+           it once there is no room. -->
+      <div class="hero-lead-row">
+        <p class="lead">Grading the property management platforms we all use, on whether they&#x27;ll actually let you access your own data.</p>
+        <a class="presented-by" href="https://column.com/property-management/?utm_source=peter-lohmann&amp;utm_medium=plm-api-grader" target="_blank" rel="noopener">Presented by <img src="column-logo.png" alt="Column" /></a>
+      </div>
 
-      <!-- Same shape as the tester guide hero: the header runs full width, then
-           a 50/50 split with the copy left and the video right. -->
-      <div class="split" style="margin-top:32px;">
-        <div>
-          <p class="sub" style="margin-top:0;">Same rubric for every platform: five weighted categories totalling 100 points. No cherry-picking, no platform-specific tuning, and the grading file is yours to download and check.</p>
+      <!-- DOM order is paragraph, video, buttons, which IS the phone order.
+           On desktop the grid areas below put the video in the right column
+           spanning both rows, so the copy and buttons stack on the left. -->
+      <div class="hero-grid">
+        <p class="sub hg-copy">Same rubric for every platform: five weighted categories totalling 100 points. No cherry-picking, no platform-specific tuning, and the grading file is yours to download and check.</p>
 
-          <div class="hero-jump" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:22px;">
-            <a class="btn btn-primary" href="#results">See the results &darr;</a>
-            <a class="btn btn-ghost" href="#method">How we grade</a>
-          </div>
-        </div>
-
-        <div>
+        <div class="hg-video">
           <!-- SWAP: intro-video - placeholder until Peter records it. To go live,
                swap this block for the .vid-open thumbnail + lightbox used on the
                tester guide page: set the YouTube id in the href, the maxresdefault
@@ -354,6 +370,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
               <p>Peter&rsquo;s walkthrough of what this is and how to read it. Coming shortly.</p>
             </div>
           </div>
+        </div>
+
+        <div class="hero-jump hg-btns">
+          <a class="btn btn-primary" href="#results">See the results &darr;</a>
+          <a class="btn btn-ghost" href="#method">How we grade</a>
         </div>
       </div>
     </div>
