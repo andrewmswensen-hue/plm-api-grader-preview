@@ -1906,13 +1906,16 @@ SUB_PAGE = """<!--
     <div class="wrap">
       <h2 class="h-lead">Where the points came from.</h2>
       <p class="sub" style="margin:10px 0 22px;">Five categories, each worth a fixed share of the 100 points. A category earns the fraction of its checks it passes, times its maximum.</p>
-      <div class="rc-cats">
-        {catcards}
+      <div class="rc-where">
+        <div class="rc-cats">
+          {catcards}
+        </div>
+        <div class="rc-scale">
+          <h3>Letter grades are absolute, never curved.</h3>
+          <p>The same numeric bands apply to every platform. Nothing here is scored relative to the rest of the board.</p>
+          {bands}
+        </div>
       </div>
-
-      <h3 style="font-family:var(--sans);font-weight:800;font-size:18px;margin:34px 0 4px;">Letter grades are absolute, never curved.</h3>
-      <p class="sub" style="margin:0 0 16px;font-size:15.5px;">The same numeric bands apply to every platform. Nothing is scored relative to the rest of the board.</p>
-      {bands}
     </div>
   </section>
 
@@ -1956,7 +1959,7 @@ SUB_PAGE = """<!--
       <div class="rc-pair">
         <div class="panel">
           <h2>The bottom line for a property manager</h2>
-          <p class="sub">{bottom}</p>
+          <p>{bottom}</p>
         </div>
         {notesec}
       </div>
@@ -2122,9 +2125,11 @@ def build_subpages(checks_data):
                 pct = float(p) / maxima[i] * 100
                 cards.append(
                     f'<div class="rc-cat">'
-                    f'<div class="n">Category {i+1}</div>'
-                    f'<h3>{CAT_LABELS[i][0]}</h3>'
+                    f'<div class="rc-cat-top">'
+                    f'<div><div class="n">Category {i+1}</div>'
+                    f'<h3>{CAT_LABELS[i][0]}</h3></div>'
                     f'<div class="p">{fmt_pts(p)}<i> / {maxima[i]}</i></div>'
+                    f'</div>'
                     f'<div class="rc-bar"><span class="{tier(p, maxima[i])}" '
                     f'style="width:{pct:.0f}%"></span></div>'
                     f'</div>')
@@ -2170,7 +2175,7 @@ def build_subpages(checks_data):
                 notesec = (
                     '<div class="panel" style="border-left:4px solid var(--primary);">'
                     '<h2>About this run</h2>'
-                    f'<p class="sub">{note}</p></div>')
+                    f'<p>{note}</p></div>')
 
             # --- the markdown download ------------------------------------
             md = Path(f"files/reports/{slug(co)}.md")

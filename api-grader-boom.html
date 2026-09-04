@@ -100,17 +100,18 @@
     <div class="wrap">
       <h2 class="h-lead">Where the points came from.</h2>
       <p class="sub" style="margin:10px 0 22px;">Five categories, each worth a fixed share of the 100 points. A category earns the fraction of its checks it passes, times its maximum.</p>
-      <div class="rc-cats">
-        <div class="rc-cat"><div class="n">Category 1</div><h3>Functional Coverage</h3><div class="p">7.5<i> / 15</i></div><div class="rc-bar"><span class="mid" style="width:50%"></span></div></div>
-        <div class="rc-cat"><div class="n">Category 2</div><h3>Design &amp; Reliability</h3><div class="p">5<i> / 10</i></div><div class="rc-bar"><span class="mid" style="width:50%"></span></div></div>
-        <div class="rc-cat"><div class="n">Category 3</div><h3>Access Control</h3><div class="p">5<i> / 5</i></div><div class="rc-bar"><span class="hi" style="width:100%"></span></div></div>
-        <div class="rc-cat"><div class="n">Category 4</div><h3>Docs &amp; AI-Ready</h3><div class="p">3.1<i> / 5</i></div><div class="rc-bar"><span class="mid" style="width:62%"></span></div></div>
-        <div class="rc-cat"><div class="n">Category 5</div><h3>Access &amp; Cost</h3><div class="p">11.3<i> / 15</i></div><div class="rc-bar"><span class="hi" style="width:75%"></span></div></div>
-      </div>
-
-      <h3 style="font-family:var(--sans);font-weight:800;font-size:18px;margin:34px 0 4px;">Letter grades are absolute, never curved.</h3>
-      <p class="sub" style="margin:0 0 16px;font-size:15.5px;">The same numeric bands apply to every platform. Nothing is scored relative to the rest of the board.</p>
-      <div class="rc-bands" aria-label="Letter grade bands">
+      <div class="rc-where">
+        <div class="rc-cats">
+          <div class="rc-cat"><div class="rc-cat-top"><div><div class="n">Category 1</div><h3>Functional Coverage</h3></div><div class="p">7.5<i> / 15</i></div></div><div class="rc-bar"><span class="mid" style="width:50%"></span></div></div>
+        <div class="rc-cat"><div class="rc-cat-top"><div><div class="n">Category 2</div><h3>Design &amp; Reliability</h3></div><div class="p">5<i> / 10</i></div></div><div class="rc-bar"><span class="mid" style="width:50%"></span></div></div>
+        <div class="rc-cat"><div class="rc-cat-top"><div><div class="n">Category 3</div><h3>Access Control</h3></div><div class="p">5<i> / 5</i></div></div><div class="rc-bar"><span class="hi" style="width:100%"></span></div></div>
+        <div class="rc-cat"><div class="rc-cat-top"><div><div class="n">Category 4</div><h3>Docs &amp; AI-Ready</h3></div><div class="p">3.1<i> / 5</i></div></div><div class="rc-bar"><span class="mid" style="width:62%"></span></div></div>
+        <div class="rc-cat"><div class="rc-cat-top"><div><div class="n">Category 5</div><h3>Access &amp; Cost</h3></div><div class="p">11.3<i> / 15</i></div></div><div class="rc-bar"><span class="hi" style="width:75%"></span></div></div>
+        </div>
+        <div class="rc-scale">
+          <h3>Letter grades are absolute, never curved.</h3>
+          <p>The same numeric bands apply to every platform. Nothing here is scored relative to the rest of the board.</p>
+          <div class="rc-bands" aria-label="Letter grade bands">
         <div class="rc-band b-a"><span class="g">A+</span><span class="r">97-100</span></div>
         <div class="rc-band b-a"><span class="g">A</span><span class="r">93-96</span></div>
         <div class="rc-band b-a"><span class="g">A&minus;</span><span class="r">90-92</span></div>
@@ -125,6 +126,8 @@
         <div class="rc-band b-d"><span class="g">D&minus;</span><span class="r">60-62</span></div>
         <div class="rc-band b-f f"><span class="g">F</span><span class="r">below 60</span></div>
         </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -176,9 +179,9 @@
       <div class="rc-pair">
         <div class="panel">
           <h2>The bottom line for a property manager</h2>
-          <p class="sub">You can build real automation on the screening half today: pull applications with their credit, criminal, eviction and income reports, decide with your own criteria, and push approved applicants into your PMS. You can enroll residents in rent reporting too. But there is no lease record, no document upload and no e-signature anywhere in this API, so approval is where Boom stops and your system of record begins. Its biggest strength is access control: read-only keys scoped to a single owner's property group, plus a sandbox that cannot touch the credit bureaus, make this genuinely safe to hand to an AI agent or an outside vendor. Its biggest limitation is that the rent-reporting half is unreliable to build against. The published schema disagrees with what the endpoint actually returns on rent amounts and booleans, the documentation's endpoint pages have pointed at a dead developer tunnel since March 2024, and there is no request id, concurrency control, retry guidance or idempotency key for unattended jobs. Boom is not a bank, no first-party material names any bank, processor or money transmitter behind it, and it documents no trust-accounting, client-fund, security-deposit or escrow workflow. Its financial endpoints concern Boom's own billing to you, not money you hold for owners. The score reflects a narrow API with unreliable documentation rather than a weak product: treat Boom as a screening and credit-reporting layer beside your PMS, your trust accounting and your bank rather than a replacement for any of them.</p>
+          <p>You can build real automation on the screening half today: pull applications with their credit, criminal, eviction and income reports, decide with your own criteria, and push approved applicants into your PMS. You can enroll residents in rent reporting too. But there is no lease record, no document upload and no e-signature anywhere in this API, so approval is where Boom stops and your system of record begins. Its biggest strength is access control: read-only keys scoped to a single owner's property group, plus a sandbox that cannot touch the credit bureaus, make this genuinely safe to hand to an AI agent or an outside vendor. Its biggest limitation is that the rent-reporting half is unreliable to build against. The published schema disagrees with what the endpoint actually returns on rent amounts and booleans, the documentation's endpoint pages have pointed at a dead developer tunnel since March 2024, and there is no request id, concurrency control, retry guidance or idempotency key for unattended jobs. Boom is not a bank, no first-party material names any bank, processor or money transmitter behind it, and it documents no trust-accounting, client-fund, security-deposit or escrow workflow. Its financial endpoints concern Boom's own billing to you, not money you hold for owners. The score reflects a narrow API with unreliable documentation rather than a weak product: treat Boom as a screening and credit-reporting layer beside your PMS, your trust accounting and your bank rather than a replacement for any of them.</p>
         </div>
-        <div class="panel" style="border-left:4px solid var(--primary);"><h2>About this run</h2><p class="sub">Graded three independent times, and the three runs disagreed sharply. The discovering evaluator published 80 (B-). The two cold-start graders, who never saw run 1's marks or each other's, landed at 64 and 63. The reconciled result is 64. Run 1 was the outlier on four of the six splits and was corrected on all four in the same direction: it graded against the capabilities Boom happens to have rather than against the classification fixed before inspection, which is the adjust-to-fit error the methodology exists to prevent. It also carried one plain factual error the independents caught, listing decision reversal as present when no endpoint in either specification performs it. Four disagreements are recorded rather than averaged away, and one of them moves the grade: scoring lease lifecycle 0.0 instead of 0.5 would give 56 (F). The report flags that question as the one deserving a methodology ruling, namely what lease lifecycle should demand of a screening tool that deliberately hands the lease to a system of record. The honest band is 56 to 65. Four checks were documentation-graded because live write testing was not authorized and no sandbox credential was available.</p></div>
+        <div class="panel" style="border-left:4px solid var(--primary);"><h2>About this run</h2><p>Graded three independent times, and the three runs disagreed sharply. The discovering evaluator published 80 (B-). The two cold-start graders, who never saw run 1's marks or each other's, landed at 64 and 63. The reconciled result is 64. Run 1 was the outlier on four of the six splits and was corrected on all four in the same direction: it graded against the capabilities Boom happens to have rather than against the classification fixed before inspection, which is the adjust-to-fit error the methodology exists to prevent. It also carried one plain factual error the independents caught, listing decision reversal as present when no endpoint in either specification performs it. Four disagreements are recorded rather than averaged away, and one of them moves the grade: scoring lease lifecycle 0.0 instead of 0.5 would give 56 (F). The report flags that question as the one deserving a methodology ruling, namely what lease lifecycle should demand of a screening tool that deliberately hands the lease to a system of record. The honest band is 56 to 65. Four checks were documentation-graded because live write testing was not authorized and no sandbox credential was available.</p></div>
       </div>
     </div>
   </section>

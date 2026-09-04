@@ -100,17 +100,18 @@
     <div class="wrap">
       <h2 class="h-lead">Where the points came from.</h2>
       <p class="sub" style="margin:10px 0 22px;">Five categories, each worth a fixed share of the 100 points. A category earns the fraction of its checks it passes, times its maximum.</p>
-      <div class="rc-cats">
-        <div class="rc-cat"><div class="n">Category 1</div><h3>Functional Coverage</h3><div class="p">5.6<i> / 15</i></div><div class="rc-bar"><span class="lo" style="width:37%"></span></div></div>
-        <div class="rc-cat"><div class="n">Category 2</div><h3>Design &amp; Reliability</h3><div class="p">7.9<i> / 10</i></div><div class="rc-bar"><span class="hi" style="width:79%"></span></div></div>
-        <div class="rc-cat"><div class="n">Category 3</div><h3>Access Control</h3><div class="p">1.9<i> / 5</i></div><div class="rc-bar"><span class="lo" style="width:38%"></span></div></div>
-        <div class="rc-cat"><div class="n">Category 4</div><h3>Docs &amp; AI-Ready</h3><div class="p">1.3<i> / 5</i></div><div class="rc-bar"><span class="lo" style="width:26%"></span></div></div>
-        <div class="rc-cat"><div class="n">Category 5</div><h3>Access &amp; Cost</h3><div class="p">7.5<i> / 15</i></div><div class="rc-bar"><span class="mid" style="width:50%"></span></div></div>
-      </div>
-
-      <h3 style="font-family:var(--sans);font-weight:800;font-size:18px;margin:34px 0 4px;">Letter grades are absolute, never curved.</h3>
-      <p class="sub" style="margin:0 0 16px;font-size:15.5px;">The same numeric bands apply to every platform. Nothing is scored relative to the rest of the board.</p>
-      <div class="rc-bands" aria-label="Letter grade bands">
+      <div class="rc-where">
+        <div class="rc-cats">
+          <div class="rc-cat"><div class="rc-cat-top"><div><div class="n">Category 1</div><h3>Functional Coverage</h3></div><div class="p">5.6<i> / 15</i></div></div><div class="rc-bar"><span class="lo" style="width:37%"></span></div></div>
+        <div class="rc-cat"><div class="rc-cat-top"><div><div class="n">Category 2</div><h3>Design &amp; Reliability</h3></div><div class="p">7.9<i> / 10</i></div></div><div class="rc-bar"><span class="hi" style="width:79%"></span></div></div>
+        <div class="rc-cat"><div class="rc-cat-top"><div><div class="n">Category 3</div><h3>Access Control</h3></div><div class="p">1.9<i> / 5</i></div></div><div class="rc-bar"><span class="lo" style="width:38%"></span></div></div>
+        <div class="rc-cat"><div class="rc-cat-top"><div><div class="n">Category 4</div><h3>Docs &amp; AI-Ready</h3></div><div class="p">1.3<i> / 5</i></div></div><div class="rc-bar"><span class="lo" style="width:26%"></span></div></div>
+        <div class="rc-cat"><div class="rc-cat-top"><div><div class="n">Category 5</div><h3>Access &amp; Cost</h3></div><div class="p">7.5<i> / 15</i></div></div><div class="rc-bar"><span class="mid" style="width:50%"></span></div></div>
+        </div>
+        <div class="rc-scale">
+          <h3>Letter grades are absolute, never curved.</h3>
+          <p>The same numeric bands apply to every platform. Nothing here is scored relative to the rest of the board.</p>
+          <div class="rc-bands" aria-label="Letter grade bands">
         <div class="rc-band b-a"><span class="g">A+</span><span class="r">97-100</span></div>
         <div class="rc-band b-a"><span class="g">A</span><span class="r">93-96</span></div>
         <div class="rc-band b-a"><span class="g">A&minus;</span><span class="r">90-92</span></div>
@@ -125,6 +126,8 @@
         <div class="rc-band b-d"><span class="g">D&minus;</span><span class="r">60-62</span></div>
         <div class="rc-band b-f f" data-now="1" aria-current="true"><span class="g">F</span><span class="r">below 60</span></div>
         </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -176,9 +179,9 @@
       <div class="rc-pair">
         <div class="panel">
           <h2>The bottom line for a property manager</h2>
-          <p class="sub">AppFolio's Database API is a well engineered read-and-notify platform with a genuinely strong operational core. Every object your business runs on is readable with typed schemas, incremental sync is the documented design, webhooks are cryptographically signed, and idempotency and rate limits are properly specified. The score is dragged down by what an operator is allowed to build. The API is locked to premium plans, endpoint and field access is negotiated with AppFolio rather than self-serve, there is one all-powerful key per database with no sandbox, AI tooling gets no spec or retrievable docs, and the leasing money cycle is absent entirely. The F reflects this rubric's heavy weighting of access, control and workflow completeness, not engineering quality. Practical read: on the Max plan this is an excellent system of record to sync from and to automate maintenance, billing and application decisions against, and the Reports API pulls trust account and 1099 data programmatically. It is not a platform you can run your whole business through, because managing trust accounts, posting payments and reconciliation stay in the interface.</p>
+          <p>AppFolio's Database API is a well engineered read-and-notify platform with a genuinely strong operational core. Every object your business runs on is readable with typed schemas, incremental sync is the documented design, webhooks are cryptographically signed, and idempotency and rate limits are properly specified. The score is dragged down by what an operator is allowed to build. The API is locked to premium plans, endpoint and field access is negotiated with AppFolio rather than self-serve, there is one all-powerful key per database with no sandbox, AI tooling gets no spec or retrievable docs, and the leasing money cycle is absent entirely. The F reflects this rubric's heavy weighting of access, control and workflow completeness, not engineering quality. Practical read: on the Max plan this is an excellent system of record to sync from and to automate maintenance, billing and application decisions against, and the Reports API pulls trust account and 1099 data programmatically. It is not a platform you can run your whole business through, because managing trust accounts, posting payments and reconciliation stay in the interface.</p>
         </div>
-        <div class="panel" style="border-left:4px solid var(--primary);"><h2>About this run</h2><p class="sub">Graded three independent times against the same frozen evidence, with unreconciled totals of 50, 45 and 48. 21 of the 27 checks were unanimous, and the published 48 is recomputed from the reconciled marks rather than averaged. Across every defensible reading of the remaining ambiguities the score stays between 45 and 56, so the letter grade is F under all of them. Worth being precise about what that means: this is not a verdict on engineering quality. On design and reliability alone AppFolio scores 7.9 out of 10, among the stronger marks here. The F comes from the other half of the question, which is what an operator is actually allowed to build.</p></div>
+        <div class="panel" style="border-left:4px solid var(--primary);"><h2>About this run</h2><p>Graded three independent times against the same frozen evidence, with unreconciled totals of 50, 45 and 48. 21 of the 27 checks were unanimous, and the published 48 is recomputed from the reconciled marks rather than averaged. Across every defensible reading of the remaining ambiguities the score stays between 45 and 56, so the letter grade is F under all of them. Worth being precise about what that means: this is not a verdict on engineering quality. On design and reliability alone AppFolio scores 7.9 out of 10, among the stronger marks here. The F comes from the other half of the question, which is what an operator is actually allowed to build.</p></div>
       </div>
     </div>
   </section>

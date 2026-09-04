@@ -253,13 +253,22 @@
   .hero-pre strong{ color:var(--navy); }
   .hero-pre a{ color:var(--primary); font-weight:700; white-space:nowrap; }
   .hero-pre a:hover{ text-decoration:underline; }
+  /* Full-width variant used above the results tiles. Bordered so it reads as a
+     standing notice rather than a stray paragraph. */
+  .hero-pre.wide{ max-width:none; margin:0 0 26px; padding:16px 20px;
+                  border:1px solid #f0dcc6; border-left:4px solid var(--orange);
+                  border-radius:var(--radius); background:#fdf8f3;
+                  font-size:16px; }
 
   /* Intro-video slot. Holds 16:9 so dropping the real embed in later cannot
      move the page around. */
-  .vid-ph{ aspect-ratio:16/9; border-radius:var(--radius); background:var(--navy);
+  /* Capped so the 16:9 frame lands near the height of the copy beside it,
+     rather than running 90px taller and pulling the hero out of balance. */
+  .vid-ph{ aspect-ratio:16/9; max-width:400px; border-radius:var(--radius); background:var(--navy);
            display:flex; align-items:center; justify-content:center; text-align:center;
            padding:24px; box-shadow:var(--shadow-lg); }
   .vid-ph p{ margin:10px 0 0; color:#cfdce6; font-size:15.5px; max-width:34ch; }
+  .page-hero .split{ align-items:center; }
   .vid-ph-tag{ display:inline-block; background:rgba(255,255,255,.15); color:#fff;
                border-radius:999px; padding:3px 12px; font-size:11.5px; font-weight:800;
                letter-spacing:.09em; text-transform:uppercase; }
@@ -327,16 +336,6 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
         <div>
           <p class="sub" style="margin-top:0;">Same rubric for every platform: five weighted categories totalling 100 points. No cherry-picking, no platform-specific tuning, and the grading file is yours to download and check.</p>
 
-          <!-- Pre-release framing. Deliberately here rather than in a footnote:
-               a reader should know these are preview scores before they read one. -->
-          <p class="hero-pre">
-            <span class="pre-tag">Preview</span>
-            These are <strong>pre-release scores</strong>, published early so they can be
-            checked. Every vendor&rsquo;s full report is here to download, a full rerun
-            follows in about 60 days, and confirmed factual errors are fixed immediately.
-            <a href="#correct">Found an error in your grade?</a>
-          </p>
-
           <div class="hero-jump" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:22px;">
             <a class="btn btn-primary" href="#results">See the results &darr;</a>
             <a class="btn btn-ghost" href="#method">How we grade</a>
@@ -355,10 +354,6 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
               <p>Peter&rsquo;s walkthrough of what this is and how to read it. Coming shortly.</p>
             </div>
           </div>
-          <div class="vid-meta">
-            <strong>Start here</strong>
-            <span class="sub" style="font-size:14.5px;display:block;">A short walkthrough of the rubric, the grades, and what they do and don&rsquo;t measure.</span>
-          </div>
         </div>
       </div>
     </div>
@@ -367,6 +362,16 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
   <!-- THE RESULTS -->
   <section class="band tight" id="results">
     <div class="wrap">
+      <!-- Pre-release framing, full width above the summary tiles. A reader
+           should meet it before they meet a score. -->
+      <p class="hero-pre wide">
+        <span class="pre-tag">Preview</span>
+        These are <strong>pre-release scores</strong>, published early so they can be
+        checked. Every vendor&rsquo;s full report is here to download, a full rerun
+        follows in about 60 days, and confirmed factual errors are fixed immediately.
+        <a href="#correct">Found an error in your grade?</a>
+      </p>
+
       <!-- RESULTS:START -->
       <div class="stats stats-color g4" aria-label="At a glance"><div class="stat"><div class="v">27</div><div class="k">Platforms listed</div></div><div class="stat"><div class="v">15</div><div class="k">Graded so far</div></div><div class="stat"><div class="v">68</div><div class="k">Average score</div></div><div class="stat"><div class="v">A</div><div class="k">Highest grade (RingCentral)</div></div></div>
       <p class="sub" style="margin-top:16px;font-size:14px;">Scores are point-in-time and tied to the evidence access date. Methodology v1.1.</p>

@@ -100,17 +100,18 @@
     <div class="wrap">
       <h2 class="h-lead">Where the points came from.</h2>
       <p class="sub" style="margin:10px 0 22px;">Five categories, each worth a fixed share of the 100 points. A category earns the fraction of its checks it passes, times its maximum.</p>
-      <div class="rc-cats">
-        <div class="rc-cat"><div class="n">Category 1</div><h3>Functional Coverage</h3><div class="p">15<i> / 15</i></div><div class="rc-bar"><span class="hi" style="width:100%"></span></div></div>
-        <div class="rc-cat"><div class="n">Category 2</div><h3>Design &amp; Reliability</h3><div class="p">7.9<i> / 10</i></div><div class="rc-bar"><span class="hi" style="width:79%"></span></div></div>
-        <div class="rc-cat"><div class="n">Category 3</div><h3>Access Control</h3><div class="p">5<i> / 5</i></div><div class="rc-bar"><span class="hi" style="width:100%"></span></div></div>
-        <div class="rc-cat"><div class="n">Category 4</div><h3>Docs &amp; AI-Ready</h3><div class="p">3.8<i> / 5</i></div><div class="rc-bar"><span class="hi" style="width:76%"></span></div></div>
-        <div class="rc-cat"><div class="n">Category 5</div><h3>Access &amp; Cost</h3><div class="p">15<i> / 15</i></div><div class="rc-bar"><span class="hi" style="width:100%"></span></div></div>
-      </div>
-
-      <h3 style="font-family:var(--sans);font-weight:800;font-size:18px;margin:34px 0 4px;">Letter grades are absolute, never curved.</h3>
-      <p class="sub" style="margin:0 0 16px;font-size:15.5px;">The same numeric bands apply to every platform. Nothing is scored relative to the rest of the board.</p>
-      <div class="rc-bands" aria-label="Letter grade bands">
+      <div class="rc-where">
+        <div class="rc-cats">
+          <div class="rc-cat"><div class="rc-cat-top"><div><div class="n">Category 1</div><h3>Functional Coverage</h3></div><div class="p">15<i> / 15</i></div></div><div class="rc-bar"><span class="hi" style="width:100%"></span></div></div>
+        <div class="rc-cat"><div class="rc-cat-top"><div><div class="n">Category 2</div><h3>Design &amp; Reliability</h3></div><div class="p">7.9<i> / 10</i></div></div><div class="rc-bar"><span class="hi" style="width:79%"></span></div></div>
+        <div class="rc-cat"><div class="rc-cat-top"><div><div class="n">Category 3</div><h3>Access Control</h3></div><div class="p">5<i> / 5</i></div></div><div class="rc-bar"><span class="hi" style="width:100%"></span></div></div>
+        <div class="rc-cat"><div class="rc-cat-top"><div><div class="n">Category 4</div><h3>Docs &amp; AI-Ready</h3></div><div class="p">3.8<i> / 5</i></div></div><div class="rc-bar"><span class="hi" style="width:76%"></span></div></div>
+        <div class="rc-cat"><div class="rc-cat-top"><div><div class="n">Category 5</div><h3>Access &amp; Cost</h3></div><div class="p">15<i> / 15</i></div></div><div class="rc-bar"><span class="hi" style="width:100%"></span></div></div>
+        </div>
+        <div class="rc-scale">
+          <h3>Letter grades are absolute, never curved.</h3>
+          <p>The same numeric bands apply to every platform. Nothing here is scored relative to the rest of the board.</p>
+          <div class="rc-bands" aria-label="Letter grade bands">
         <div class="rc-band b-a"><span class="g">A+</span><span class="r">97-100</span></div>
         <div class="rc-band b-a" data-now="1" aria-current="true"><span class="g">A</span><span class="r">93-96</span></div>
         <div class="rc-band b-a"><span class="g">A&minus;</span><span class="r">90-92</span></div>
@@ -125,6 +126,8 @@
         <div class="rc-band b-d"><span class="g">D&minus;</span><span class="r">60-62</span></div>
         <div class="rc-band b-f f"><span class="g">F</span><span class="r">below 60</span></div>
         </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -176,9 +179,9 @@
       <div class="rc-pair">
         <div class="panel">
           <h2>The bottom line for a property manager</h2>
-          <p class="sub">RingCentral's API is excellent to build on: modern REST with an OpenAPI spec and SDKs in every common language, granular read-only and scoped keys, a real sandbox, structured errors, rate-limit and request-id headers, proper pagination and incremental sync, and self-serve free access. For a property manager this is the communications layer. You can log every tenant, owner and vendor call and text, send SMS reminders, build click-to-call and screen-pop, and get real-time webhooks. It is not a PMS, an accounting system, or a trust-accounting system, and it holds no funds. Property management is not a documented use case, only a general fit. The main engineering cautions are the missing idempotency keys and the lack of lost-update protection, so protect your own retries of anything that sends a message or moves money, and the stale changelog, so verify against the live reference.</p>
+          <p>RingCentral's API is excellent to build on: modern REST with an OpenAPI spec and SDKs in every common language, granular read-only and scoped keys, a real sandbox, structured errors, rate-limit and request-id headers, proper pagination and incremental sync, and self-serve free access. For a property manager this is the communications layer. You can log every tenant, owner and vendor call and text, send SMS reminders, build click-to-call and screen-pop, and get real-time webhooks. It is not a PMS, an accounting system, or a trust-accounting system, and it holds no funds. Property management is not a documented use case, only a general fit. The main engineering cautions are the missing idempotency keys and the lack of lost-update protection, so protect your own retries of anything that sends a message or moves money, and the stale changelog, so verify against the live reference.</p>
         </div>
-        <div class="panel" style="border-left:4px solid var(--primary);"><h2>About this run</h2><p class="sub">The highest score graded so far, and the first A. Graded three independent times, and all three runs landed on 93. 25 of the 27 checks were unanimous, and the two that split sat in the same category and offset each other exactly, so the total is 93 under either resolution. Read paths were tested live on a production account with a read-only key; the write paths are graded from documentation, because the key supplied could not write. A sandbox key would lift those to fully verified.</p></div>
+        <div class="panel" style="border-left:4px solid var(--primary);"><h2>About this run</h2><p>The highest score graded so far, and the first A. Graded three independent times, and all three runs landed on 93. 25 of the 27 checks were unanimous, and the two that split sat in the same category and offset each other exactly, so the total is 93 under either resolution. Read paths were tested live on a production account with a read-only key; the write paths are graded from documentation, because the key supplied could not write. A sandbox key would lift those to fully verified.</p></div>
       </div>
     </div>
   </section>
