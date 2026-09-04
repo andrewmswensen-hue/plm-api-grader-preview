@@ -241,3 +241,28 @@
 .rc-list{ margin:14px 0 0; padding-left:20px; }
 .rc-list li{ color:var(--muted); font-size:17px; line-height:1.6; margin-bottom:9px; }
 .rc-list li:last-child{ margin-bottom:0; }
+
+/* ---- Not-yet-graded states ----------------------------------------------
+   A pending platform is not a missing one. Both states below say "the run has
+   not happened" rather than showing an empty score, which read as no data. */
+.rc-score.is-pending{ background:var(--wash-soft); color:var(--muted); }
+.rc-score.is-pending .rc-gnum{ align-items:center; gap:14px; }
+.pend-word{ font-size:26px; font-weight:800; line-height:1.15; color:var(--navy); }
+.pend-dot{ flex:none; width:13px; height:13px; border-radius:50%;
+           background:var(--orange); box-shadow:0 0 0 5px rgba(224,112,60,.18); }
+.rc-cat.is-pending{ opacity:.72; }
+.rc-cat.is-pending .pend-pts{ color:#aab6c0; }
+.rc-bands .rc-band{ opacity:1; }
+
+/* Switcher entry for a platform with no grade yet. */
+.rc-switch a.is-pending{ color:var(--muted); }
+.rc-switch a.is-pending .grade{ background:var(--wash-soft); color:#9aa8b4;
+                                letter-spacing:.06em; }
+
+@media (prefers-reduced-motion:no-preference){
+  .pend-dot{ animation:pend-pulse 2.4s ease-in-out infinite; }
+  @keyframes pend-pulse{
+    0%,100%{ box-shadow:0 0 0 5px rgba(224,112,60,.18); }
+    50%    { box-shadow:0 0 0 9px rgba(224,112,60,.07); }
+  }
+}
