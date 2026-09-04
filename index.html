@@ -268,15 +268,18 @@
            display:flex; align-items:center; justify-content:center; text-align:center;
            padding:24px; box-shadow:var(--shadow-lg); }
   .vid-ph p{ margin:10px 0 0; color:#cfdce6; font-size:15.5px; max-width:34ch; }
-  /* Subhead left, sponsor right, wrapping to its own line when tight. */
-  .hero-lead-row{ display:flex; flex-wrap:wrap; align-items:center;
-                  justify-content:space-between; gap:14px 32px; }
-  .hero-lead-row .lead{ flex:1 1 420px; margin-bottom:0; }
-  .hero-lead-row .presented-by{ flex:none; margin:0; }
+  /* Sponsor sits on its own line between the subhead and the body copy,
+     outlined so it reads as a credit rather than as more running text.
+     inline-flex keeps the box tight to the logo instead of spanning the wrap. */
+  .presented-by.boxed{ display:inline-flex; align-items:center; gap:10px;
+                       margin:18px 0 0; padding:9px 16px;
+                       border:1px solid var(--line); border-radius:999px;
+                       background:var(--card); }
+  .presented-by.boxed:hover{ border-color:var(--primary); text-decoration:none; }
 
   /* Areas rather than source order, so the phone gets paragraph, video,
      buttons while the desktop keeps the video in one tall right column. */
-  .hero-grid{ display:grid; margin-top:32px; gap:22px 30px;
+  .hero-grid{ display:grid; margin-top:30px; gap:22px 30px;
               grid-template-columns:1fr 1fr;
               grid-template-areas:"copy video" "btns video";
               align-items:start; }
@@ -345,12 +348,8 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
     <div class="wrap">
       <div class="ticks" aria-hidden="true"><i></i><i></i><i></i></div>
       <h1>The PM API Report Card</h1>
-      <!-- Subhead and sponsor share a row on desktop; the sponsor drops below
-           it once there is no room. -->
-      <div class="hero-lead-row">
-        <p class="lead">Grading the property management platforms we all use, on whether they&#x27;ll actually let you access your own data.</p>
-        <a class="presented-by" href="https://column.com/property-management/?utm_source=peter-lohmann&amp;utm_medium=plm-api-grader" target="_blank" rel="noopener">Presented by <img src="column-logo.png" alt="Column" /></a>
-      </div>
+      <p class="lead">Grading the property management platforms we all use, on whether they&#x27;ll actually let you access your own data.</p>
+      <a class="presented-by boxed" href="https://column.com/property-management/?utm_source=peter-lohmann&amp;utm_medium=plm-api-grader" target="_blank" rel="noopener">Presented by <img src="column-logo.png" alt="Column" /></a>
 
       <!-- DOM order is paragraph, video, buttons, which IS the phone order.
            On desktop the grid areas below put the video in the right column
