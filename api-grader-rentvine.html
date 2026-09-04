@@ -76,9 +76,12 @@
 
       <div class="rc-slab">
         <div class="rc-score g-d">
-          <div class="lab">Published score</div>
-          <div class="big">69<i>/100</i></div>
-          <div class="sub2">Grade D+ &middot; 34.38 / 50 raw</div>
+          <div class="lab">Published grade</div>
+          <div class="rc-gnum">
+            <span class="letter">D+</span>
+            <span class="num">69<i>/100</i></span>
+          </div>
+          <div class="raw">34.38 / 50 raw</div>
         </div>
         <div class="rc-meta">
           <div><div class="k">Evidence tier</div><div class="v">Baseline verified</div></div>
@@ -104,6 +107,24 @@
         <div class="rc-cat"><div class="n">Category 4</div><h3>Docs &amp; AI-Ready</h3><div class="p">2.5<i> / 5</i></div><div class="rc-bar"><span class="mid" style="width:50%"></span></div></div>
         <div class="rc-cat"><div class="n">Category 5</div><h3>Access &amp; Cost</h3><div class="p">15<i> / 15</i></div><div class="rc-bar"><span class="hi" style="width:100%"></span></div></div>
       </div>
+
+      <h3 style="font-family:var(--sans);font-weight:800;font-size:18px;margin:34px 0 4px;">Letter grades are absolute, never curved.</h3>
+      <p class="sub" style="margin:0 0 16px;font-size:15.5px;">The same numeric bands apply to every platform. Nothing is scored relative to the rest of the board.</p>
+      <div class="rc-bands" aria-label="Letter grade bands">
+        <div class="rc-band b-a"><span class="g">A+</span><span class="r">97-100</span></div>
+        <div class="rc-band b-a"><span class="g">A</span><span class="r">93-96</span></div>
+        <div class="rc-band b-a"><span class="g">A&minus;</span><span class="r">90-92</span></div>
+        <div class="rc-band b-b"><span class="g">B+</span><span class="r">87-89</span></div>
+        <div class="rc-band b-b"><span class="g">B</span><span class="r">83-86</span></div>
+        <div class="rc-band b-b"><span class="g">B&minus;</span><span class="r">80-82</span></div>
+        <div class="rc-band b-c"><span class="g">C+</span><span class="r">77-79</span></div>
+        <div class="rc-band b-c"><span class="g">C</span><span class="r">73-76</span></div>
+        <div class="rc-band b-c"><span class="g">C&minus;</span><span class="r">70-72</span></div>
+        <div class="rc-band b-d" data-now="1" aria-current="true"><span class="g">D+</span><span class="r">67-69</span></div>
+        <div class="rc-band b-d"><span class="g">D</span><span class="r">63-66</span></div>
+        <div class="rc-band b-d"><span class="g">D&minus;</span><span class="r">60-62</span></div>
+        <div class="rc-band b-f f"><span class="g">F</span><span class="r">below 60</span></div>
+        </div>
     </div>
   </section>
 
@@ -136,25 +157,6 @@
     </div>
   </section>
 
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel" style="border-left:4px solid var(--primary);">
-        <h2 class="h-lead" style="font-size:clamp(21px,2.6vw,26px);">About this run</h2>
-        <p class="sub" style="margin-top:12px;">Graded three independent times. The runs scored 70, 70 and 69 and agreed on 24 of the 27 checks, including every check in four of the five categories. All three disagreements sat in Design and Reliability, all three were resolved against the frozen evidence rather than averaged, and all three moved the score down. The reconciled 69 matches the strictest run exactly. Two things about the evidence. Writes were tested live but only on one throwaway inventory record, created, updated and deleted with cleanup verified; the money-moving writes, posting a charge or a payment to a real trust ledger, were graded from documentation because the protocol forbids running them. And two checks in Functional Coverage cleared their threshold by about a point: object coverage scored 85.5% against an 85% bar. The report records that a defensible stricter reading lands near 65 (D), and that one evaluator's alternative view of the ledger void question lands near 76 (C). The honest band is roughly 65 to 76.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- BOTTOM LINE -->
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel">
-        <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">The bottom line for a property manager</h2>
-        <p class="sub" style="margin-top:12px;">Rentvine's API is genuinely open in the way that matters most: it is included in the one plan at no extra cost, you can issue your own key in two minutes without a sales call, and the permission controls are excellent, with a separate least-privilege key for every tool or AI agent, revocable in seconds. Its functional reach is real too. Properties, units, leases, tenants, owners, work orders, bills, screening and the full trust ledger are all reachable, and most of it is changeable. What you can build today is substantial: nightly portfolio syncs, custom dashboards and reporting, renewal and delinquency tracking, maintenance automation, and AI assistants that read your live data. What you cannot build safely today is anything that posts money unattended. The API will post a charge or payment to a lease but offers no way to void or reverse one, no protection against a retried request posting twice, and no journal-entry posting for corrections. That work belongs in the web application with a human. The score is held down not by what the API can do but by the guarantees it does not make: text-typed numbers that contradict the published schema, five error formats including two that cannot be parsed, no published rate limit, no way to stop two tools overwriting each other, no export or change filter for work orders and bills, no version contract, and no status page. Integrations here need more babysitting than the feature list suggests. Rentvine is a property-management system of record with documented trust-accounting workflows, and it is not a bank: it accounts for money held in trust accounts you open in your own name at your own institution, so you still need that bank, a payment processor, and the web application for corrections the API cannot make. A D+ is a grade for API engineering discipline, not a verdict on the product. On openness and cost of entry, where most competitors fail outright, Rentvine scores full marks.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- ALL 27 CHECKS -->
   <section class="band tight wash" id="checks">
     <div class="wrap">
@@ -168,8 +170,21 @@
     </div>
   </section>
 
-  <!-- DOWNLOADS -->
+  <!-- VERDICT + PROVENANCE, side by side -->
   <section class="band tight">
+    <div class="wrap">
+      <div class="rc-pair">
+        <div class="panel">
+          <h2>The bottom line for a property manager</h2>
+          <p class="sub">Rentvine's API is genuinely open in the way that matters most: it is included in the one plan at no extra cost, you can issue your own key in two minutes without a sales call, and the permission controls are excellent, with a separate least-privilege key for every tool or AI agent, revocable in seconds. Its functional reach is real too. Properties, units, leases, tenants, owners, work orders, bills, screening and the full trust ledger are all reachable, and most of it is changeable. What you can build today is substantial: nightly portfolio syncs, custom dashboards and reporting, renewal and delinquency tracking, maintenance automation, and AI assistants that read your live data. What you cannot build safely today is anything that posts money unattended. The API will post a charge or payment to a lease but offers no way to void or reverse one, no protection against a retried request posting twice, and no journal-entry posting for corrections. That work belongs in the web application with a human. The score is held down not by what the API can do but by the guarantees it does not make: text-typed numbers that contradict the published schema, five error formats including two that cannot be parsed, no published rate limit, no way to stop two tools overwriting each other, no export or change filter for work orders and bills, no version contract, and no status page. Integrations here need more babysitting than the feature list suggests. Rentvine is a property-management system of record with documented trust-accounting workflows, and it is not a bank: it accounts for money held in trust accounts you open in your own name at your own institution, so you still need that bank, a payment processor, and the web application for corrections the API cannot make. A D+ is a grade for API engineering discipline, not a verdict on the product. On openness and cost of entry, where most competitors fail outright, Rentvine scores full marks.</p>
+        </div>
+        <div class="panel" style="border-left:4px solid var(--primary);"><h2>About this run</h2><p class="sub">Graded three independent times. The runs scored 70, 70 and 69 and agreed on 24 of the 27 checks, including every check in four of the five categories. All three disagreements sat in Design and Reliability, all three were resolved against the frozen evidence rather than averaged, and all three moved the score down. The reconciled 69 matches the strictest run exactly. Two things about the evidence. Writes were tested live but only on one throwaway inventory record, created, updated and deleted with cleanup verified; the money-moving writes, posting a charge or a payment to a real trust ledger, were graded from documentation because the protocol forbids running them. And two checks in Functional Coverage cleared their threshold by about a point: object coverage scored 85.5% against an 85% bar. The report records that a defensible stricter reading lands near 65 (D), and that one evaluator's alternative view of the ledger void question lands near 76 (C). The honest band is roughly 65 to 76.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOADS -->
+  <section class="band tight wash">
     <div class="wrap">
       <h2 class="h-lead">Check it yourself.</h2>
       <p class="sub" style="margin:10px 0 22px;">Both files behind this page, in full.</p>
@@ -189,7 +204,7 @@
   </section>
 
   <!-- CORRECTIONS -->
-  <section class="band tight wash">
+  <section class="band tight">
     <div class="wrap">
       <div class="fix-note" id="correct">
         <h3>Found a factual error in your grade?</h3>

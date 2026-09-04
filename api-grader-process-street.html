@@ -76,9 +76,12 @@
 
       <div class="rc-slab">
         <div class="rc-score g-c">
-          <div class="lab">Published score</div>
-          <div class="big">73<i>/100</i></div>
-          <div class="sub2">Grade C &middot; 36.25 / 50 raw</div>
+          <div class="lab">Published grade</div>
+          <div class="rc-gnum">
+            <span class="letter">C</span>
+            <span class="num">73<i>/100</i></span>
+          </div>
+          <div class="raw">36.25 / 50 raw</div>
         </div>
         <div class="rc-meta">
           <div><div class="k">Evidence tier</div><div class="v">Fully verified, controlled live</div></div>
@@ -104,6 +107,24 @@
         <div class="rc-cat"><div class="n">Category 4</div><h3>Docs &amp; AI-Ready</h3><div class="p">3.8<i> / 5</i></div><div class="rc-bar"><span class="hi" style="width:76%"></span></div></div>
         <div class="rc-cat"><div class="n">Category 5</div><h3>Access &amp; Cost</h3><div class="p">11.3<i> / 15</i></div><div class="rc-bar"><span class="hi" style="width:75%"></span></div></div>
       </div>
+
+      <h3 style="font-family:var(--sans);font-weight:800;font-size:18px;margin:34px 0 4px;">Letter grades are absolute, never curved.</h3>
+      <p class="sub" style="margin:0 0 16px;font-size:15.5px;">The same numeric bands apply to every platform. Nothing is scored relative to the rest of the board.</p>
+      <div class="rc-bands" aria-label="Letter grade bands">
+        <div class="rc-band b-a"><span class="g">A+</span><span class="r">97-100</span></div>
+        <div class="rc-band b-a"><span class="g">A</span><span class="r">93-96</span></div>
+        <div class="rc-band b-a"><span class="g">A&minus;</span><span class="r">90-92</span></div>
+        <div class="rc-band b-b"><span class="g">B+</span><span class="r">87-89</span></div>
+        <div class="rc-band b-b"><span class="g">B</span><span class="r">83-86</span></div>
+        <div class="rc-band b-b"><span class="g">B&minus;</span><span class="r">80-82</span></div>
+        <div class="rc-band b-c"><span class="g">C+</span><span class="r">77-79</span></div>
+        <div class="rc-band b-c" data-now="1" aria-current="true"><span class="g">C</span><span class="r">73-76</span></div>
+        <div class="rc-band b-c"><span class="g">C&minus;</span><span class="r">70-72</span></div>
+        <div class="rc-band b-d"><span class="g">D+</span><span class="r">67-69</span></div>
+        <div class="rc-band b-d"><span class="g">D</span><span class="r">63-66</span></div>
+        <div class="rc-band b-d"><span class="g">D&minus;</span><span class="r">60-62</span></div>
+        <div class="rc-band b-f f"><span class="g">F</span><span class="r">below 60</span></div>
+        </div>
     </div>
   </section>
 
@@ -136,25 +157,6 @@
     </div>
   </section>
 
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel" style="border-left:4px solid var(--primary);">
-        <h2 class="h-lead" style="font-size:clamp(21px,2.6vw,26px);">About this run</h2>
-        <p class="sub" style="margin-top:12px;">Graded three independent times against the same frozen evidence. The three unreconciled totals were 75, 72 and 70, and the published 73 is not their average: it is recomputed from the check-level marks after each disagreement was resolved against the evidence. 21 of 26 applicable checks were unanimous. One disagreement is left unresolved and it moves the grade: on change notification, a strict reading of the scoring band gives 69 (D+) instead of 73 (C). This is also the only result here graded Fully verified on all eight live-test steps against a live account, including real writes and an observed webhook delivery, with nothing graded from documentation alone.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- BOTTOM LINE -->
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel">
-        <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">The bottom line for a property manager</h2>
-        <p class="sub" style="margin-top:12px;">Process Street's API can do essentially everything the product can do, and the writes were proven on a live account rather than taken on trust. The documentation is a real strength: the complete machine-readable spec is public and free, and Process Street runs its own MCP server, so Claude can drive an account with very little custom code. Three things should shape how you use it. Retry safety is broken, so build your own duplicate guard. The documentation is wrong in places that matter, so build against observed behaviour and test each endpoint yourself. And outside Enterprise every key is a full organization administrator, so give each integration its own key and revoke precisely. It is not a PMS, a bank, or a trust accounting system. It is the procedure layer that runs on top of whatever holds your properties, leases and money, and it does have a genuine property management offering, though that comes from templates rather than any property-specific objects in the API.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- ALL 27 CHECKS -->
   <section class="band tight wash" id="checks">
     <div class="wrap">
@@ -168,8 +170,21 @@
     </div>
   </section>
 
-  <!-- DOWNLOADS -->
+  <!-- VERDICT + PROVENANCE, side by side -->
   <section class="band tight">
+    <div class="wrap">
+      <div class="rc-pair">
+        <div class="panel">
+          <h2>The bottom line for a property manager</h2>
+          <p class="sub">Process Street's API can do essentially everything the product can do, and the writes were proven on a live account rather than taken on trust. The documentation is a real strength: the complete machine-readable spec is public and free, and Process Street runs its own MCP server, so Claude can drive an account with very little custom code. Three things should shape how you use it. Retry safety is broken, so build your own duplicate guard. The documentation is wrong in places that matter, so build against observed behaviour and test each endpoint yourself. And outside Enterprise every key is a full organization administrator, so give each integration its own key and revoke precisely. It is not a PMS, a bank, or a trust accounting system. It is the procedure layer that runs on top of whatever holds your properties, leases and money, and it does have a genuine property management offering, though that comes from templates rather than any property-specific objects in the API.</p>
+        </div>
+        <div class="panel" style="border-left:4px solid var(--primary);"><h2>About this run</h2><p class="sub">Graded three independent times against the same frozen evidence. The three unreconciled totals were 75, 72 and 70, and the published 73 is not their average: it is recomputed from the check-level marks after each disagreement was resolved against the evidence. 21 of 26 applicable checks were unanimous. One disagreement is left unresolved and it moves the grade: on change notification, a strict reading of the scoring band gives 69 (D+) instead of 73 (C). This is also the only result here graded Fully verified on all eight live-test steps against a live account, including real writes and an observed webhook delivery, with nothing graded from documentation alone.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOADS -->
+  <section class="band tight wash">
     <div class="wrap">
       <h2 class="h-lead">Check it yourself.</h2>
       <p class="sub" style="margin:10px 0 22px;">Both files behind this page, in full.</p>
@@ -189,7 +204,7 @@
   </section>
 
   <!-- CORRECTIONS -->
-  <section class="band tight wash">
+  <section class="band tight">
     <div class="wrap">
       <div class="fix-note" id="correct">
         <h3>Found a factual error in your grade?</h3>

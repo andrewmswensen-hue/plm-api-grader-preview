@@ -76,9 +76,12 @@
 
       <div class="rc-slab">
         <div class="rc-score g-f">
-          <div class="lab">Published score</div>
-          <div class="big">51<i>/100</i></div>
-          <div class="sub2">Grade F &middot; 25.63 / 50 raw</div>
+          <div class="lab">Published grade</div>
+          <div class="rc-gnum">
+            <span class="letter">F</span>
+            <span class="num">51<i>/100</i></span>
+          </div>
+          <div class="raw">25.63 / 50 raw</div>
         </div>
         <div class="rc-meta">
           <div><div class="k">Evidence tier</div><div class="v">Baseline verified</div></div>
@@ -104,6 +107,24 @@
         <div class="rc-cat"><div class="n">Category 4</div><h3>Docs &amp; AI-Ready</h3><div class="p">1.3<i> / 5</i></div><div class="rc-bar"><span class="lo" style="width:26%"></span></div></div>
         <div class="rc-cat"><div class="n">Category 5</div><h3>Access &amp; Cost</h3><div class="p">15<i> / 15</i></div><div class="rc-bar"><span class="hi" style="width:100%"></span></div></div>
       </div>
+
+      <h3 style="font-family:var(--sans);font-weight:800;font-size:18px;margin:34px 0 4px;">Letter grades are absolute, never curved.</h3>
+      <p class="sub" style="margin:0 0 16px;font-size:15.5px;">The same numeric bands apply to every platform. Nothing is scored relative to the rest of the board.</p>
+      <div class="rc-bands" aria-label="Letter grade bands">
+        <div class="rc-band b-a"><span class="g">A+</span><span class="r">97-100</span></div>
+        <div class="rc-band b-a"><span class="g">A</span><span class="r">93-96</span></div>
+        <div class="rc-band b-a"><span class="g">A&minus;</span><span class="r">90-92</span></div>
+        <div class="rc-band b-b"><span class="g">B+</span><span class="r">87-89</span></div>
+        <div class="rc-band b-b"><span class="g">B</span><span class="r">83-86</span></div>
+        <div class="rc-band b-b"><span class="g">B&minus;</span><span class="r">80-82</span></div>
+        <div class="rc-band b-c"><span class="g">C+</span><span class="r">77-79</span></div>
+        <div class="rc-band b-c"><span class="g">C</span><span class="r">73-76</span></div>
+        <div class="rc-band b-c"><span class="g">C&minus;</span><span class="r">70-72</span></div>
+        <div class="rc-band b-d"><span class="g">D+</span><span class="r">67-69</span></div>
+        <div class="rc-band b-d"><span class="g">D</span><span class="r">63-66</span></div>
+        <div class="rc-band b-d"><span class="g">D&minus;</span><span class="r">60-62</span></div>
+        <div class="rc-band b-f f" data-now="1" aria-current="true"><span class="g">F</span><span class="r">below 60</span></div>
+        </div>
     </div>
   </section>
 
@@ -136,25 +157,6 @@
     </div>
   </section>
 
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel" style="border-left:4px solid var(--primary);">
-        <h2 class="h-lead" style="font-size:clamp(21px,2.6vw,26px);">About this run</h2>
-        <p class="sub" style="margin-top:12px;">Graded three independent times. The runs scored 62, 51 and 54 before reconciliation and agreed on 21 of the 27 checks; the six splits were each resolved against the frozen evidence rather than averaged, landing on 51. The report records that the discovering evaluator was the outlier on five of those six and generous in every case. The F holds across every combination of the unresolved positions, which move the score only within roughly 50 to 55. Two caveats worth knowing. The account owner declined live write testing in advance, so four checks were graded from ShowMojo's documentation rather than observed, and no write, import or webhook-registration call was made at any point. And one check is unverified: whether an account can hold several separately revocable tokens, because that page is behind a login. Resolved either way, the grade stays F.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- BOTTOM LINE -->
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel">
-        <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">The bottom line for a property manager</h2>
-        <p class="sub" style="margin-top:12px;">ShowMojo's API is a one-way street, and you should plan around that. You can push your listings in and pull your leasing activity back out, leads, showings, no-shows, pre-screening answers, lockbox access and performance metrics, all date-filterable in JSON or CSV. What you cannot do is make ShowMojo act. There is no way to confirm, cancel or reschedule a showing through the API, and no way to create or update a lead, so the automations most operators actually want are not buildable today. What you can build is good reporting, a warehouse sync, and real-time reaction to leasing events, because the webhook coverage of showing and prospect activity is genuinely thorough and the export path works exactly as documented. Two limitations do most of the damage. Access control: one kind of key, not scopable, not read-only, able to overwrite your whole listing portfolio. And listing sync: no updated-since filter, no listing webhook, no pagination on the listings call, so noticing that a listing changed means re-pulling everything. Against that, the thing ShowMojo gets clearly right is access. No sales call, no upgrade, no approval, and that alone accounts for nearly two-thirds of the points it earned. Read the score for what it measures. This grades how buildable the API is for an operator, not whether the product does its job.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- ALL 27 CHECKS -->
   <section class="band tight wash" id="checks">
     <div class="wrap">
@@ -168,8 +170,21 @@
     </div>
   </section>
 
-  <!-- DOWNLOADS -->
+  <!-- VERDICT + PROVENANCE, side by side -->
   <section class="band tight">
+    <div class="wrap">
+      <div class="rc-pair">
+        <div class="panel">
+          <h2>The bottom line for a property manager</h2>
+          <p class="sub">ShowMojo's API is a one-way street, and you should plan around that. You can push your listings in and pull your leasing activity back out, leads, showings, no-shows, pre-screening answers, lockbox access and performance metrics, all date-filterable in JSON or CSV. What you cannot do is make ShowMojo act. There is no way to confirm, cancel or reschedule a showing through the API, and no way to create or update a lead, so the automations most operators actually want are not buildable today. What you can build is good reporting, a warehouse sync, and real-time reaction to leasing events, because the webhook coverage of showing and prospect activity is genuinely thorough and the export path works exactly as documented. Two limitations do most of the damage. Access control: one kind of key, not scopable, not read-only, able to overwrite your whole listing portfolio. And listing sync: no updated-since filter, no listing webhook, no pagination on the listings call, so noticing that a listing changed means re-pulling everything. Against that, the thing ShowMojo gets clearly right is access. No sales call, no upgrade, no approval, and that alone accounts for nearly two-thirds of the points it earned. Read the score for what it measures. This grades how buildable the API is for an operator, not whether the product does its job.</p>
+        </div>
+        <div class="panel" style="border-left:4px solid var(--primary);"><h2>About this run</h2><p class="sub">Graded three independent times. The runs scored 62, 51 and 54 before reconciliation and agreed on 21 of the 27 checks; the six splits were each resolved against the frozen evidence rather than averaged, landing on 51. The report records that the discovering evaluator was the outlier on five of those six and generous in every case. The F holds across every combination of the unresolved positions, which move the score only within roughly 50 to 55. Two caveats worth knowing. The account owner declined live write testing in advance, so four checks were graded from ShowMojo's documentation rather than observed, and no write, import or webhook-registration call was made at any point. And one check is unverified: whether an account can hold several separately revocable tokens, because that page is behind a login. Resolved either way, the grade stays F.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOADS -->
+  <section class="band tight wash">
     <div class="wrap">
       <h2 class="h-lead">Check it yourself.</h2>
       <p class="sub" style="margin:10px 0 22px;">Both files behind this page, in full.</p>
@@ -189,7 +204,7 @@
   </section>
 
   <!-- CORRECTIONS -->
-  <section class="band tight wash">
+  <section class="band tight">
     <div class="wrap">
       <div class="fix-note" id="correct">
         <h3>Found a factual error in your grade?</h3>

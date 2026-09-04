@@ -76,9 +76,12 @@
 
       <div class="rc-slab">
         <div class="rc-score g-b">
-          <div class="lab">Published score</div>
-          <div class="big">87<i>/100</i></div>
-          <div class="sub2">Grade B+ &middot; 43.33 / 50 raw</div>
+          <div class="lab">Published grade</div>
+          <div class="rc-gnum">
+            <span class="letter">B+</span>
+            <span class="num">87<i>/100</i></span>
+          </div>
+          <div class="raw">43.33 / 50 raw</div>
         </div>
         <div class="rc-meta">
           <div><div class="k">Evidence tier</div><div class="v">Baseline verified</div></div>
@@ -104,6 +107,24 @@
         <div class="rc-cat"><div class="n">Category 4</div><h3>Docs &amp; AI-Ready</h3><div class="p">3.1<i> / 5</i></div><div class="rc-bar"><span class="mid" style="width:62%"></span></div></div>
         <div class="rc-cat"><div class="n">Category 5</div><h3>Access &amp; Cost</h3><div class="p">15<i> / 15</i></div><div class="rc-bar"><span class="hi" style="width:100%"></span></div></div>
       </div>
+
+      <h3 style="font-family:var(--sans);font-weight:800;font-size:18px;margin:34px 0 4px;">Letter grades are absolute, never curved.</h3>
+      <p class="sub" style="margin:0 0 16px;font-size:15.5px;">The same numeric bands apply to every platform. Nothing is scored relative to the rest of the board.</p>
+      <div class="rc-bands" aria-label="Letter grade bands">
+        <div class="rc-band b-a"><span class="g">A+</span><span class="r">97-100</span></div>
+        <div class="rc-band b-a"><span class="g">A</span><span class="r">93-96</span></div>
+        <div class="rc-band b-a"><span class="g">A&minus;</span><span class="r">90-92</span></div>
+        <div class="rc-band b-b" data-now="1" aria-current="true"><span class="g">B+</span><span class="r">87-89</span></div>
+        <div class="rc-band b-b"><span class="g">B</span><span class="r">83-86</span></div>
+        <div class="rc-band b-b"><span class="g">B&minus;</span><span class="r">80-82</span></div>
+        <div class="rc-band b-c"><span class="g">C+</span><span class="r">77-79</span></div>
+        <div class="rc-band b-c"><span class="g">C</span><span class="r">73-76</span></div>
+        <div class="rc-band b-c"><span class="g">C&minus;</span><span class="r">70-72</span></div>
+        <div class="rc-band b-d"><span class="g">D+</span><span class="r">67-69</span></div>
+        <div class="rc-band b-d"><span class="g">D</span><span class="r">63-66</span></div>
+        <div class="rc-band b-d"><span class="g">D&minus;</span><span class="r">60-62</span></div>
+        <div class="rc-band b-f f"><span class="g">F</span><span class="r">below 60</span></div>
+        </div>
     </div>
   </section>
 
@@ -136,25 +157,6 @@
     </div>
   </section>
 
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel" style="border-left:4px solid var(--primary);">
-        <h2 class="h-lead" style="font-size:clamp(21px,2.6vw,26px);">About this run</h2>
-        <p class="sub" style="margin-top:12px;">This is the first platform here to move because the vendor changed the product, rather than because the evidence or the rubric changed. Between the 2026-08-27 run and this one, LeadSimple shipped five fixes, all of them in its two weakest categories: a public documentation site, multiple API keys, read-only keys, per-key revoke, and key labels. Access Control went from 1.3 out of 5 to 4.4, and Documentation from 2.5 to 3.1, taking the score from 78 (C+) to 87 (B+). Coverage and cost did not move, because the API surface and plan access did not change. Two independent graders then scored the same frozen evidence and agreed on 25 of the 27 checks, with the two splits resolved against the evidence rather than averaged. The three runs landed at 85, 86 and 87, so the result is robustly B or B+.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- BOTTOM LINE -->
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel">
-        <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">The bottom line for a property manager</h2>
-        <p class="sub" style="margin-top:12px;">LeadSimple's REST API has improved markedly, from 78 (C+) to 87 (B+), because it fixed its two weakest areas. You can now create multiple labeled keys, make a key read-only, and revoke any key on its own, so you can hand a reporting agent something safe and cut off one integration without breaking the rest. The documentation is public now, with a downloadable OpenAPI 3.0 file and request samples in five languages, so a developer or an AI tool can build against it without a login. The remaining weaknesses are in reliability rather than access: money fields come back as text, errors carry no stable code, webhooks have no signature or retry policy, and there is no clear version policy. LeadSimple is not a bank and not your system of record. It sits on top of your PMS, so you still need that PMS for property, lease, ledger and money data.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- ALL 27 CHECKS -->
   <section class="band tight wash" id="checks">
     <div class="wrap">
@@ -168,8 +170,21 @@
     </div>
   </section>
 
-  <!-- DOWNLOADS -->
+  <!-- VERDICT + PROVENANCE, side by side -->
   <section class="band tight">
+    <div class="wrap">
+      <div class="rc-pair">
+        <div class="panel">
+          <h2>The bottom line for a property manager</h2>
+          <p class="sub">LeadSimple's REST API has improved markedly, from 78 (C+) to 87 (B+), because it fixed its two weakest areas. You can now create multiple labeled keys, make a key read-only, and revoke any key on its own, so you can hand a reporting agent something safe and cut off one integration without breaking the rest. The documentation is public now, with a downloadable OpenAPI 3.0 file and request samples in five languages, so a developer or an AI tool can build against it without a login. The remaining weaknesses are in reliability rather than access: money fields come back as text, errors carry no stable code, webhooks have no signature or retry policy, and there is no clear version policy. LeadSimple is not a bank and not your system of record. It sits on top of your PMS, so you still need that PMS for property, lease, ledger and money data.</p>
+        </div>
+        <div class="panel" style="border-left:4px solid var(--primary);"><h2>About this run</h2><p class="sub">This is the first platform here to move because the vendor changed the product, rather than because the evidence or the rubric changed. Between the 2026-08-27 run and this one, LeadSimple shipped five fixes, all of them in its two weakest categories: a public documentation site, multiple API keys, read-only keys, per-key revoke, and key labels. Access Control went from 1.3 out of 5 to 4.4, and Documentation from 2.5 to 3.1, taking the score from 78 (C+) to 87 (B+). Coverage and cost did not move, because the API surface and plan access did not change. Two independent graders then scored the same frozen evidence and agreed on 25 of the 27 checks, with the two splits resolved against the evidence rather than averaged. The three runs landed at 85, 86 and 87, so the result is robustly B or B+.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOADS -->
+  <section class="band tight wash">
     <div class="wrap">
       <h2 class="h-lead">Check it yourself.</h2>
       <p class="sub" style="margin:10px 0 22px;">Both files behind this page, in full.</p>
@@ -189,7 +204,7 @@
   </section>
 
   <!-- CORRECTIONS -->
-  <section class="band tight wash">
+  <section class="band tight">
     <div class="wrap">
       <div class="fix-note" id="correct">
         <h3>Found a factual error in your grade?</h3>

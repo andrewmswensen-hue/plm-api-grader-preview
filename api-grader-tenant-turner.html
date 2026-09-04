@@ -76,9 +76,12 @@
 
       <div class="rc-slab">
         <div class="rc-score g-f">
-          <div class="lab">Published score</div>
-          <div class="big">51<i>/100</i></div>
-          <div class="sub2">Grade F &middot; 25.42 / 50 raw</div>
+          <div class="lab">Published grade</div>
+          <div class="rc-gnum">
+            <span class="letter">F</span>
+            <span class="num">51<i>/100</i></span>
+          </div>
+          <div class="raw">25.42 / 50 raw</div>
         </div>
         <div class="rc-meta">
           <div><div class="k">Evidence tier</div><div class="v">Baseline verified</div></div>
@@ -104,6 +107,24 @@
         <div class="rc-cat"><div class="n">Category 4</div><h3>Docs &amp; AI-Ready</h3><div class="p">1.3<i> / 5</i></div><div class="rc-bar"><span class="lo" style="width:26%"></span></div></div>
         <div class="rc-cat"><div class="n">Category 5</div><h3>Access &amp; Cost</h3><div class="p">15<i> / 15</i></div><div class="rc-bar"><span class="hi" style="width:100%"></span></div></div>
       </div>
+
+      <h3 style="font-family:var(--sans);font-weight:800;font-size:18px;margin:34px 0 4px;">Letter grades are absolute, never curved.</h3>
+      <p class="sub" style="margin:0 0 16px;font-size:15.5px;">The same numeric bands apply to every platform. Nothing is scored relative to the rest of the board.</p>
+      <div class="rc-bands" aria-label="Letter grade bands">
+        <div class="rc-band b-a"><span class="g">A+</span><span class="r">97-100</span></div>
+        <div class="rc-band b-a"><span class="g">A</span><span class="r">93-96</span></div>
+        <div class="rc-band b-a"><span class="g">A&minus;</span><span class="r">90-92</span></div>
+        <div class="rc-band b-b"><span class="g">B+</span><span class="r">87-89</span></div>
+        <div class="rc-band b-b"><span class="g">B</span><span class="r">83-86</span></div>
+        <div class="rc-band b-b"><span class="g">B&minus;</span><span class="r">80-82</span></div>
+        <div class="rc-band b-c"><span class="g">C+</span><span class="r">77-79</span></div>
+        <div class="rc-band b-c"><span class="g">C</span><span class="r">73-76</span></div>
+        <div class="rc-band b-c"><span class="g">C&minus;</span><span class="r">70-72</span></div>
+        <div class="rc-band b-d"><span class="g">D+</span><span class="r">67-69</span></div>
+        <div class="rc-band b-d"><span class="g">D</span><span class="r">63-66</span></div>
+        <div class="rc-band b-d"><span class="g">D&minus;</span><span class="r">60-62</span></div>
+        <div class="rc-band b-f f" data-now="1" aria-current="true"><span class="g">F</span><span class="r">below 60</span></div>
+        </div>
     </div>
   </section>
 
@@ -136,25 +157,6 @@
     </div>
   </section>
 
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel" style="border-left:4px solid var(--primary);">
-        <h2 class="h-lead" style="font-size:clamp(21px,2.6vw,26px);">About this run</h2>
-        <p class="sub" style="margin-top:12px;">Graded three independent times. The runs scored 56, 50 and 51 before reconciliation and agreed on 23 of the 26 applicable checks; the three splits were each resolved against the evidence rather than averaged, landing on 51. The F held in all three runs and under every single-check alternative either independent grader considered. One detail worth knowing if you are grading a platform yourself: Tenant Turner's API reference and OpenAPI file sit behind a customer login, and the run only proceeded because the operator supplied authenticated access. Without it most of three categories would have been unverified and the run would have failed the coverage gate outright.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- BOTTOM LINE -->
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel">
-        <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">The bottom line for a property manager</h2>
-        <p class="sub" style="margin-top:12px;">Tenant Turner has done the hard part of access exactly right: the API is free, on every plan, and the key is already in your portal. What you get for that is a solid read surface over your listings, leads and showings, full write control over listings themselves, and 21 signed webhook triggers. If your goal is getting your leasing data out and into something else, you can build that today, though you will be reverse-engineering the event payloads and correcting the generated client as you go. What you cannot build is write-back automation for the things that move fastest: any workflow ending in 'and then change it in Tenant Turner' ends with a person in the portal instead. Read the score for what it measures. This rates API buildability, not the product, and Tenant Turner is a leasing tool that clearly does its job. Treat the API as a very good read-and-notify feed with a narrow write path for listings.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- ALL 27 CHECKS -->
   <section class="band tight wash" id="checks">
     <div class="wrap">
@@ -168,8 +170,21 @@
     </div>
   </section>
 
-  <!-- DOWNLOADS -->
+  <!-- VERDICT + PROVENANCE, side by side -->
   <section class="band tight">
+    <div class="wrap">
+      <div class="rc-pair">
+        <div class="panel">
+          <h2>The bottom line for a property manager</h2>
+          <p class="sub">Tenant Turner has done the hard part of access exactly right: the API is free, on every plan, and the key is already in your portal. What you get for that is a solid read surface over your listings, leads and showings, full write control over listings themselves, and 21 signed webhook triggers. If your goal is getting your leasing data out and into something else, you can build that today, though you will be reverse-engineering the event payloads and correcting the generated client as you go. What you cannot build is write-back automation for the things that move fastest: any workflow ending in 'and then change it in Tenant Turner' ends with a person in the portal instead. Read the score for what it measures. This rates API buildability, not the product, and Tenant Turner is a leasing tool that clearly does its job. Treat the API as a very good read-and-notify feed with a narrow write path for listings.</p>
+        </div>
+        <div class="panel" style="border-left:4px solid var(--primary);"><h2>About this run</h2><p class="sub">Graded three independent times. The runs scored 56, 50 and 51 before reconciliation and agreed on 23 of the 26 applicable checks; the three splits were each resolved against the evidence rather than averaged, landing on 51. The F held in all three runs and under every single-check alternative either independent grader considered. One detail worth knowing if you are grading a platform yourself: Tenant Turner's API reference and OpenAPI file sit behind a customer login, and the run only proceeded because the operator supplied authenticated access. Without it most of three categories would have been unverified and the run would have failed the coverage gate outright.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOADS -->
+  <section class="band tight wash">
     <div class="wrap">
       <h2 class="h-lead">Check it yourself.</h2>
       <p class="sub" style="margin:10px 0 22px;">Both files behind this page, in full.</p>
@@ -189,7 +204,7 @@
   </section>
 
   <!-- CORRECTIONS -->
-  <section class="band tight wash">
+  <section class="band tight">
     <div class="wrap">
       <div class="fix-note" id="correct">
         <h3>Found a factual error in your grade?</h3>

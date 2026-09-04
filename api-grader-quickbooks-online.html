@@ -76,9 +76,12 @@
 
       <div class="rc-slab">
         <div class="rc-score g-d">
-          <div class="lab">Published score</div>
-          <div class="big">64<i>/100</i></div>
-          <div class="sub2">Grade D &middot; 32.04 / 50 raw</div>
+          <div class="lab">Published grade</div>
+          <div class="rc-gnum">
+            <span class="letter">D</span>
+            <span class="num">64<i>/100</i></span>
+          </div>
+          <div class="raw">32.04 / 50 raw</div>
         </div>
         <div class="rc-meta">
           <div><div class="k">Evidence tier</div><div class="v">Baseline verified</div></div>
@@ -104,6 +107,24 @@
         <div class="rc-cat"><div class="n">Category 4</div><h3>Docs &amp; AI-Ready</h3><div class="p">4.4<i> / 5</i></div><div class="rc-bar"><span class="hi" style="width:88%"></span></div></div>
         <div class="rc-cat"><div class="n">Category 5</div><h3>Access &amp; Cost</h3><div class="p">7.5<i> / 15</i></div><div class="rc-bar"><span class="mid" style="width:50%"></span></div></div>
       </div>
+
+      <h3 style="font-family:var(--sans);font-weight:800;font-size:18px;margin:34px 0 4px;">Letter grades are absolute, never curved.</h3>
+      <p class="sub" style="margin:0 0 16px;font-size:15.5px;">The same numeric bands apply to every platform. Nothing is scored relative to the rest of the board.</p>
+      <div class="rc-bands" aria-label="Letter grade bands">
+        <div class="rc-band b-a"><span class="g">A+</span><span class="r">97-100</span></div>
+        <div class="rc-band b-a"><span class="g">A</span><span class="r">93-96</span></div>
+        <div class="rc-band b-a"><span class="g">A&minus;</span><span class="r">90-92</span></div>
+        <div class="rc-band b-b"><span class="g">B+</span><span class="r">87-89</span></div>
+        <div class="rc-band b-b"><span class="g">B</span><span class="r">83-86</span></div>
+        <div class="rc-band b-b"><span class="g">B&minus;</span><span class="r">80-82</span></div>
+        <div class="rc-band b-c"><span class="g">C+</span><span class="r">77-79</span></div>
+        <div class="rc-band b-c"><span class="g">C</span><span class="r">73-76</span></div>
+        <div class="rc-band b-c"><span class="g">C&minus;</span><span class="r">70-72</span></div>
+        <div class="rc-band b-d"><span class="g">D+</span><span class="r">67-69</span></div>
+        <div class="rc-band b-d" data-now="1" aria-current="true"><span class="g">D</span><span class="r">63-66</span></div>
+        <div class="rc-band b-d"><span class="g">D&minus;</span><span class="r">60-62</span></div>
+        <div class="rc-band b-f f"><span class="g">F</span><span class="r">below 60</span></div>
+        </div>
     </div>
   </section>
 
@@ -136,25 +157,6 @@
     </div>
   </section>
 
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel" style="border-left:4px solid var(--primary);">
-        <h2 class="h-lead" style="font-size:clamp(21px,2.6vw,26px);">About this run</h2>
-        <p class="sub" style="margin-top:12px;">Graded three independent times against the same frozen evidence, with every disagreement resolved against that evidence before scoring and none left open. Worth knowing how coverage was judged here, because it was generous rather than harsh: the run scored property-management objects by their accounting equivalents, counting tenants as Customers, properties as Classes or Departments, and the lease ledger as AR transactions. That mapping is why objects a PMS would have natively are marked present or partial here rather than absent. Writes were exercised in an Intuit sandbox company; only the webhook delivery step could not be run, because subscriptions are configured in the portal and need a public endpoint.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- BOTTOM LINE -->
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel">
-        <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">The bottom line for a property manager</h2>
-        <p class="sub" style="margin-top:12px;">You can build real automations on this API today: read and post anything on the ledger, get signed webhooks when data changes, sync full datasets incrementally, and retry writes safely thanks to duplicate suppression that was proven live. The engineering fundamentals are genuinely strong, and the Design and Reliability score is the best on this board. What drags the grade down is fit and access. There are no property, unit, lease, work-order or reconciliation objects, so QuickBooks Online can only ever be the general-ledger layer behind a PMS, and the all-or-nothing read and write scope means any integration or AI agent you connect can write to your books. It is not a substitute for a PMS or a trust-accounting system, and nothing in the API evidences trust or fiduciary workflows.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- ALL 27 CHECKS -->
   <section class="band tight wash" id="checks">
     <div class="wrap">
@@ -168,8 +170,21 @@
     </div>
   </section>
 
-  <!-- DOWNLOADS -->
+  <!-- VERDICT + PROVENANCE, side by side -->
   <section class="band tight">
+    <div class="wrap">
+      <div class="rc-pair">
+        <div class="panel">
+          <h2>The bottom line for a property manager</h2>
+          <p class="sub">You can build real automations on this API today: read and post anything on the ledger, get signed webhooks when data changes, sync full datasets incrementally, and retry writes safely thanks to duplicate suppression that was proven live. The engineering fundamentals are genuinely strong, and the Design and Reliability score is the best on this board. What drags the grade down is fit and access. There are no property, unit, lease, work-order or reconciliation objects, so QuickBooks Online can only ever be the general-ledger layer behind a PMS, and the all-or-nothing read and write scope means any integration or AI agent you connect can write to your books. It is not a substitute for a PMS or a trust-accounting system, and nothing in the API evidences trust or fiduciary workflows.</p>
+        </div>
+        <div class="panel" style="border-left:4px solid var(--primary);"><h2>About this run</h2><p class="sub">Graded three independent times against the same frozen evidence, with every disagreement resolved against that evidence before scoring and none left open. Worth knowing how coverage was judged here, because it was generous rather than harsh: the run scored property-management objects by their accounting equivalents, counting tenants as Customers, properties as Classes or Departments, and the lease ledger as AR transactions. That mapping is why objects a PMS would have natively are marked present or partial here rather than absent. Writes were exercised in an Intuit sandbox company; only the webhook delivery step could not be run, because subscriptions are configured in the portal and need a public endpoint.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOADS -->
+  <section class="band tight wash">
     <div class="wrap">
       <h2 class="h-lead">Check it yourself.</h2>
       <p class="sub" style="margin:10px 0 22px;">Both files behind this page, in full.</p>
@@ -189,7 +204,7 @@
   </section>
 
   <!-- CORRECTIONS -->
-  <section class="band tight wash">
+  <section class="band tight">
     <div class="wrap">
       <div class="fix-note" id="correct">
         <h3>Found a factual error in your grade?</h3>

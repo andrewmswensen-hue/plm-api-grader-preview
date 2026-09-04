@@ -118,14 +118,6 @@
     .col-sticky img{ height:14px; }
   }
 
-  /* PREVIEW SCAFFOLDING - delete this block and the .ver-bar markup before launch. */
-  .ver-bar{ background:#1F3A4D; color:#fff; font-size:13.5px; }
-  .ver-bar .wrap{ display:flex; align-items:center; justify-content:space-between;
-                  gap:14px; flex-wrap:wrap; padding-top:10px; padding-bottom:10px; }
-  .ver-bar strong{ letter-spacing:.04em; text-transform:uppercase; font-size:12px; }
-  .ver-bar a{ color:#9ecbe8; font-weight:700; text-decoration:none; }
-  .ver-bar a:hover{ text-decoration:underline; }
-
   /* Sponsor strip: understated, not a banner ad.
      Deliberately NOT flex. As a flex container its gap applied between the text
      nodes and the inline links, which opened a visible space either side of the
@@ -264,7 +256,6 @@
 
   /* Intro-video slot. Holds 16:9 so dropping the real embed in later cannot
      move the page around. */
-  .hero-vid{ margin-top:34px; max-width:640px; }
   .vid-ph{ aspect-ratio:16/9; border-radius:var(--radius); background:var(--navy);
            display:flex; align-items:center; justify-content:center; text-align:center;
            padding:24px; box-shadow:var(--shadow-lg); }
@@ -311,15 +302,8 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
   </div>
 </nav>
 
-<!-- PREVIEW ONLY: layout switcher so Peter can compare the two formats.
-     Delete this block (and the .ver-bar CSS) before this page goes live. -->
-<div class="ver-bar">
-  <div class="wrap">
-    <span><strong>Layout v1</strong> &middot; one comparison table</span>
-    <a href="v2.html">See layout v2 (a card per platform) &rarr;</a>
-  </div>
-</div>
-
+<!-- Preview slot. Kept deliberately: a thin bar above the banner for whatever
+     needs flagging during the pre-release. Empty renders as nothing. -->
 <!-- BANNER:START -->
       <div class="pre-bar">
   <div class="wrap">
@@ -335,39 +319,46 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
       <div class="ticks" aria-hidden="true"><i></i><i></i><i></i></div>
       <h1>The PM API Report Card</h1>
       <p class="lead">Grading the property management platforms we all use, on whether they&#x27;ll actually let you access your own data.</p>
-      <p class="sub" style="margin-top:18px;">Same rubric for every platform: five weighted categories totalling 100 points. No cherry-picking, no platform-specific tuning, and the grading file is yours to download and check.</p>
-
-      <!-- Pre-release framing. Deliberately in the hero rather than a footnote:
-           a reader should know these are preview scores before they read one. -->
-      <p class="hero-pre">
-        <span class="pre-tag">Preview</span>
-        These are <strong>pre-release scores</strong>, published early so they can be
-        checked. Every vendor&rsquo;s full report is here to download, a full rerun
-        follows in about 60 days, and confirmed factual errors are fixed immediately.
-        <a href="#correct">Found an error in your grade?</a>
-      </p>
-
       <a class="presented-by" href="https://column.com/property-management/?utm_source=peter-lohmann&amp;utm_medium=plm-api-grader" target="_blank" rel="noopener">Presented by <img src="column-logo.png" alt="Column" /></a>
-      <div class="hero-jump" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:26px;">
-        <a class="btn btn-primary" href="#results">See the results &darr;</a>
-        <a class="btn btn-ghost" href="#method">How we grade</a>
-      </div>
 
-      <!-- SWAP: intro-video - placeholder until Peter records it. To go live,
-           set VIDEO_ID below to the YouTube id and the thumbnail, lightbox and
-           "watch on YouTube" link all wire themselves up. Same mechanism as the
-           grader guide page. Until then this renders as a labelled placeholder
-           rather than a broken embed. -->
-      <div class="hero-vid">
-        <div class="vid-ph" id="vidPlaceholder">
-          <div>
-            <span class="vid-ph-tag">Intro video</span>
-            <p>Peter&rsquo;s walkthrough of what this is and how to read it. Coming shortly.</p>
+      <!-- Same shape as the tester guide hero: the header runs full width, then
+           a 50/50 split with the copy left and the video right. -->
+      <div class="split" style="margin-top:32px;">
+        <div>
+          <p class="sub" style="margin-top:0;">Same rubric for every platform: five weighted categories totalling 100 points. No cherry-picking, no platform-specific tuning, and the grading file is yours to download and check.</p>
+
+          <!-- Pre-release framing. Deliberately here rather than in a footnote:
+               a reader should know these are preview scores before they read one. -->
+          <p class="hero-pre">
+            <span class="pre-tag">Preview</span>
+            These are <strong>pre-release scores</strong>, published early so they can be
+            checked. Every vendor&rsquo;s full report is here to download, a full rerun
+            follows in about 60 days, and confirmed factual errors are fixed immediately.
+            <a href="#correct">Found an error in your grade?</a>
+          </p>
+
+          <div class="hero-jump" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:22px;">
+            <a class="btn btn-primary" href="#results">See the results &darr;</a>
+            <a class="btn btn-ghost" href="#method">How we grade</a>
           </div>
         </div>
-        <div class="vid-meta">
-          <strong>How to read this report card</strong>
-          <span class="sub" style="font-size:14.5px;">A short walkthrough of the rubric, the grades, and what they do and don&rsquo;t measure.</span>
+
+        <div>
+          <!-- SWAP: intro-video - placeholder until Peter records it. To go live,
+               swap this block for the .vid-open thumbnail + lightbox used on the
+               tester guide page: set the YouTube id in the href, the maxresdefault
+               thumbnail, and the #vidLight markup. Holding 16:9 now means dropping
+               the real embed in later cannot move the page around. -->
+          <div class="vid-ph" id="vidPlaceholder">
+            <div>
+              <span class="vid-ph-tag">Intro video</span>
+              <p>Peter&rsquo;s walkthrough of what this is and how to read it. Coming shortly.</p>
+            </div>
+          </div>
+          <div class="vid-meta">
+            <strong>Start here</strong>
+            <span class="sub" style="font-size:14.5px;display:block;">A short walkthrough of the rubric, the grades, and what they do and don&rsquo;t measure.</span>
+          </div>
         </div>
       </div>
     </div>

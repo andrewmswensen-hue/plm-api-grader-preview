@@ -76,9 +76,12 @@
 
       <div class="rc-slab">
         <div class="rc-score g-b">
-          <div class="lab">Published score</div>
-          <div class="big">80<i>/100</i></div>
-          <div class="sub2">Grade B- &middot; 39.92 / 50 raw</div>
+          <div class="lab">Published grade</div>
+          <div class="rc-gnum">
+            <span class="letter">B-</span>
+            <span class="num">80<i>/100</i></span>
+          </div>
+          <div class="raw">39.92 / 50 raw</div>
         </div>
         <div class="rc-meta">
           <div><div class="k">Evidence tier</div><div class="v">Baseline verified</div></div>
@@ -104,6 +107,24 @@
         <div class="rc-cat"><div class="n">Category 4</div><h3>Docs &amp; AI-Ready</h3><div class="p">4.4<i> / 5</i></div><div class="rc-bar"><span class="hi" style="width:88%"></span></div></div>
         <div class="rc-cat"><div class="n">Category 5</div><h3>Access &amp; Cost</h3><div class="p">11.3<i> / 15</i></div><div class="rc-bar"><span class="hi" style="width:75%"></span></div></div>
       </div>
+
+      <h3 style="font-family:var(--sans);font-weight:800;font-size:18px;margin:34px 0 4px;">Letter grades are absolute, never curved.</h3>
+      <p class="sub" style="margin:0 0 16px;font-size:15.5px;">The same numeric bands apply to every platform. Nothing is scored relative to the rest of the board.</p>
+      <div class="rc-bands" aria-label="Letter grade bands">
+        <div class="rc-band b-a"><span class="g">A+</span><span class="r">97-100</span></div>
+        <div class="rc-band b-a"><span class="g">A</span><span class="r">93-96</span></div>
+        <div class="rc-band b-a"><span class="g">A&minus;</span><span class="r">90-92</span></div>
+        <div class="rc-band b-b"><span class="g">B+</span><span class="r">87-89</span></div>
+        <div class="rc-band b-b"><span class="g">B</span><span class="r">83-86</span></div>
+        <div class="rc-band b-b" data-now="1" aria-current="true"><span class="g">B&minus;</span><span class="r">80-82</span></div>
+        <div class="rc-band b-c"><span class="g">C+</span><span class="r">77-79</span></div>
+        <div class="rc-band b-c"><span class="g">C</span><span class="r">73-76</span></div>
+        <div class="rc-band b-c"><span class="g">C&minus;</span><span class="r">70-72</span></div>
+        <div class="rc-band b-d"><span class="g">D+</span><span class="r">67-69</span></div>
+        <div class="rc-band b-d"><span class="g">D</span><span class="r">63-66</span></div>
+        <div class="rc-band b-d"><span class="g">D&minus;</span><span class="r">60-62</span></div>
+        <div class="rc-band b-f f"><span class="g">F</span><span class="r">below 60</span></div>
+        </div>
     </div>
   </section>
 
@@ -136,25 +157,6 @@
     </div>
   </section>
 
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel" style="border-left:4px solid var(--primary);">
-        <h2 class="h-lead" style="font-size:clamp(21px,2.6vw,26px);">About this run</h2>
-        <p class="sub" style="margin-top:12px;">Three runs scored 80, 80 and 78 and agreed on 25 of the 27 checks. The check that split was webhook delivery, marked down because no retry policy could be cited from the frozen evidence. It turns out the policy is documented: it sits on a JavaScript-rendered page the discovery tool could not load. Rendering that page in a browser confirmed all three legs, HMAC signatures, a retry schedule of immediate then every 15 minutes for 24 hours, and consumer replay guidance. So the check is finalised yes and the score is 80 (B-). Nothing about Xero changed at any point; what changed was what the grader could read. One disagreement stays open, on AI-readable documentation, and it is now the only check that moves the letter: 80 (B-) if partial, 79 (C+) if no.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- BOTTOM LINE -->
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel">
-        <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">The bottom line for a property manager</h2>
-        <p class="sub" style="margin-top:12px;">Xero has a strong, mature accounting API. You can build your own tools and AI agents on top of your general ledger, with good rate limits, pagination, tracing, and read-only keys you can revoke. The biggest API limits are no bank statement import or reconciliation, webhooks for only a few record types, and no lost-update protection. The biggest fit limit is that Xero is general accounting, not property management: no native properties, units, leases, or work orders, and no first-party trust or security deposit workflows. Treat Xero as an excellent accounting backend to connect to, not a replacement for a PMS, a bank, or a trust accounting system.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- ALL 27 CHECKS -->
   <section class="band tight wash" id="checks">
     <div class="wrap">
@@ -168,8 +170,21 @@
     </div>
   </section>
 
-  <!-- DOWNLOADS -->
+  <!-- VERDICT + PROVENANCE, side by side -->
   <section class="band tight">
+    <div class="wrap">
+      <div class="rc-pair">
+        <div class="panel">
+          <h2>The bottom line for a property manager</h2>
+          <p class="sub">Xero has a strong, mature accounting API. You can build your own tools and AI agents on top of your general ledger, with good rate limits, pagination, tracing, and read-only keys you can revoke. The biggest API limits are no bank statement import or reconciliation, webhooks for only a few record types, and no lost-update protection. The biggest fit limit is that Xero is general accounting, not property management: no native properties, units, leases, or work orders, and no first-party trust or security deposit workflows. Treat Xero as an excellent accounting backend to connect to, not a replacement for a PMS, a bank, or a trust accounting system.</p>
+        </div>
+        <div class="panel" style="border-left:4px solid var(--primary);"><h2>About this run</h2><p class="sub">Three runs scored 80, 80 and 78 and agreed on 25 of the 27 checks. The check that split was webhook delivery, marked down because no retry policy could be cited from the frozen evidence. It turns out the policy is documented: it sits on a JavaScript-rendered page the discovery tool could not load. Rendering that page in a browser confirmed all three legs, HMAC signatures, a retry schedule of immediate then every 15 minutes for 24 hours, and consumer replay guidance. So the check is finalised yes and the score is 80 (B-). Nothing about Xero changed at any point; what changed was what the grader could read. One disagreement stays open, on AI-readable documentation, and it is now the only check that moves the letter: 80 (B-) if partial, 79 (C+) if no.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOADS -->
+  <section class="band tight wash">
     <div class="wrap">
       <h2 class="h-lead">Check it yourself.</h2>
       <p class="sub" style="margin:10px 0 22px;">Both files behind this page, in full.</p>
@@ -189,7 +204,7 @@
   </section>
 
   <!-- CORRECTIONS -->
-  <section class="band tight wash">
+  <section class="band tight">
     <div class="wrap">
       <div class="fix-note" id="correct">
         <h3>Found a factual error in your grade?</h3>

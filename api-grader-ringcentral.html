@@ -76,9 +76,12 @@
 
       <div class="rc-slab">
         <div class="rc-score g-a">
-          <div class="lab">Published score</div>
-          <div class="big">93<i>/100</i></div>
-          <div class="sub2">Grade A &middot; 46.67 / 50 raw</div>
+          <div class="lab">Published grade</div>
+          <div class="rc-gnum">
+            <span class="letter">A</span>
+            <span class="num">93<i>/100</i></span>
+          </div>
+          <div class="raw">46.67 / 50 raw</div>
         </div>
         <div class="rc-meta">
           <div><div class="k">Evidence tier</div><div class="v">Baseline verified</div></div>
@@ -104,6 +107,24 @@
         <div class="rc-cat"><div class="n">Category 4</div><h3>Docs &amp; AI-Ready</h3><div class="p">3.8<i> / 5</i></div><div class="rc-bar"><span class="hi" style="width:76%"></span></div></div>
         <div class="rc-cat"><div class="n">Category 5</div><h3>Access &amp; Cost</h3><div class="p">15<i> / 15</i></div><div class="rc-bar"><span class="hi" style="width:100%"></span></div></div>
       </div>
+
+      <h3 style="font-family:var(--sans);font-weight:800;font-size:18px;margin:34px 0 4px;">Letter grades are absolute, never curved.</h3>
+      <p class="sub" style="margin:0 0 16px;font-size:15.5px;">The same numeric bands apply to every platform. Nothing is scored relative to the rest of the board.</p>
+      <div class="rc-bands" aria-label="Letter grade bands">
+        <div class="rc-band b-a"><span class="g">A+</span><span class="r">97-100</span></div>
+        <div class="rc-band b-a" data-now="1" aria-current="true"><span class="g">A</span><span class="r">93-96</span></div>
+        <div class="rc-band b-a"><span class="g">A&minus;</span><span class="r">90-92</span></div>
+        <div class="rc-band b-b"><span class="g">B+</span><span class="r">87-89</span></div>
+        <div class="rc-band b-b"><span class="g">B</span><span class="r">83-86</span></div>
+        <div class="rc-band b-b"><span class="g">B&minus;</span><span class="r">80-82</span></div>
+        <div class="rc-band b-c"><span class="g">C+</span><span class="r">77-79</span></div>
+        <div class="rc-band b-c"><span class="g">C</span><span class="r">73-76</span></div>
+        <div class="rc-band b-c"><span class="g">C&minus;</span><span class="r">70-72</span></div>
+        <div class="rc-band b-d"><span class="g">D+</span><span class="r">67-69</span></div>
+        <div class="rc-band b-d"><span class="g">D</span><span class="r">63-66</span></div>
+        <div class="rc-band b-d"><span class="g">D&minus;</span><span class="r">60-62</span></div>
+        <div class="rc-band b-f f"><span class="g">F</span><span class="r">below 60</span></div>
+        </div>
     </div>
   </section>
 
@@ -136,25 +157,6 @@
     </div>
   </section>
 
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel" style="border-left:4px solid var(--primary);">
-        <h2 class="h-lead" style="font-size:clamp(21px,2.6vw,26px);">About this run</h2>
-        <p class="sub" style="margin-top:12px;">The highest score graded so far, and the first A. Graded three independent times, and all three runs landed on 93. 25 of the 27 checks were unanimous, and the two that split sat in the same category and offset each other exactly, so the total is 93 under either resolution. Read paths were tested live on a production account with a read-only key; the write paths are graded from documentation, because the key supplied could not write. A sandbox key would lift those to fully verified.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- BOTTOM LINE -->
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel">
-        <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">The bottom line for a property manager</h2>
-        <p class="sub" style="margin-top:12px;">RingCentral's API is excellent to build on: modern REST with an OpenAPI spec and SDKs in every common language, granular read-only and scoped keys, a real sandbox, structured errors, rate-limit and request-id headers, proper pagination and incremental sync, and self-serve free access. For a property manager this is the communications layer. You can log every tenant, owner and vendor call and text, send SMS reminders, build click-to-call and screen-pop, and get real-time webhooks. It is not a PMS, an accounting system, or a trust-accounting system, and it holds no funds. Property management is not a documented use case, only a general fit. The main engineering cautions are the missing idempotency keys and the lack of lost-update protection, so protect your own retries of anything that sends a message or moves money, and the stale changelog, so verify against the live reference.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- ALL 27 CHECKS -->
   <section class="band tight wash" id="checks">
     <div class="wrap">
@@ -168,8 +170,21 @@
     </div>
   </section>
 
-  <!-- DOWNLOADS -->
+  <!-- VERDICT + PROVENANCE, side by side -->
   <section class="band tight">
+    <div class="wrap">
+      <div class="rc-pair">
+        <div class="panel">
+          <h2>The bottom line for a property manager</h2>
+          <p class="sub">RingCentral's API is excellent to build on: modern REST with an OpenAPI spec and SDKs in every common language, granular read-only and scoped keys, a real sandbox, structured errors, rate-limit and request-id headers, proper pagination and incremental sync, and self-serve free access. For a property manager this is the communications layer. You can log every tenant, owner and vendor call and text, send SMS reminders, build click-to-call and screen-pop, and get real-time webhooks. It is not a PMS, an accounting system, or a trust-accounting system, and it holds no funds. Property management is not a documented use case, only a general fit. The main engineering cautions are the missing idempotency keys and the lack of lost-update protection, so protect your own retries of anything that sends a message or moves money, and the stale changelog, so verify against the live reference.</p>
+        </div>
+        <div class="panel" style="border-left:4px solid var(--primary);"><h2>About this run</h2><p class="sub">The highest score graded so far, and the first A. Graded three independent times, and all three runs landed on 93. 25 of the 27 checks were unanimous, and the two that split sat in the same category and offset each other exactly, so the total is 93 under either resolution. Read paths were tested live on a production account with a read-only key; the write paths are graded from documentation, because the key supplied could not write. A sandbox key would lift those to fully verified.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOADS -->
+  <section class="band tight wash">
     <div class="wrap">
       <h2 class="h-lead">Check it yourself.</h2>
       <p class="sub" style="margin:10px 0 22px;">Both files behind this page, in full.</p>
@@ -189,7 +204,7 @@
   </section>
 
   <!-- CORRECTIONS -->
-  <section class="band tight wash">
+  <section class="band tight">
     <div class="wrap">
       <div class="fix-note" id="correct">
         <h3>Found a factual error in your grade?</h3>

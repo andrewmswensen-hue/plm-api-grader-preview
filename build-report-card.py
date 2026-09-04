@@ -1882,9 +1882,12 @@ SUB_PAGE = """<!--
 
       <div class="rc-slab">
         <div class="rc-score {gcls}">
-          <div class="lab">Published score</div>
-          <div class="big">{score}<i>/100</i></div>
-          <div class="sub2">Grade {grade} &middot; {raw} raw</div>
+          <div class="lab">Published grade</div>
+          <div class="rc-gnum">
+            <span class="letter">{grade}</span>
+            <span class="num">{score}<i>/100</i></span>
+          </div>
+          <div class="raw">{raw} raw</div>
         </div>
         <div class="rc-meta">
           <div><div class="k">Evidence tier</div><div class="v">{tier}</div></div>
@@ -1906,6 +1909,10 @@ SUB_PAGE = """<!--
       <div class="rc-cats">
         {catcards}
       </div>
+
+      <h3 style="font-family:var(--sans);font-weight:800;font-size:18px;margin:34px 0 4px;">Letter grades are absolute, never curved.</h3>
+      <p class="sub" style="margin:0 0 16px;font-size:15.5px;">The same numeric bands apply to every platform. Nothing is scored relative to the rest of the board.</p>
+      {bands}
     </div>
   </section>
 
@@ -1934,18 +1941,6 @@ SUB_PAGE = """<!--
     </div>
   </section>
 
-  {notesec}
-
-  <!-- BOTTOM LINE -->
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel">
-        <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">The bottom line for a property manager</h2>
-        <p class="sub" style="margin-top:12px;">{bottom}</p>
-      </div>
-    </div>
-  </section>
-
   <!-- ALL 27 CHECKS -->
   <section class="band tight wash" id="checks">
     <div class="wrap">
@@ -1955,8 +1950,21 @@ SUB_PAGE = """<!--
     </div>
   </section>
 
-  <!-- DOWNLOADS -->
+  <!-- VERDICT + PROVENANCE, side by side -->
   <section class="band tight">
+    <div class="wrap">
+      <div class="rc-pair">
+        <div class="panel">
+          <h2>The bottom line for a property manager</h2>
+          <p class="sub">{bottom}</p>
+        </div>
+        {notesec}
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOADS -->
+  <section class="band tight wash">
     <div class="wrap">
       <h2 class="h-lead">Check it yourself.</h2>
       <p class="sub" style="margin:10px 0 22px;">Both files behind this page, in full.</p>
@@ -1976,7 +1984,7 @@ SUB_PAGE = """<!--
   </section>
 
   <!-- CORRECTIONS -->
-  <section class="band tight wash">
+  <section class="band tight">
     <div class="wrap">
       {fixnote}
     </div>
@@ -2058,6 +2066,34 @@ def short(s, limit=46):
     return cut.rstrip(" .,;:") + "&hellip;"
 
 
+
+# Letter bands, laid out three to a row so each letter family shares one, with F
+# spanning the full width because it is a single open-ended band. Straight from
+# the methodology; these are absolute and are never curved to the board.
+GRADE_BANDS = [
+    ("A+", "97-100"), ("A", "93-96"),  ("A-", "90-92"),
+    ("B+", "87-89"),  ("B", "83-86"),  ("B-", "80-82"),
+    ("C+", "77-79"),  ("C", "73-76"),  ("C-", "70-72"),
+    ("D+", "67-69"),  ("D", "63-66"),  ("D-", "60-62"),
+    ("F",  "below 60"),
+]
+
+
+def build_bands(grade):
+    out = ['<div class="rc-bands" aria-label="Letter grade bands">']
+    for g, rng in GRADE_BANDS:
+        fam = "b-" + g[0].lower()
+        wide = " f" if g == "F" else ""
+        now = ' data-now="1"' if g == grade else ""
+        lab = ' aria-current="true"' if g == grade else ""
+        out.append(
+            f'<div class="rc-band {fam}{wide}"{now}{lab}>'
+            f'<span class="g">{g.replace("-", "&minus;")}</span>'
+            f'<span class="r">{rng}</span></div>')
+    out.append("</div>")
+    return "\n        ".join(out)
+
+
 STAND = ("How easily can a property management operator build their own tools, "
          "automations and AI agents on this API? Graded against a fixed checklist, "
          "with every mark tied to first-party evidence or a live call.")
@@ -2132,12 +2168,9 @@ def build_subpages(checks_data):
             notesec = ""
             if note:
                 notesec = (
-                    '<section class="band tight">\n    <div class="wrap">\n'
-                    '      <div class="panel" style="border-left:4px solid var(--primary);">\n'
-                    '        <h2 class="h-lead" style="font-size:clamp(21px,2.6vw,26px);">'
-                    'About this run</h2>\n'
-                    f'        <p class="sub" style="margin-top:12px;">{note}</p>\n'
-                    '      </div>\n    </div>\n  </section>')
+                    '<div class="panel" style="border-left:4px solid var(--primary);">'
+                    '<h2>About this run</h2>'
+                    f'<p class="sub">{note}</p></div>')
 
             # --- the markdown download ------------------------------------
             md = Path(f"files/reports/{slug(co)}.md")
@@ -2162,6 +2195,7 @@ def build_subpages(checks_data):
                 battery=short(cd["meta"].get("battery"), 52),
                 nchecks=len(cd["checks"]),
                 catcards="\n        ".join(cards),
+                bands=build_bands(r["grade"]),
                 reads="\n      ".join(reads),
                 strengths="".join(f"<li>{s}</li>" for s in r["strengths"]),
                 watch="".join(f"<li>{s}</li>" for s in r["watch"]),

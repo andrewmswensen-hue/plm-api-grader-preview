@@ -76,9 +76,12 @@
 
       <div class="rc-slab">
         <div class="rc-score g-b">
-          <div class="lab">Published score</div>
-          <div class="big">85<i>/100</i></div>
-          <div class="sub2">Grade B &middot; 42.50 / 50 raw</div>
+          <div class="lab">Published grade</div>
+          <div class="rc-gnum">
+            <span class="letter">B</span>
+            <span class="num">85<i>/100</i></span>
+          </div>
+          <div class="raw">42.50 / 50 raw</div>
         </div>
         <div class="rc-meta">
           <div><div class="k">Evidence tier</div><div class="v">Fully verified, sandbox</div></div>
@@ -104,6 +107,24 @@
         <div class="rc-cat"><div class="n">Category 4</div><h3>Docs &amp; AI-Ready</h3><div class="p">3.8<i> / 5</i></div><div class="rc-bar"><span class="hi" style="width:76%"></span></div></div>
         <div class="rc-cat"><div class="n">Category 5</div><h3>Access &amp; Cost</h3><div class="p">11.3<i> / 15</i></div><div class="rc-bar"><span class="hi" style="width:75%"></span></div></div>
       </div>
+
+      <h3 style="font-family:var(--sans);font-weight:800;font-size:18px;margin:34px 0 4px;">Letter grades are absolute, never curved.</h3>
+      <p class="sub" style="margin:0 0 16px;font-size:15.5px;">The same numeric bands apply to every platform. Nothing is scored relative to the rest of the board.</p>
+      <div class="rc-bands" aria-label="Letter grade bands">
+        <div class="rc-band b-a"><span class="g">A+</span><span class="r">97-100</span></div>
+        <div class="rc-band b-a"><span class="g">A</span><span class="r">93-96</span></div>
+        <div class="rc-band b-a"><span class="g">A&minus;</span><span class="r">90-92</span></div>
+        <div class="rc-band b-b"><span class="g">B+</span><span class="r">87-89</span></div>
+        <div class="rc-band b-b" data-now="1" aria-current="true"><span class="g">B</span><span class="r">83-86</span></div>
+        <div class="rc-band b-b"><span class="g">B&minus;</span><span class="r">80-82</span></div>
+        <div class="rc-band b-c"><span class="g">C+</span><span class="r">77-79</span></div>
+        <div class="rc-band b-c"><span class="g">C</span><span class="r">73-76</span></div>
+        <div class="rc-band b-c"><span class="g">C&minus;</span><span class="r">70-72</span></div>
+        <div class="rc-band b-d"><span class="g">D+</span><span class="r">67-69</span></div>
+        <div class="rc-band b-d"><span class="g">D</span><span class="r">63-66</span></div>
+        <div class="rc-band b-d"><span class="g">D&minus;</span><span class="r">60-62</span></div>
+        <div class="rc-band b-f f"><span class="g">F</span><span class="r">below 60</span></div>
+        </div>
     </div>
   </section>
 
@@ -136,25 +157,6 @@
     </div>
   </section>
 
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel" style="border-left:4px solid var(--primary);">
-        <h2 class="h-lead" style="font-size:clamp(21px,2.6vw,26px);">About this run</h2>
-        <p class="sub" style="margin-top:12px;">Column sponsors this report, and this row has been through six independent grading runs, more than any other platform here. The first three graded a frozen evidence packet blind and scored 85, 95 and 92. Column then sent a written clarification, it was added to the packet, and three further blinded runs scored 85, 86 and 86. The published 85 is the reconciled result. The counterintuitive part is worth saying plainly: more information moved graders toward the stricter mark, not away from it. The only two runs that passed Column on commercial gating were the two that had not read Column's statement, and all three that did read it marked it partial. Three reasons converged. The methodology requires a publicly auditable citation for a pass, and private correspondence is not one. The statement addresses the cost of API access but not the separate finding that several capabilities need Column to switch them on per platform. And on the reserve, the statement confirms that a funded reserve is required and disputes only how it is sized. One reading stays legitimate and is recorded rather than averaged away: a grader who takes gated to mean strictly a purchasable plan ladder would pass it, producing 93 and an A. Worth crediting Column for the outcome anyway: without their statement there was no first-party evidence either way on cost, the check would have been unverified, and the whole score would have been withheld.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- BOTTOM LINE -->
-  <section class="band tight">
-    <div class="wrap">
-      <div class="panel">
-        <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">The bottom line for a property manager</h2>
-        <p class="sub" style="margin-top:12px;">Column is a real, nationally chartered bank with one of the best banking APIs you can build on, and unlike almost every banking API you will be pitched, there is no sponsor bank in the middle: Column holds the money itself. You could build automated owner disbursements, vendor payments, rent collection by ACH debit, check issuance and deposit, and a reconciliation feed with running balances, and hand an AI agent a key that reads balances but is structurally incapable of moving a dollar. What you cannot do is treat it as a substitute for your PMS or your trust accounting. The API has no concept of a property, unit, lease or tenant, and despite a polished property-management page promising trust reconciliation and owner disbursements, there is not one property-management endpoint in the API itself. Two words in the marketing deserve care: the trust accounts in Column's changelog are legal estate-planning trusts, not client trust accounting, and the PM-specific promises are relationship features reached through a sales conversation, not documented API capabilities. Biggest strength is control and safety; biggest limitation is operational opacity; and the biggest business limitation is not technical at all.</p>
-      </div>
-    </div>
-  </section>
-
   <!-- ALL 27 CHECKS -->
   <section class="band tight wash" id="checks">
     <div class="wrap">
@@ -168,8 +170,21 @@
     </div>
   </section>
 
-  <!-- DOWNLOADS -->
+  <!-- VERDICT + PROVENANCE, side by side -->
   <section class="band tight">
+    <div class="wrap">
+      <div class="rc-pair">
+        <div class="panel">
+          <h2>The bottom line for a property manager</h2>
+          <p class="sub">Column is a real, nationally chartered bank with one of the best banking APIs you can build on, and unlike almost every banking API you will be pitched, there is no sponsor bank in the middle: Column holds the money itself. You could build automated owner disbursements, vendor payments, rent collection by ACH debit, check issuance and deposit, and a reconciliation feed with running balances, and hand an AI agent a key that reads balances but is structurally incapable of moving a dollar. What you cannot do is treat it as a substitute for your PMS or your trust accounting. The API has no concept of a property, unit, lease or tenant, and despite a polished property-management page promising trust reconciliation and owner disbursements, there is not one property-management endpoint in the API itself. Two words in the marketing deserve care: the trust accounts in Column's changelog are legal estate-planning trusts, not client trust accounting, and the PM-specific promises are relationship features reached through a sales conversation, not documented API capabilities. Biggest strength is control and safety; biggest limitation is operational opacity; and the biggest business limitation is not technical at all.</p>
+        </div>
+        <div class="panel" style="border-left:4px solid var(--primary);"><h2>About this run</h2><p class="sub">Column sponsors this report, and this row has been through six independent grading runs, more than any other platform here. The first three graded a frozen evidence packet blind and scored 85, 95 and 92. Column then sent a written clarification, it was added to the packet, and three further blinded runs scored 85, 86 and 86. The published 85 is the reconciled result. The counterintuitive part is worth saying plainly: more information moved graders toward the stricter mark, not away from it. The only two runs that passed Column on commercial gating were the two that had not read Column's statement, and all three that did read it marked it partial. Three reasons converged. The methodology requires a publicly auditable citation for a pass, and private correspondence is not one. The statement addresses the cost of API access but not the separate finding that several capabilities need Column to switch them on per platform. And on the reserve, the statement confirms that a funded reserve is required and disputes only how it is sized. One reading stays legitimate and is recorded rather than averaged away: a grader who takes gated to mean strictly a purchasable plan ladder would pass it, producing 93 and an A. Worth crediting Column for the outcome anyway: without their statement there was no first-party evidence either way on cost, the check would have been unverified, and the whole score would have been withheld.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOADS -->
+  <section class="band tight wash">
     <div class="wrap">
       <h2 class="h-lead">Check it yourself.</h2>
       <p class="sub" style="margin:10px 0 22px;">Both files behind this page, in full.</p>
@@ -189,7 +204,7 @@
   </section>
 
   <!-- CORRECTIONS -->
-  <section class="band tight wash">
+  <section class="band tight">
     <div class="wrap">
       <div class="fix-note" id="correct">
         <h3>Found a factual error in your grade?</h3>
