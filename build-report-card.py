@@ -1878,7 +1878,6 @@ SUB_PAGE = """<!--
       <a class="rc-back" href="index.html#results">&larr; All platforms</a>
       <p class="rc-eyebrow">API Report Card &middot; {cat} &middot; Methodology v1.1</p>
       <h1 class="rc-title">{name}</h1>
-      <p class="rc-stand">{stand}</p>
 
       <div class="rc-slab">
         <div class="rc-score {gcls}">
@@ -1910,6 +1909,7 @@ SUB_PAGE = """<!--
         <div class="rc-cats">
           {catcards}
         </div>
+        <div class="rc-rule" aria-hidden="true"></div>
         <div class="rc-scale">
           <h3>Letter grades are absolute, never curved.</h3>
           <p>The same numeric bands apply to every platform. Nothing here is scored relative to the rest of the board.</p>
@@ -1928,28 +1928,23 @@ SUB_PAGE = """<!--
     </div>
   </section>
 
-  <!-- STRENGTHS / WATCH -->
-  <section class="band tight wash">
-    <div class="wrap">
-      <div class="split">
-        <div>
-          <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">What works</h2>
-          <ul class="sub" style="margin-top:14px;padding-left:20px;line-height:1.65;">{strengths}</ul>
-        </div>
-        <div>
-          <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">What to watch</h2>
-          <ul class="sub" style="margin-top:14px;padding-left:20px;line-height:1.65;">{watch}</ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ALL 27 CHECKS -->
   <section class="band tight wash" id="checks">
     <div class="wrap">
       <h2 class="h-lead">Every check, and why it scored that way.</h2>
       <p class="sub" style="margin:10px 0 24px;">The same 27 checks are applied to every platform. What changes is which are N-A and what the core objects mean for that kind of software. Each mark below is quoted from the run's own report.</p>
       {checkblocks}
+
+      <div class="rc-pair" style="margin-top:26px;">
+        <div class="panel">
+          <h2>What works</h2>
+          <ul class="rc-list">{strengths}</ul>
+        </div>
+        <div class="panel">
+          <h2>What to watch</h2>
+          <ul class="rc-list">{watch}</ul>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -2097,11 +2092,6 @@ def build_bands(grade):
     return "\n        ".join(out)
 
 
-STAND = ("How easily can a property management operator build their own tools, "
-         "automations and AI agents on this API? Graded against a fixed checklist, "
-         "with every mark tied to first-party evidence or a live call.")
-
-
 def build_subpages(checks_data):
     """One standalone page per graded platform. Returns the count written."""
     written = 0
@@ -2124,15 +2114,16 @@ def build_subpages(checks_data):
             for i, (p, _, _) in enumerate(r["cats"]):
                 pct = float(p) / maxima[i] * 100
                 cards.append(
-                    f'<div class="rc-cat">'
+                    f'<a class="rc-cat" href="#checks-c{i+1}">'
                     f'<div class="rc-cat-top">'
                     f'<div><div class="n">Category {i+1}</div>'
                     f'<h3>{CAT_LABELS[i][0]}</h3></div>'
-                    f'<div class="p">{fmt_pts(p)}<i> / {maxima[i]}</i></div>'
+                    f'<div class="p">{fmt_pts(p)}<i> / {maxima[i]}</i>'
+                    f'<span class="go" aria-hidden="true">&rarr;</span></div>'
                     f'</div>'
                     f'<div class="rc-bar"><span class="{tier(p, maxima[i])}" '
                     f'style="width:{pct:.0f}%"></span></div>'
-                    f'</div>')
+                    f'</a>')
 
             # --- plain-language read per category -------------------------
             reads = []
@@ -2161,7 +2152,8 @@ def build_subpages(checks_data):
                         f'{MARK_LABEL[c["mark"]]}</span>'
                         f'</div>')
                 blocks.append(
-                    f'<div class="rc-checks" style="margin-bottom:18px;">'
+                    f'<div class="rc-checks" id="checks-c{ci}" '
+                    f'style="margin-bottom:18px;">'
                     f'<div class="rc-chead">'
                     f'<span class="sq" style="background:{CAT_SQ[ci-1]}"></span>'
                     f'<h3>Category {ci} &middot; {CAT_LABELS[ci-1][0]}</h3>'
@@ -2189,7 +2181,6 @@ def build_subpages(checks_data):
             page = SUB_PAGE.format(
                 name=co,
                 cat=re.sub("&amp;", "&", cat_heading),
-                stand=STAND,
                 score=r["score"], grade=r["grade"],
                 gcls=grade_letter_class(r["grade"]),
                 raw=r["meta"].get("raw", "&ndash;"),
