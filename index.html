@@ -145,7 +145,15 @@
             margin-top:3px; letter-spacing:.01em; transition:color .15s ease; }
   tr.has-detail{ cursor:pointer; transition:background .13s ease; }
   tr.has-detail:hover{ background:var(--wash-soft); }
-  tr.has-detail:hover .co-hint{ color:var(--primary); }
+  /* The whole cell is a link, so styles.css a:hover would underline the company
+     name too. Underline only the hint, and drive it from the ROW so hovering
+     anywhere in the row responds, not just the name. */
+  .co-btn, .co-btn:hover{ text-decoration:none; }
+  tr.has-detail:hover .co-hint,
+  tr.pending:hover .co-hint{ color:var(--primary); text-decoration:underline;
+                             text-underline-offset:2px; }
+  tr.pending{ cursor:pointer; transition:background .13s ease; }
+  tr.pending:hover{ background:var(--wash-soft); }
   .co-btn:focus-visible{ outline:2px solid var(--primary); outline-offset:3px; border-radius:4px; }
   .rank-table td.plat{ white-space:normal; }
   .cat-total{ font-variant-numeric:tabular-nums; font-weight:800; font-size:16px; color:var(--navy); }
@@ -367,13 +375,12 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
       <h1>The PM API Report Card</h1>
       <a class="presented-by" href="https://column.com/property-management/?utm_source=peter-lohmann&amp;utm_medium=plm-api-grader" target="_blank" rel="noopener">Presented by <img src="column-logo.png" alt="Column" /></a>
       <div class="hero-rule" aria-hidden="true"></div>
-      <p class="lead">Grading the property management platforms we all use, on whether they&#x27;ll actually let you access your own data.</p>
 
       <!-- DOM order is paragraph, video, buttons, which IS the phone order.
            On desktop the grid areas below put the video in the right column
            spanning both rows, so the copy and buttons stack on the left. -->
       <div class="hero-grid">
-        <p class="sub hg-copy">Same rubric for every platform: five weighted categories totalling 100 points. No cherry-picking, no platform-specific tuning, and the grading file is yours to download and check.</p>
+        <p class="sub hg-copy">Grading the property management platforms we all use, on whether they&#x27;ll actually let you access your own data. Same rubric for every platform: five weighted categories totalling 100 points. No cherry-picking, no platform-specific tuning, and the grading file is yours to download and check.</p>
 
         <div class="hg-video">
           <!-- SWAP: intro-video - placeholder until Peter records it. To go live,
@@ -488,7 +495,7 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
     <div class="wrap">
       <div>
         <h2 class="h-lead">The problem.</h2>
-        <p class="sub" style="margin-top:12px;">Every platform will tell you their API is great. I wanted to find out if that&#x27;s actually true.</p>
+        <p class="sub" style="margin-top:12px;"><strong>Every platform will tell you their API is great. I wanted to find out if that&#x27;s actually true.</strong></p>
         <p class="sub" style="margin-top:14px;">Property managers should have access to their own data. These platforms are fantastic, but they vary wildly, both in how sophisticated the API is and in their <em>commercial posture</em>: how willing they are to let us reach our own data. Some of that is a technology problem. A lot of it is a business decision.</p>
         <p class="sub" style="margin-top:14px;">Grading that objectively wasn&#x27;t possible at scale until recently. With AI, it is. The idea came from <a href="https://saastr.ai/api-report-card" target="_blank" rel="noopener">SaaStr</a>&#x27;s API Report Card for B2B SaaS. I wanted one for our industry.</p>
       </div>
