@@ -96,8 +96,12 @@
 .rc-cat{ display:block; border:1px solid var(--line); border-radius:var(--radius);
          background:var(--card); padding:15px 18px 14px; box-shadow:var(--shadow);
          transition:border-color .13s ease, transform .13s ease, box-shadow .13s ease; }
+.rc-cat, .rc-cat:hover{ text-decoration:none; }
 .rc-cat:hover{ border-color:var(--primary); transform:translateY(-1px);
                box-shadow:0 10px 26px rgba(31,58,77,.10); }
+/* Only the category name takes the underline: not the "Category 5" eyebrow,
+   not the score, not the arrow. */
+.rc-cat:hover h3{ text-decoration:underline; text-underline-offset:3px; }
 .rc-cat:focus-visible{ outline:3px solid var(--primary); outline-offset:2px; }
 .rc-cat .go{ margin-left:9px; font-size:17px; font-weight:700; color:var(--primary);
              opacity:0; transition:opacity .13s ease, transform .13s ease;
@@ -112,7 +116,8 @@
            font-size:16.5px; line-height:1.3; color:var(--navy); }
 .rc-cat .p{ flex:none; display:flex; align-items:center; font-size:27px; font-weight:900; color:var(--navy); line-height:1;
             font-variant-numeric:tabular-nums; white-space:nowrap; }
-.rc-cat .p i{ font-style:normal; font-size:15px; font-weight:700; color:var(--muted); }
+.rc-cat .p i{ font-style:normal; font-size:15px; font-weight:700; color:var(--muted);
+              margin-left:5px; }
 .rc-bar{ height:6px; border-radius:999px; background:var(--wash); margin-top:11px;
          overflow:hidden; }
 .rc-bar span{ display:block; height:100%; border-radius:999px; }
@@ -214,6 +219,12 @@
 .rc-pair:has(> :only-child){ grid-template-columns:1fr; }
 @media (max-width:760px){ .rc-pair{ grid-template-columns:1fr; } }
 .rc-pair .panel{ height:100%; }
+/* Tinted rather than rail-and-white: the two blocks carry equal weight, so
+   neither should look like an annotation on the other. */
+.rc-pair .panel.t-blue{ background:var(--wash-soft); border-color:#cfe0ed; }
+.rc-pair .panel.t-orange{ background:#fdf6ef; border-color:#f0dcc6; }
+.band.wash .rc-pair .panel.t-blue{ background:var(--wash-soft); }
+.band.wash .rc-pair .panel.t-orange{ background:#fdf6ef; }
 .rc-pair h2{ font-family:var(--sans); font-weight:800;
              font-size:clamp(20px,2.4vw,24px); margin:0; }
 /* Same size as the per-category copy. These two blocks are the longest prose on

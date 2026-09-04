@@ -1952,7 +1952,7 @@ SUB_PAGE = """<!--
   <section class="band tight">
     <div class="wrap">
       <div class="rc-pair">
-        <div class="panel">
+        <div class="panel t-blue">
           <h2>The bottom line for a property manager</h2>
           <p>{bottom}</p>
         </div>
@@ -2165,7 +2165,7 @@ def build_subpages(checks_data):
             notesec = ""
             if note:
                 notesec = (
-                    '<div class="panel" style="border-left:4px solid var(--primary);">'
+                    '<div class="panel t-orange">'
                     '<h2>About this run</h2>'
                     f'<p>{note}</p></div>')
 
