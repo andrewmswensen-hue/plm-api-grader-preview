@@ -1673,7 +1673,7 @@ CONTACT = "mailto:peter@rlpmg.com?subject=API%20Report%20Card%3A%20factual%20cor
 
 COPY = {
     # Thin bar across the top of every page.
-    "banner_tag":  "Preview",
+    "banner_tag":  "Preview Version",
     "banner":      ("These are <b>pre-release scores</b>, not final grades. "
                     "Every vendor's full markdown report is published here so the "
                     "scoring can be checked line by line. A complete rerun follows "
