@@ -27,6 +27,7 @@ HOUSE RULE
 """
 
 import json, re, pathlib
+from pathlib import Path
 
 HERE = pathlib.Path(__file__).parent
 PAGE = HERE / "index.html"
@@ -1604,9 +1605,10 @@ def build_rows():
             flag = ' <span class="row-flag">v2.0</span>' if r.get("legacy") else ""
             rows.append(
                 f'<tr class="has-detail" data-co="{slug(co)}">'
-                f'<td class="plat"><button class="co-btn" type="button">'
+                f'<td class="plat">'
+                f'<a class="co-btn" href="api-grader-{slug(co)}.html">'
                 f'<span class="co-name">{co}</span>{flag}'
-                f'<span class="co-hint">Click for details</span></button></td>'
+                f'<span class="co-hint">Full report &rarr;</span></a></td>'
                 f'{cells}'
                 f'<td class="num"><span class="cat-total">{r["score"]}</span></td>'
                 f'<td class="num"><span class="grade {grade_class(r["grade"])}">'
@@ -1658,6 +1660,525 @@ def build_data():
     return json.dumps(out, separators=(",", ":"), ensure_ascii=False)
 
 
+# =============================================================================
+# SHARED COPY  -  edit here, it changes everywhere
+#
+# The preview banner, the correction callout and the rerun disclosure appear on
+# the index and on all 15 vendor pages. Andrew said the wording is not locked, so
+# every page renders from these strings rather than carrying its own copy. Change
+# a line here, rerun the build, and all 16 pages move together.
+# =============================================================================
+
+CONTACT = "mailto:peter@rlpmg.com?subject=API%20Report%20Card%3A%20factual%20correction"
+
+COPY = {
+    # Thin bar across the top of every page.
+    "banner_tag":  "Preview",
+    "banner":      ("These are <b>pre-release scores</b>, not final grades. "
+                    "Every vendor's full markdown report is published here so the "
+                    "scoring can be checked line by line. A complete rerun follows "
+                    "in roughly 60 days."),
+    "banner_link": "Found a factual error?",
+
+    # Long form. Used at the foot of the index and on every vendor page.
+    "fix_head": "Found a factual error in your grade?",
+    "fix_body": [
+        "Tell us and we will fix it. Every mark on this page traces to a specific "
+        "piece of first-party evidence or a live API call, and the full report is "
+        "published so you can see exactly what was checked and what it was checked "
+        "against.",
+        "<strong>Confirmed factual errors are corrected immediately, in real time.</strong> "
+        "If a mark rests on something that was wrong, out of date, or misread, that "
+        "gets fixed as soon as it is verified, and the page says so.",
+        "Everything else waits. We do not rescore piecemeal on request, because a "
+        "board where some vendors have been re-run and others have not is not a fair "
+        "comparison. Shipped improvements, changed documentation and disagreements "
+        "about judgement all go into the next full rerun.",
+    ],
+    "fix_cta":  "Email peter@rlpmg.com",
+
+    # The rerun policy, stated once.
+    "rerun_head": "Preview scores, and what happens next.",
+    "rerun_body": [
+        "This is a pre-release. It is published now, before it is finished, because "
+        "the fastest way to find a bad score is to show it to the people who know the "
+        "product. Feedback on the methodology itself is as welcome as feedback on the "
+        "facts.",
+        "Every graded platform gets its complete markdown report published up front, "
+        "so any vendor can see precisely how the score was reached rather than "
+        "arguing with a number.",
+        "<strong>A full rerun of every platform follows in roughly 30 to 60 days</strong>, "
+        "against the same rubric, at the same time. That refreshed board is then "
+        "expected to hold for six to twelve months before the next update.",
+    ],
+}
+
+
+def banner_html(here=""):
+    link = CONTACT if here else "#correct"
+    return (
+        '<div class="pre-bar">\n  <div class="wrap">\n'
+        f'    <span class="pre-tag">{COPY["banner_tag"]}</span>\n'
+        f'    <span>{COPY["banner"]} '
+        f'<a href="#correct">{COPY["banner_link"]}</a></span>\n'
+        '  </div>\n</div>'
+    )
+
+
+def fix_html():
+    ps = "\n        ".join(f'<p>{p}</p>' for p in COPY["fix_body"])
+    return (
+        f'<div class="fix-note" id="correct">\n'
+        f'        <h3>{COPY["fix_head"]}</h3>\n'
+        f'        {ps}\n'
+        f'        <a class="btn btn-primary" href="{CONTACT}">{COPY["fix_cta"]}</a>\n'
+        f'      </div>'
+    )
+
+
+def rerun_html():
+    ps = "\n        ".join(
+        f'<p class="sub" style="margin-top:{14 if i else 12}px;">{p}</p>'
+        for i, p in enumerate(COPY["rerun_body"]))
+    return (f'<h2 class="h-lead">{COPY["rerun_head"]}</h2>\n        {ps}')
+
+
+# =============================================================================
+# PER-VENDOR PAGES
+# =============================================================================
+
+CHECKS_JSON = Path("data/checks.json")
+SUB_TMPL_HEAD = Path("index.html")
+
+# Category accent squares, matching the order of CAT_LABELS.
+CAT_SQ = ["#2C7CB0", "#3f97cc", "#4bab8f", "#E0703C", "#e0a83c"]
+
+MARK_LABEL = {"yes": "Yes", "partial": "Partial", "no": "No",
+              "na": "N-A", "unverified": "Unverified"}
+
+
+def load_checks():
+    if not CHECKS_JSON.exists():
+        raise SystemExit(
+            "data/checks.json is missing. Run:  python3 extract-checks.py")
+    return json.loads(CHECKS_JSON.read_text(encoding="utf-8"))
+
+
+def code_up(s):
+    """`foo` -> <code>foo</code>, after escaping. The reports use backticks
+    heavily for endpoints and headers and they carry real meaning."""
+    s = html_escape(s)
+    return re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
+
+
+def html_escape(s):
+    return (s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))
+
+
+def grade_letter_class(g):
+    return "g-" + g[0].lower()
+
+
+def build_switcher(current):
+    """Every graded vendor, in board order, as a one-click strip. This is the
+    thing the modal was actually good at, so it has to survive the move to pages."""
+    out = ['<div class="rc-switch" aria-label="Other platforms">']
+    for _, _, companies in CATEGORIES:
+        for co in companies:
+            r = RESULTS.get(co)
+            if not r:
+                continue
+            cur = ' aria-current="page"' if co == current else ""
+            out.append(
+                f'<a href="api-grader-{slug(co)}.html"{cur}>'
+                f'<span class="grade {grade_class(r["grade"])}">{r["grade"]}</span>'
+                f'{co}</a>')
+    out.append("</div>")
+    return "\n        ".join(out)
+
+
+def build_nextprev(current):
+    order = [co for _, _, cos in CATEGORIES for co in cos if co in RESULTS]
+    i = order.index(current)
+    prev = order[i - 1] if i > 0 else order[-1]
+    nxt = order[i + 1] if i < len(order) - 1 else order[0]
+    return (
+        '<div class="rc-nextprev">'
+        f'<a href="api-grader-{slug(prev)}.html">&larr; {prev}</a>'
+        f'<a href="api-grader-{slug(nxt)}.html">{nxt} &rarr;</a>'
+        '</div>')
+
+
+SUB_PAGE = """<!--
+  PM API REPORT CARD - vendor detail page. GENERATED by build-report-card.py.
+  Do not hand-edit: your changes are overwritten on the next build. Change the
+  RESULTS entry, data/checks.json, or the SUB_PAGE template instead.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://use.typekit.net" crossorigin />
+<title>{name} API Report Card &middot; Peter Lohmann</title>
+<meta name="description" content="{name} scored {score}/100 ({grade}) on the PM API Report Card. All 27 checks, the evidence behind each mark, and the full report." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="apple-touch-icon" href="favicon.png" />
+<link rel="stylesheet" href="https://use.typekit.net/dik1zcl.css" media="print" onload="this.media='all'" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'" /><noscript><link rel="stylesheet" href="https://use.typekit.net/dik1zcl.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" /></noscript>
+<link rel="stylesheet" href="styles.css?v=24" />
+<link rel="stylesheet" href="report.css?v=1" />
+<style>
+  .grade{{ display:inline-flex; align-items:center; justify-content:center; min-width:44px;
+          padding:5px 10px; border-radius:8px; font-weight:800; font-size:14px;
+          font-variant-numeric:tabular-nums; }}
+  .grade-a{{ background:#e7f5ee; color:#248a5c; }}
+  .grade-b{{ background:var(--wash); color:var(--primary-dark); }}
+  .grade-c{{ background:#fdf3e0; color:#9a6a1c; }}
+  .grade-d{{ background:#fdeade; color:#a95a24; }}
+  .grade-f{{ background:#fdeaea; color:#a63b3b; }}
+  .band.wash .panel, .band.wash .card,
+  .band.wash .rc-checks, .band.wash .fix-note{{ background:var(--card); box-shadow:var(--shadow); }}
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DRCVXMNK1D"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-DRCVXMNK1D');</script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="top" aria-label="Primary">
+  <div class="bar">
+    <a class="brand" href="https://www.peterlohmann.com/">Peter <span>Lohmann</span></a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="navlinks">Menu</button>
+    <div class="links" id="navlinks">
+      <a href="https://www.peterlohmann.com/">About</a>
+      <a href="https://www.peterlohmann.com/newsletter">Newsletter</a>
+      <a href="https://www.peterlohmann.com/podcast">Podcast</a>
+      <a href="https://www.peterlohmann.com/largest-pm-companies">Largest PM Companies</a>
+      <a href="https://www.peterlohmann.com/blog">Blog</a>
+      <a href="https://www.peterlohmann.com/report/">M&amp;A Report</a>
+      <a href="https://www.peterlohmann.com/peterbot">PeterBot</a>
+      <a href="https://www.peterlohmann.com/products">Products</a>
+    </div>
+    <a class="btn btn-navy btn-sm cta" href="https://www.peterlohmann.com/contact">Contact</a>
+  </div>
+</nav>
+
+{banner}
+
+<main id="main">
+
+  <section class="band tight">
+    <div class="wrap">
+      <a class="rc-back" href="index.html#results">&larr; All platforms</a>
+      <p class="rc-eyebrow">API Report Card &middot; {cat} &middot; Methodology v1.1</p>
+      <h1 class="rc-title">{name}</h1>
+      <p class="rc-stand">{stand}</p>
+
+      <div class="rc-slab">
+        <div class="rc-score {gcls}">
+          <div class="lab">Published score</div>
+          <div class="big">{score}<i>/100</i></div>
+          <div class="sub2">Grade {grade} &middot; {raw} raw</div>
+        </div>
+        <div class="rc-meta">
+          <div><div class="k">Evidence tier</div><div class="v">{tier}</div></div>
+          <div><div class="k">Date run</div><div class="v">{run}</div></div>
+          <div><div class="k">Evaluating model</div><div class="v">{model}</div></div>
+          <div><div class="k">Verification coverage</div><div class="v">{cov}</div></div>
+          <div><div class="k">Live-test battery</div><div class="v">{battery}</div></div>
+          <div><div class="k">Checks</div><div class="v">{nchecks} of 27 scored</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY SCORES -->
+  <section class="band tight wash">
+    <div class="wrap">
+      <h2 class="h-lead">Where the points came from.</h2>
+      <p class="sub" style="margin:10px 0 22px;">Five categories, each worth a fixed share of the 100 points. A category earns the fraction of its checks it passes, times its maximum.</p>
+      <div class="rc-cats">
+        {catcards}
+      </div>
+    </div>
+  </section>
+
+  <!-- PLAIN-LANGUAGE READ -->
+  <section class="band tight">
+    <div class="wrap">
+      <h2 class="h-lead">What this means for you.</h2>
+      <p class="sub" style="margin:10px 0 26px;">One paragraph per category, in plain language.</p>
+      {reads}
+    </div>
+  </section>
+
+  <!-- STRENGTHS / WATCH -->
+  <section class="band tight wash">
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">What works</h2>
+          <ul class="sub" style="margin-top:14px;padding-left:20px;line-height:1.65;">{strengths}</ul>
+        </div>
+        <div>
+          <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">What to watch</h2>
+          <ul class="sub" style="margin-top:14px;padding-left:20px;line-height:1.65;">{watch}</ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {notesec}
+
+  <!-- BOTTOM LINE -->
+  <section class="band tight">
+    <div class="wrap">
+      <div class="panel">
+        <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">The bottom line for a property manager</h2>
+        <p class="sub" style="margin-top:12px;">{bottom}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALL 27 CHECKS -->
+  <section class="band tight wash" id="checks">
+    <div class="wrap">
+      <h2 class="h-lead">Every check, and why it scored that way.</h2>
+      <p class="sub" style="margin:10px 0 24px;">The same 27 checks are applied to every platform. What changes is which are N-A and what the core objects mean for that kind of software. Each mark below is quoted from the run's own report.</p>
+      {checkblocks}
+    </div>
+  </section>
+
+  <!-- DOWNLOADS -->
+  <section class="band tight">
+    <div class="wrap">
+      <h2 class="h-lead">Check it yourself.</h2>
+      <p class="sub" style="margin:10px 0 22px;">Both files behind this page, in full.</p>
+      <div class="rc-dl">
+        <div class="card">
+          <h3>{name}&rsquo;s full report</h3>
+          <p>The complete markdown report this page is built from, including the evidence packet, the run metadata and every check in full.</p>
+          {dlbtn}
+        </div>
+        <div class="card">
+          <h3>The grading file</h3>
+          <p>The exact rubric behind every score on this page. Same file, every platform. Run it yourself and compare.</p>
+          <a class="btn btn-ghost" href="files/pm-api-report-card-methodology.md" download>Download the methodology</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORRECTIONS -->
+  <section class="band tight wash">
+    <div class="wrap">
+      {fixnote}
+    </div>
+  </section>
+
+  <!-- SWITCHER -->
+  <section class="band tight">
+    <div class="wrap">
+      <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">Compare another platform</h2>
+      <p class="sub" style="margin:10px 0 16px;">Same rubric, same process, every one.</p>
+      {switcher}
+      {nextprev}
+    </div>
+  </section>
+
+  <section class="band tight">
+    <div class="wrap center">
+      <p class="sponsor-note" style="justify-content:center;">
+        Methodology inspired by <a href="https://saastr.ai/api-report-card" target="_blank" rel="noopener">SaaStr&rsquo;s AI Agent API Report Card</a>. Sponsored by <a href="https://column.com/property-management/?utm_source=peter-lohmann&amp;utm_medium=plm-api-grader" target="_blank" rel="noopener">Column</a>.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="brand" style="font-weight:700;color:var(--navy);">Peter <span style="color:var(--primary);">Lohmann</span></div>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="https://www.peterlohmann.com/">About</a>
+        <a href="https://www.peterlohmann.com/newsletter">Newsletter</a>
+        <a href="https://www.peterlohmann.com/podcast">Podcast</a>
+        <a href="index.html">API Report Card</a>
+        <a href="https://www.peterlohmann.com/contact">Contact</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){{
+  var t=document.querySelector('.nav-toggle'),l=document.getElementById('navlinks');
+  if(t&&l){{t.addEventListener('click',function(){{
+    var o=t.getAttribute('aria-expanded')==='true';
+    t.setAttribute('aria-expanded',String(!o)); l.classList.toggle('open',!o);
+  }});}}
+}})();
+</script>
+</body>
+</html>
+"""
+
+
+
+def short(s, limit=46):
+    """Trim a metadata line to its headline fact, on a word or clause boundary.
+
+    The reports write these as full sentences ("100% (26 of 26 applicable checks
+    verified; gate satisfied...)"). The slab wants the fact, not the sentence, and
+    a blind character slice cuts words in half."""
+    s = (s or "").strip()
+    if not s:
+        return "&ndash;"
+    # Tidy what the reports write inconsistently: leftover bold markers, a space
+    # before a percent sign, and a leading capital that varies run to run.
+    s = s.replace("*", "").replace(" %", "%").strip()
+    s = s[:1].upper() + s[1:]
+    # Cut at the EARLIEST clause boundary, not the first one in list order:
+    # "Steps 1-6 complete. Step 7 (idempotency)..." has a full stop before its
+    # parenthesis, and checking "(" first kept the dangling "Step 7".
+    cuts = [i for i in (s.find(sep) for sep in (". ", "; ", ";", "(", " - ", " \u2014 "))
+            if 0 < i <= limit]
+    if cuts:
+        return s[:min(cuts)].strip(" .,;:")
+    if len(s) <= limit:
+        return s
+    cut = s[:limit].rsplit(" ", 1)[0]
+    return cut.rstrip(" .,;:") + "&hellip;"
+
+
+STAND = ("How easily can a property management operator build their own tools, "
+         "automations and AI agents on this API? Graded against a fixed checklist, "
+         "with every mark tied to first-party evidence or a live call.")
+
+
+def build_subpages(checks_data):
+    """One standalone page per graded platform. Returns the count written."""
+    written = 0
+    for _, cat_heading, companies in CATEGORIES:
+        for co in companies:
+            r = RESULTS.get(co)
+            if not r:
+                continue
+            cd = checks_data.get(co)
+            if not cd:
+                raise SystemExit(
+                    f"{co} is on the board but absent from data/checks.json. "
+                    f"Run:  python3 extract-checks.py")
+
+            maxima = (r["legacy"]["maxima"] if r.get("legacy")
+                      else [m for _, m in CAT_LABELS])
+
+            # --- category cards -------------------------------------------
+            cards = []
+            for i, (p, _, _) in enumerate(r["cats"]):
+                pct = float(p) / maxima[i] * 100
+                cards.append(
+                    f'<div class="rc-cat">'
+                    f'<div class="n">Category {i+1}</div>'
+                    f'<h3>{CAT_LABELS[i][0]}</h3>'
+                    f'<div class="p">{fmt_pts(p)}<i> / {maxima[i]}</i></div>'
+                    f'<div class="rc-bar"><span class="{tier(p, maxima[i])}" '
+                    f'style="width:{pct:.0f}%"></span></div>'
+                    f'</div>')
+
+            # --- plain-language read per category -------------------------
+            reads = []
+            for i, (p, _, txt) in enumerate(r["cats"]):
+                reads.append(
+                    f'<div class="rc-read">'
+                    f'<h3>{i+1} &middot; {CAT_LABELS[i][0]}</h3>'
+                    f'<div class="pts">{fmt_pts(p)} / {maxima[i]} points</div>'
+                    f'<p>{txt}</p></div>')
+
+            # --- the 27 checks, grouped by category -----------------------
+            blocks = []
+            for ci in range(1, 6):
+                rows = [c for c in cd["checks"] if c["cat"] == ci]
+                if not rows:
+                    continue
+                p, mx = r["cats"][ci - 1][0], maxima[ci - 1]
+                body = []
+                for c in rows:
+                    body.append(
+                        f'<div class="rc-chk">'
+                        f'<div class="id">{c["id"]}</div>'
+                        f'<div><h4>{html_escape(c["title"])}</h4>'
+                        f'<p>{code_up(c["why"])}</p></div>'
+                        f'<span class="mark m-{c["mark"]}">'
+                        f'{MARK_LABEL[c["mark"]]}</span>'
+                        f'</div>')
+                blocks.append(
+                    f'<div class="rc-checks" style="margin-bottom:18px;">'
+                    f'<div class="rc-chead">'
+                    f'<span class="sq" style="background:{CAT_SQ[ci-1]}"></span>'
+                    f'<h3>Category {ci} &middot; {CAT_LABELS[ci-1][0]}</h3>'
+                    f'<span class="pts">{fmt_pts(p)} / {mx}</span></div>'
+                    f'{"".join(body)}</div>')
+
+            # --- the run note, when the report carries one ----------------
+            note = r.get("note") or r.get("rescored")
+            notesec = ""
+            if note:
+                notesec = (
+                    '<section class="band tight">\n    <div class="wrap">\n'
+                    '      <div class="panel" style="border-left:4px solid var(--primary);">\n'
+                    '        <h2 class="h-lead" style="font-size:clamp(21px,2.6vw,26px);">'
+                    'About this run</h2>\n'
+                    f'        <p class="sub" style="margin-top:12px;">{note}</p>\n'
+                    '      </div>\n    </div>\n  </section>')
+
+            # --- the markdown download ------------------------------------
+            md = Path(f"files/reports/{slug(co)}.md")
+            if md.exists():
+                dl = (f'<a class="btn btn-primary" href="files/reports/{slug(co)}.md" '
+                      f'download>Download the {co} report</a>')
+            else:
+                dl = ('<span class="sub" style="font-size:14.5px;">'
+                      'Publishing shortly.</span>')
+
+            page = SUB_PAGE.format(
+                name=co,
+                cat=re.sub("&amp;", "&", cat_heading),
+                stand=STAND,
+                score=r["score"], grade=r["grade"],
+                gcls=grade_letter_class(r["grade"]),
+                raw=r["meta"].get("raw", "&ndash;"),
+                tier=r["meta"].get("tier", "&ndash;"),
+                run=r["meta"].get("run", "&ndash;"),
+                model=r["meta"].get("model", "&ndash;"),
+                cov=short(cd["meta"].get("coverage")),
+                battery=short(cd["meta"].get("battery"), 52),
+                nchecks=len(cd["checks"]),
+                catcards="\n        ".join(cards),
+                reads="\n      ".join(reads),
+                strengths="".join(f"<li>{s}</li>" for s in r["strengths"]),
+                watch="".join(f"<li>{s}</li>" for s in r["watch"]),
+                notesec=notesec,
+                bottom=r["bottom"],
+                checkblocks="\n      ".join(blocks),
+                dlbtn=dl,
+                fixnote=fix_html(),
+                switcher=build_switcher(co),
+                nextprev=build_nextprev(co),
+                banner=banner_html(co),
+            )
+            Path(f"api-grader-{slug(co)}.html").write_text(page, encoding="utf-8")
+            written += 1
+    return written
+
+
 BANDS = [(97,"A+"),(93,"A"),(90,"A-"),(87,"B+"),(83,"B"),(80,"B-"),
          (77,"C+"),(73,"C"),(70,"C-"),(67,"D+"),(63,"D"),(60,"D-"),(0,"F")]
 
@@ -1689,13 +2210,14 @@ def check_math():
 
 def main():
     check_math()
+    checks_data = load_checks()
     html = PAGE.read_text(encoding="utf-8")
 
     results_block = f"""      {build_stats()}
       <p class="sub" style="margin-top:16px;font-size:14px;">Scores are point-in-time and tied to the evidence access date. Methodology v1.1.</p>
 
       <h2 class="h-lead" style="margin-top:46px;">The results.</h2>
-      <p class="sub" style="margin:10px 0 18px;">Scores are point-in-time, based on first-party documentation and, where available, live testing. Click any graded platform for the full breakdown.</p>
+      <p class="sub" style="margin:10px 0 18px;">Scores are point-in-time, based on first-party documentation and, where available, live testing. Open any graded platform for its own page: all 27 checks, the evidence behind each mark, and the full report to download.</p>
 
         {build_pills()}
 
@@ -1722,18 +2244,33 @@ def main():
         html, flags=re.S,
     )
 
+    # The per-vendor detail moved out of a modal and onto its own page, so the
+    # blob the modal read from is no longer emitted. The marker stays put: it is
+    # cheap, and it keeps the option of re-adding an inline preview later.
     html = re.sub(
         r"(<!-- DATA:START -->\n).*?(\s*<!-- DATA:END -->)",
-        lambda m: (m.group(1)
-                   + '<script type="application/json" id="coData">'
-                   + build_data() + "</script>" + m.group(2)),
+        lambda m: m.group(1) + m.group(2),
         html, flags=re.S,
     )
+
+    # Shared copy blocks, rendered into the index from the same strings the
+    # vendor pages use, so the wording can only be changed in one place.
+    for marker, blockfn in (("BANNER", lambda: banner_html()),
+                            ("FIXNOTE", fix_html),
+                            ("RERUN", rerun_html)):
+        html = re.sub(
+            rf"(<!-- {marker}:START -->\n).*?(\s*<!-- {marker}:END -->)",
+            lambda m, f=blockfn: m.group(1) + "      " + f() + m.group(2),
+            html, flags=re.S,
+        )
 
     PAGE.write_text(html, encoding="utf-8")
     print(f"Wrote {PAGE}")
     print(f"  {sum(len(c) for _,_,c in CATEGORIES)} companies in "
           f"{len(CATEGORIES)} categories, {len(RESULTS)} graded")
+
+    n = build_subpages(checks_data)
+    print(f"Wrote {n} vendor pages: api-grader-<platform>.html")
 
 
 if __name__ == "__main__":
