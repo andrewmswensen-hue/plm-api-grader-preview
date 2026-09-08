@@ -364,44 +364,42 @@
                   border-radius:var(--radius); background:#fdf8f3;
                   font-size:16px; }
 
-  /* Intro-video slot. Holds 16:9 so dropping the real embed in later cannot
-     move the page around. */
-  /* Capped rather than free: the column is wider than the frame wants to be,
-     and an uncapped 16:9 ran far taller than the copy beside it. */
-  .vid-ph{ aspect-ratio:16/9; max-width:520px; border-radius:var(--radius); background:var(--navy);
-           display:flex; align-items:center; justify-content:center; text-align:center;
-           padding:24px; box-shadow:var(--shadow-lg); }
-  .vid-ph p{ margin:10px 0 0; color:#cfdce6; font-size:15.5px; max-width:34ch; }
-  /* Sponsor credit, matching the Largest PM Companies hero: it sits directly
-     under the H1, ahead of any body copy, with a short rule separating it from
-     the subhead. Same values as that page so the two heroes read as a set. */
-  .presented-by{ display:inline-flex; align-items:center; gap:12px; margin:-2px 0 14px;
-                 font-size:clamp(18px,2.2vw,22px); font-weight:400;
-                 color:var(--muted); text-decoration:none; }
-  .presented-by img{ height:clamp(27px,3.3vw,35px); width:auto; display:block;
-                     transform:translateY(1px); }
-  .presented-by:hover{ text-decoration:none; opacity:.82; }
-  .hero-rule{ width:56px; height:3px; background:var(--primary); border-radius:2px;
-              margin:0 0 18px; }
+  /* Intro video. Same thumbnail-plus-lightbox pattern as the tester guide page:
+     the base state is a plain link to YouTube, so a phone or a visitor with no
+     JavaScript gets a working video with no special casing, and on wider screens
+     the script below intercepts the click and opens the lightbox instead. */
+  .vid-open{ position:relative; display:block; max-width:520px; aspect-ratio:16/9;
+             overflow:hidden; border-radius:var(--radius); box-shadow:var(--shadow-lg);
+             background:var(--navy); transition:transform .16s ease, box-shadow .16s ease; }
+  .vid-open img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .vid-open:hover{ transform:translateY(-3px); box-shadow:0 24px 60px rgba(31,58,77,.22); }
+  .vid-open:focus-visible{ outline:3px solid var(--primary); outline-offset:3px; }
+  .vid-play{ position:absolute; inset:0; margin:auto; width:66px; height:66px;
+             border-radius:50%; background:rgba(255,255,255,.94);
+             display:flex; align-items:center; justify-content:center;
+             transition:transform .16s ease; }
+  .vid-open:hover .vid-play{ transform:scale(1.06); }
+  .vid-play svg{ width:24px; height:24px; margin-left:4px; color:var(--navy); }
+  .vid-link{ display:inline-block; margin-top:10px; font-size:13.5px; font-weight:700;
+             color:var(--muted); }
+  .vid-link:hover{ color:var(--primary); text-decoration:underline; }
 
-  /* Areas rather than source order, so the phone gets paragraph, video,
-     buttons while the desktop keeps the video in one tall right column. */
-  .hero-grid{ display:grid; margin-top:30px; gap:22px 30px;
-              grid-template-columns:1fr 1fr;
-              grid-template-areas:"copy video" "btns video";
-              align-items:start; }
-  .hg-copy{ grid-area:copy; margin-top:0; }
-  .hg-video{ grid-area:video; align-self:center; }
-  .hg-btns{ grid-area:btns; display:flex; flex-wrap:wrap; gap:12px; align-self:start; }
-  @media (max-width:820px){
-    .hero-grid{ grid-template-columns:1fr;
-                grid-template-areas:"copy" "video" "btns"; }
-  }
-  .vid-ph-tag{ display:inline-block; background:rgba(255,255,255,.15); color:#fff;
-               border-radius:999px; padding:3px 12px; font-size:11.5px; font-weight:800;
-               letter-spacing:.09em; text-transform:uppercase; }
-  .vid-meta{ display:block; margin-top:16px; }
-  .vid-meta strong{ display:block; color:var(--navy); font-size:16px; }
+  /* Lightbox: the video and an X, nothing else. Sized to the larger of the two
+     constraints so it fills as much of the screen as 16:9 allows either way. */
+  .vlight{ position:fixed; inset:0; z-index:1000; display:none;
+           align-items:center; justify-content:center;
+           background:rgba(8,14,20,.92); backdrop-filter:blur(4px);
+           -webkit-backdrop-filter:blur(4px); }
+  .vlight.open{ display:flex; }
+  .vlight-frame{ width:min(94vw, calc(86vh * 16 / 9)); aspect-ratio:16/9;
+                 background:#000; border-radius:12px; overflow:hidden;
+                 box-shadow:0 30px 90px rgba(0,0,0,.55); }
+  .vlight-frame iframe{ width:100%; height:100%; border:0; display:block; }
+  .vlight-close{ position:absolute; top:18px; right:20px; width:44px; height:44px;
+                 border:0; border-radius:50%; cursor:pointer; font-size:26px; line-height:1;
+                 background:rgba(255,255,255,.16); color:#fff; }
+  .vlight-close:hover{ background:rgba(255,255,255,.28); }
+  .vlight-close:focus-visible{ outline:3px solid #fff; outline-offset:2px; }
   .band.wash .fix-note{ background:var(--card); box-shadow:var(--shadow); }
 </style>
 <!-- Google Analytics (GA4) -->
@@ -465,22 +463,19 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
         <p class="sub hg-copy">Grading the property management platforms we all use, on whether they&#x27;ll actually let you access your own data. Same rubric for every platform: five weighted categories totalling 100 points. No cherry-picking, no platform-specific tuning, and the grading file is yours to download and check.</p>
 
         <div class="hg-video">
-          <!-- SWAP: intro-video - placeholder until Peter records it. To go live,
-               swap this block for the .vid-open thumbnail + lightbox used on the
-               tester guide page: set the YouTube id in the href, the maxresdefault
-               thumbnail, and the #vidLight markup. Holding 16:9 now means dropping
-               the real embed in later cannot move the page around. -->
-          <div class="vid-ph" id="vidPlaceholder">
-            <div>
-              <span class="vid-ph-tag">Intro video</span>
-              <p>Peter&rsquo;s walkthrough of what this is and how to read it. Coming shortly.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-jump hg-btns">
-          <a class="btn btn-primary" href="#results">See the results &darr;</a>
-          <a class="btn btn-ghost" href="#method">How we grade</a>
+          <!-- Base state is a plain link to YouTube, so mobile and any
+               no-JavaScript visitor gets a working video with no special casing.
+               On wider screens the script at the foot of the page intercepts the
+               click and opens the lightbox instead. -->
+          <a class="vid-open" id="vidOpen" href="https://youtu.be/Go39ZQyuyjo"
+             target="_blank" rel="noopener" aria-label="Play the intro video">
+            <img src="https://i.ytimg.com/vi/Go39ZQyuyjo/maxresdefault.jpg"
+                 alt="" width="1280" height="720" fetchpriority="high" />
+            <span class="vid-play" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+          </a>
+          <a class="vid-link" href="https://youtu.be/Go39ZQyuyjo" target="_blank" rel="noopener">Click to watch on YouTube &rarr;</a>
         </div>
       </div>
     </div>
@@ -835,6 +830,55 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
     ro.observe(nav);
     if (bar) ro.observe(bar);
   }
+})();
+</script>
+<div class="vlight" id="vidLight" aria-hidden="true">
+  <button class="vlight-close" id="vidClose" aria-label="Close video">&times;</button>
+  <div class="vlight-frame" role="dialog" aria-modal="true" aria-label="The PM API Report Card intro">
+    <iframe id="vidFrame"
+            data-src="https://www.youtube.com/embed/Go39ZQyuyjo?rel=0&amp;autoplay=1"
+            title="The PM API Report Card intro"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </div>
+</div>
+
+<script>
+/* Delegated from the document, not bound to the element, so it cannot depend on
+   this script running after the thumbnail exists. */
+(function () {
+  var wide = window.matchMedia('(min-width: 769px)');
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest && e.target.closest('#vidOpen');
+    if (!link || !wide.matches) return;          // phone: let it go to YouTube
+    var light = document.getElementById('vidLight'),
+        frame = document.getElementById('vidFrame'),
+        close = document.getElementById('vidClose');
+    if (!light || !frame) return;                // markup absent: link still works
+    e.preventDefault();
+    if (frame.dataset.src && frame.src !== frame.dataset.src) frame.src = frame.dataset.src;
+    light.classList.add('open');
+    light.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    if (close) close.focus();
+  });
+
+  function shut() {
+    var light = document.getElementById('vidLight'),
+        frame = document.getElementById('vidFrame');
+    if (!light || !light.classList.contains('open')) return;
+    frame.removeAttribute('src');                // stops playback
+    light.classList.remove('open');
+    light.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    var link = document.getElementById('vidOpen');
+    if (link) link.focus();
+  }
+  document.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('#vidClose')) return shut();
+    if (e.target.id === 'vidLight') shut();      // backdrop
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') shut(); });
 })();
 </script>
 </body>
