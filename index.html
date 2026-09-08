@@ -256,6 +256,15 @@
   #results .rank-table thead th{
     top:calc(var(--nav-h, 59px) + var(--prebar-h, 67px));
     z-index:3;
+    /* Outline every header cell, and draw its bottom rule as a shadow.
+       The table is border-collapse:collapse, which means a cell's borders
+       belong to the table grid rather than to the cell, so they do not travel
+       with a sticky header: rows scrolling underneath showed through the seam
+       where the border used to sit. box-shadow paints on the cell itself and
+       moves with it, so the header stays a solid, closed block. */
+    border-bottom:0;
+    box-shadow:inset 0 0 0 1px #cfdce8, 0 2px 0 0 #c3d3e2;
+    background-clip:padding-box;
   }
   #results .rank-table th:first-child,  #results .rank-table td:first-child{ width:23%; }
   #results .rank-table .col-cat{ width:11.2%; }
