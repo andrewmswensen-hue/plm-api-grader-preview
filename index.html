@@ -206,12 +206,11 @@
   @media (max-width:640px){ .info::after{ width:min(74vw,300px); } }
 
   /* Notes under the table. */
-  /* Financial-interest disclosure, above the table. Bordered so it reads as a
-     standing notice rather than more of the intro copy, and its link is
+  /* Financial-interest disclosure, running inline under the intro paragraph.
+     Smaller than the copy above it so it reads as a footnote, but with no box:
+     a border made it look like a warning rather than a disclosure. Its link is
      underlined for the same reason the footer's legal links now are. */
-  .disclosure-note{ margin:0 0 22px; padding:13px 16px; max-width:96ch;
-                    border:1px solid var(--line); border-left:3px solid var(--muted);
-                    border-radius:var(--radius); background:#fbfcfd;
+  .disclosure-note{ margin:-6px 0 22px; max-width:96ch;
                     font-size:14.5px; line-height:1.6; color:var(--muted); }
   .disclosure-note strong{ color:var(--navy); }
   .disclosure-note a{ color:var(--primary); font-weight:700;
