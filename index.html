@@ -30,7 +30,7 @@
 <link rel="apple-touch-icon" href="favicon.png" />
 <link rel="stylesheet" href="https://use.typekit.net/dik1zcl.css" media="print" onload="this.media='all'" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'" /><noscript><link rel="stylesheet" href="https://use.typekit.net/dik1zcl.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" /></noscript>
-<link rel="stylesheet" href="styles.css?v=24" />
+<link rel="stylesheet" href="styles.css?v=25" />
 <link rel="stylesheet" href="report.css?v=5" />
 <style>
   /* Letter-grade chip. Colour tracks the band, so the table scans at a glance. */
@@ -206,6 +206,17 @@
   @media (max-width:640px){ .info::after{ width:min(74vw,300px); } }
 
   /* Notes under the table. */
+  /* Financial-interest disclosure, above the table. Bordered so it reads as a
+     standing notice rather than more of the intro copy, and its link is
+     underlined for the same reason the footer's legal links now are. */
+  .disclosure-note{ margin:0 0 22px; padding:13px 16px; max-width:96ch;
+                    border:1px solid var(--line); border-left:3px solid var(--muted);
+                    border-radius:var(--radius); background:#fbfcfd;
+                    font-size:14.5px; line-height:1.6; color:var(--muted); }
+  .disclosure-note strong{ color:var(--navy); }
+  .disclosure-note a{ color:var(--primary); font-weight:700;
+                      text-decoration:underline; text-underline-offset:2px; }
+  .disclosure-note a:hover{ color:var(--primary-dark); }
   .tbl-note{ margin:16px 0 0; font-size:16.5px; line-height:1.62;
              color:var(--muted); max-width:96ch; }
   .tbl-note strong{ color:var(--navy); }
@@ -482,6 +493,8 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
       <!-- RESULTS:START -->
       <h2 class="h-lead">The results.</h2>
       <p class="sub" style="margin:10px 0 18px;">Scores are point-in-time, based on first-party documentation and, where available, live testing. Open any graded platform for its own page: all 27 checks, the evidence behind each mark, and the full report to download.</p>
+
+      <p class="disclosure-note"><strong>Note:</strong> Peter may have consulting agreements with, or financial interests in, companies mentioned on this page. However, there are <strong>NO affiliate links</strong> on this page or the individual results pages. <a href="https://www.peterlohmann.com/financial-interest-disclosure">Click here for more information</a>.</p>
 
         <div class="pill-row" aria-label="Jump to a category">
         <a class="jump-pill" href="#cat-pm-software">PM Software</a>

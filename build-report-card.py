@@ -2252,7 +2252,7 @@ SUB_PAGE = """<!--
 <link rel="apple-touch-icon" href="favicon.png" />
 <link rel="stylesheet" href="https://use.typekit.net/dik1zcl.css" media="print" onload="this.media='all'" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'" /><noscript><link rel="stylesheet" href="https://use.typekit.net/dik1zcl.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" /></noscript>
-<link rel="stylesheet" href="styles.css?v=24" />
+<link rel="stylesheet" href="styles.css?v=25" />
 <link rel="stylesheet" href="report.css?v=5" />
 <style>
   .grade{{ display:inline-flex; align-items:center; justify-content:center; min-width:44px;
@@ -2532,7 +2532,7 @@ PENDING_PAGE = """<!--
 <link rel="apple-touch-icon" href="favicon.png" />
 <link rel="stylesheet" href="https://use.typekit.net/dik1zcl.css" media="print" onload="this.media='all'" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'" /><noscript><link rel="stylesheet" href="https://use.typekit.net/dik1zcl.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" /></noscript>
-<link rel="stylesheet" href="styles.css?v=24" />
+<link rel="stylesheet" href="styles.css?v=25" />
 <link rel="stylesheet" href="report.css?v=5" />
 <style>
   .grade{{ display:inline-flex; align-items:center; justify-content:center; min-width:44px;
@@ -2900,6 +2900,8 @@ def main():
 
     results_block = f"""      <h2 class="h-lead">The results.</h2>
       <p class="sub" style="margin:10px 0 18px;">Scores are point-in-time, based on first-party documentation and, where available, live testing. Open any graded platform for its own page: all 27 checks, the evidence behind each mark, and the full report to download.</p>
+
+      <p class="disclosure-note"><strong>Note:</strong> Peter may have consulting agreements with, or financial interests in, companies mentioned on this page. However, there are <strong>NO affiliate links</strong> on this page or the individual results pages. <a href="https://www.peterlohmann.com/financial-interest-disclosure">Click here for more information</a>.</p>
 
         {build_pills()}
 
