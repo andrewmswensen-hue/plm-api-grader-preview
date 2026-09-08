@@ -1854,6 +1854,14 @@ def build_data():
 CONTACT = "https://www.peterlohmann.com/contact"
 
 COPY = {
+    # Thin bar across the top of every page.
+    "banner_tag":  "Preview Version",
+    "banner":      ("These are <b>pre-release scores</b>, not final grades. "
+                    "Every vendor's full markdown report is published here so the "
+                    "scoring can be checked line by line. A complete rerun follows "
+                    "in roughly 60 days."),
+    "banner_link": "Found a factual error?",
+
     # Long form. Used at the foot of the index and on every vendor page.
     "fix_head": "Found a factual error in your grade?",
     "fix_body": [
@@ -1886,6 +1894,15 @@ COPY = {
         "until a planned re-score in roughly 6 months.",
     ],
 }
+
+
+def banner_html(here=""):
+    return (
+        '<div class="pre-bar">\n  <div class="wrap">\n'
+        f'    <p><span class="pre-tag">{COPY["banner_tag"]}</span>{COPY["banner"]} '
+        f'<a href="#correct">{COPY["banner_link"]}</a></p>\n'
+        '  </div>\n</div>'
+    )
 
 
 def fix_html():
@@ -1997,7 +2014,7 @@ SUB_PAGE = """<!--
 <link rel="stylesheet" href="https://use.typekit.net/dik1zcl.css" media="print" onload="this.media='all'" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'" /><noscript><link rel="stylesheet" href="https://use.typekit.net/dik1zcl.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" /></noscript>
 <link rel="stylesheet" href="styles.css?v=24" />
-<link rel="stylesheet" href="report.css?v=1" />
+<link rel="stylesheet" href="report.css?v=2" />
 <style>
   .grade{{ display:inline-flex; align-items:center; justify-content:center; min-width:44px;
           padding:5px 10px; border-radius:8px; font-weight:800; font-size:14px;
@@ -2035,6 +2052,7 @@ SUB_PAGE = """<!--
   </div>
 </nav>
 
+{banner}
 
 <main id="main">
 
@@ -2046,7 +2064,7 @@ SUB_PAGE = """<!--
 
       <div class="rc-slab">
         <div class="rc-score {gcls}">
-          <div class="lab">Published grade</div>
+          <div class="lab">Preliminary grade</div>
           <div class="rc-gnum">
             <span class="letter">{grade}</span>
             <span class="num">{score}<i>/100</i></span>
@@ -2182,6 +2200,16 @@ SUB_PAGE = """<!--
     var o=t.getAttribute('aria-expanded')==='true';
     t.setAttribute('aria-expanded',String(!o)); l.classList.toggle('open',!o);
   }});}}
+  /* Pin the preview bar directly under the sticky nav. The nav's height changes
+     with the viewport, so it is measured rather than assumed. */
+  var nav=document.querySelector('nav.top');
+  if(nav){{
+    var sync=function(){{
+      document.documentElement.style.setProperty('--nav-h', nav.offsetHeight+'px');
+    }};
+    sync(); window.addEventListener('resize', sync);
+    if(window.ResizeObserver) new ResizeObserver(sync).observe(nav);
+  }}
 }})();
 </script>
 </body>
@@ -2266,7 +2294,7 @@ PENDING_PAGE = """<!--
 <link rel="stylesheet" href="https://use.typekit.net/dik1zcl.css" media="print" onload="this.media='all'" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'" /><noscript><link rel="stylesheet" href="https://use.typekit.net/dik1zcl.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" /></noscript>
 <link rel="stylesheet" href="styles.css?v=24" />
-<link rel="stylesheet" href="report.css?v=1" />
+<link rel="stylesheet" href="report.css?v=2" />
 <style>
   .grade{{ display:inline-flex; align-items:center; justify-content:center; min-width:44px;
           padding:5px 10px; border-radius:8px; font-weight:800; font-size:14px;
@@ -2305,6 +2333,7 @@ PENDING_PAGE = """<!--
   </div>
 </nav>
 
+{banner}
 
 <main id="main">
 
@@ -2324,7 +2353,7 @@ PENDING_PAGE = """<!--
           <div class="raw">Not yet graded</div>
         </div>
         <div class="rc-meta">
-          <div><div class="k">Published grade</div><div class="v">&ndash;</div></div>
+          <div><div class="k">Preliminary grade</div><div class="v">&ndash;</div></div>
           <div><div class="k">Date run</div><div class="v">&ndash;</div></div>
           <div><div class="k">Evidence tier</div><div class="v">&ndash;</div></div>
           <div><div class="k">Methodology</div><div class="v">v1.1</div></div>
@@ -2413,6 +2442,16 @@ PENDING_PAGE = """<!--
     var o=t.getAttribute('aria-expanded')==='true';
     t.setAttribute('aria-expanded',String(!o)); l.classList.toggle('open',!o);
   }});}}
+  /* Pin the preview bar directly under the sticky nav. The nav's height changes
+     with the viewport, so it is measured rather than assumed. */
+  var nav=document.querySelector('nav.top');
+  if(nav){{
+    var sync=function(){{
+      document.documentElement.style.setProperty('--nav-h', nav.offsetHeight+'px');
+    }};
+    sync(); window.addEventListener('resize', sync);
+    if(window.ResizeObserver) new ResizeObserver(sync).observe(nav);
+  }}
 }})();
 </script>
 </body>
@@ -2459,6 +2498,7 @@ def build_pending_page(co, cat_heading):
         catcards="\n        ".join(cards),
         bands=build_bands(None),
         fixnote=fix_html(),
+        banner=banner_html(co),
     )
 
 
@@ -2565,7 +2605,8 @@ def build_subpages(checks_data):
                 checkblocks="\n      ".join(blocks),
                 dlbtn=dl,
                 fixnote=fix_html(),
-                    )
+                banner=banner_html(co),
+            )
             Path(f"api-grader-{slug(co)}.html").write_text(page, encoding="utf-8")
             written += 1
     return written
@@ -2620,7 +2661,7 @@ def main():
               <th class="num">Score<button class="info" type="button"
                     aria-label="How the score is calculated"
                     data-tip="The five category scores add up to a raw total out of 50, which is doubled to a score out of 100 and mapped to a letter grade: A+ at 97 and above, down to F below 60. Scores are absolute, never curved against other platforms. A number is only published when the run clears the methodology&#x27;s verification bar; otherwise the score is withheld."><span aria-hidden="true">i</span></button></th>
-              <th class="num">Grade</th>
+              <th class="num">Preliminary<br />Grade</th>
             </tr>
           </thead>
           <tbody>
@@ -2649,7 +2690,8 @@ def main():
 
     # Shared copy blocks, rendered into the index from the same strings the
     # vendor pages use, so the wording can only be changed in one place.
-    for marker, blockfn in (("FIXNOTE", fix_html),
+    for marker, blockfn in (("BANNER", lambda: banner_html()),
+                            ("FIXNOTE", fix_html),
                             ("RERUN", rerun_html)):
         html = re.sub(
             rf"(<!-- {marker}:START -->\n).*?(\s*<!-- {marker}:END -->)",

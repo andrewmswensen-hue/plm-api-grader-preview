@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="https://use.typekit.net/dik1zcl.css" media="print" onload="this.media='all'" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'" /><noscript><link rel="stylesheet" href="https://use.typekit.net/dik1zcl.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" /></noscript>
 <link rel="stylesheet" href="styles.css?v=24" />
-<link rel="stylesheet" href="report.css?v=1" />
+<link rel="stylesheet" href="report.css?v=2" />
 <style>
   .grade{ display:inline-flex; align-items:center; justify-content:center; min-width:44px;
           padding:5px 10px; border-radius:8px; font-weight:800; font-size:14px;
@@ -58,6 +58,11 @@
   </div>
 </nav>
 
+<div class="pre-bar">
+  <div class="wrap">
+    <p><span class="pre-tag">Preview Version</span>These are <b>pre-release scores</b>, not final grades. Every vendor's full markdown report is published here so the scoring can be checked line by line. A complete rerun follows in roughly 60 days. <a href="#correct">Found a factual error?</a></p>
+  </div>
+</div>
 
 <main id="main">
 
@@ -69,7 +74,7 @@
 
       <div class="rc-slab">
         <div class="rc-score g-c">
-          <div class="lab">Published grade</div>
+          <div class="lab">Preliminary grade</div>
           <div class="rc-gnum">
             <span class="letter">C+</span>
             <span class="num">78<i>/100</i></span>
@@ -237,6 +242,16 @@
     var o=t.getAttribute('aria-expanded')==='true';
     t.setAttribute('aria-expanded',String(!o)); l.classList.toggle('open',!o);
   });}
+  /* Pin the preview bar directly under the sticky nav. The nav's height changes
+     with the viewport, so it is measured rather than assumed. */
+  var nav=document.querySelector('nav.top');
+  if(nav){
+    var sync=function(){
+      document.documentElement.style.setProperty('--nav-h', nav.offsetHeight+'px');
+    };
+    sync(); window.addEventListener('resize', sync);
+    if(window.ResizeObserver) new ResizeObserver(sync).observe(nav);
+  }
 })();
 </script>
 </body>

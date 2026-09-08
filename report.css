@@ -7,7 +7,27 @@
    correction callout, which both pages share.
    --------------------------------------------------------------------------- */
 
-/* ---- Correction callout (shared with the index) ------------------------- */
+/* ---- Preview banner + correction callout (shared with the index) ---------- */
+/* Pinned under the nav so the pre-release framing never scrolls away. --nav-h
+   is measured by a script at the foot of the page, because the nav's height
+   changes with the viewport and a hardcoded offset would leave a gap or an
+   overlap at some widths. */
+.pre-bar{ position:sticky; top:var(--nav-h, 59px); z-index:99;
+          background:var(--navy); color:#dbe6ee; font-size:14.5px; line-height:1.55; }
+/* Block, not flex: as flex items the pill and the sentence were separate boxes
+   and the sentence wrapped away onto its own line. Inline, the pill sits in the
+   first line of the text and the whole thing runs to two lines. */
+.pre-bar .wrap{ padding:10px 0; }
+.pre-bar b{ color:#fff; font-weight:800; letter-spacing:.02em; }
+.pre-bar .pre-tag{ display:inline-flex; align-items:center; margin-right:11px;
+                   vertical-align:1px;
+                   background:rgba(255,255,255,.13); color:#fff; border-radius:999px;
+                   padding:3px 11px; font-size:12px; font-weight:800;
+                   letter-spacing:.09em; text-transform:uppercase;
+                   white-space:nowrap; }
+.pre-bar a{ color:#fff; text-decoration:underline; text-underline-offset:3px; }
+.pre-bar a:hover{ color:var(--wash); }
+
 /* The full correction block. Orange rail so it reads as an action, not a note. */
 .fix-note{ border:1px solid var(--line); border-left:4px solid var(--orange);
            border-radius:var(--radius); background:var(--card);
