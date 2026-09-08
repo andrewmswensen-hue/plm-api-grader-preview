@@ -39,6 +39,7 @@ SOURCES = {
     "showmojo":          "showmojo-2026-09-02.md",
     "tenant-turner":     "tenant-turner-2026-09-01.md",
     "xero":              "xero-2026-08-27.md",
+    "zoom":              "zoom-2026-09-08.md",
 }
 
 REDACT = [

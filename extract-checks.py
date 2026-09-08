@@ -41,6 +41,7 @@ SOURCES = {
     "ShowMojo":          "showmojo-2026-09-02.md",
     "Tenant Turner":     "tenant-turner-2026-09-01.md",
     "Xero":              "xero-2026-08-27.md",
+    "Zoom":              "zoom-2026-09-08.md",
 }
 
 # Live account identifiers that must never reach a public repo. Applied to the

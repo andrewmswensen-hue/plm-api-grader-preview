@@ -3415,5 +3415,206 @@
     "why": "a genuinely free path exists (standard app, free Starter tier, 5 connections, API included in all Xero subscriptions), so the API is not behind a premium plan; but meaningful capabilities are tier-gated: the higher rate limit (5,000 vs 1,000 calls/day/org) needs paid Core+ ($35 AUD/mo min), per-GB data-egress fees apply on paid tiers, and the machine-to-machine Custom Connections credential is a paid monthly add-on. [developer.xero.com/pricing; custom-connections guide]"
    }
   ]
+ },
+ "Zoom": {
+  "source": "zoom-2026-09-08.md",
+  "meta": {
+   "tier": "Baseline verified",
+   "battery": "steps 1–7 complete; step 8 (webhook registration + delivery) not run — requires an HTTPS receiver the operator controls, and the controlled live-data protocol forbids pointing a subscription at a third-party or shared endpoint",
+   "date": "2026-09-08",
+   "model": "Claude Opus 5 (claude-opus-5)",
+   "coverage": "100%** (26 of 26 applicable checks verified; gate requires no category Unable to verify and overall ≥ 80% — both satisfied. Category coverage: C1 100%, C2 100%, C3 100%, C4 100%, C5 100%.)"
+  },
+  "checks": [
+   {
+    "id": "C1.1",
+    "cat": 1,
+    "title": "Object coverage",
+    "mark": "yes",
+    "why": "weighted coverage = 100% (25 of 25 weighted points; no critical object absent). Every predetermined object is present with the operations its role requires. Live-verified on the Meetings/Users/Recordings surface and, in packet F2, on Zoom Phone: `GET /phone/users` returned 9 phone users with extensions, calling plans and assigned numbers; `/phone/numbers` 9 numbers; `/phone/devices` 1 provisioned device; `/phone/call_history` 17 call records; `/phone/recordings` 161 recordings — confirming the telephony object is real and populated on this account, not merely documented. [.well-known/api-catalog.json, 64 group anchors; `docs/api/meetings.md` 186 operations; `docs/api/phone.md` 397; `docs/api/users.md` 71; live reads 2026-09-08]"
+   },
+   {
+    "id": "C1.2",
+    "cat": 1,
+    "title": "Core operational actions",
+    "mark": "yes",
+    "why": "weighted coverage = 100% (14 of 14). Both critical write workflows observed live, not merely documented: `POST /users/me/meetings` → HTTP 201, meeting id `86806188345`, `status: \"waiting\"`, `host_email: wolf@croskeyrealestate.com`; `PATCH /meetings/86806188345` → HTTP 204 with read-back confirming `topic: \"APITEST-DELETE updated\"`, then restored. User, registrant, chat, recording and settings writes documented [`docs/api/users.md` \"Create users\" / \"Delete a user\"; `docs/api/meetings.md` \"Create a meeting registrant\"]."
+   },
+   {
+    "id": "C1.3",
+    "cat": 1,
+    "title": "Delete or lifecycle actions",
+    "mark": "yes",
+    "why": "weighted coverage = 100% (13 of 13; no critical lifecycle action absent). Observed live: `DELETE /meetings/86806188345` → HTTP 204, re-read → HTTP 404 `code: 3001` \"Meeting does not exist\". Remaining actions documented [`docs/api/meetings.md`: \"Update meeting status\", \"Delete meeting or webinar recordings\", \"Update registrant's status\"; `docs/api/users.md`: \"Delete a user\"]."
+   },
+   {
+    "id": "C1.4",
+    "cat": 1,
+    "title": "Change notification",
+    "mark": "yes",
+    "why": "documented webhooks cover well above 0.85 weighted of critical-plus-important state changes. `docs/api/meetings/events.md` alone defines 105 events, including `meeting.created`, `meeting.updated`, `meeting.deleted`, `meeting.participant_joined`, `meeting.participant_left`, `recording.completed`, `meeting.registration_approved` / `_denied`. Event catalogs exist for ~25 further API groups (`.well-known/api-catalog.json` `/events` anchors), and WebSockets are offered as an alternative transport [developers.zoom.us/docs/api/websockets]."
+   },
+   {
+    "id": "C2.1",
+    "cat": 2,
+    "title": "Modern API conventions",
+    "mark": "yes",
+    "why": "resource-oriented REST over HTTPS with standard verbs and JSON. Observed live: `GET`, `POST` (201), `PATCH` (204), `DELETE` (204) against `/users` and `/meetings/{id}` [base URL `https://api.zoom.us/v2/`, developers.zoom.us/docs/api/]."
+   },
+   {
+    "id": "C2.2",
+    "cat": 2,
+    "title": "Consistent typing",
+    "mark": "partial",
+    "why": "Limitation: numeric values are inconsistently typed as integers in some places and digit-strings in others — within a single object, and for the same domain concept across two endpoints. Observed live in one `GET /users` record: `\"type\": 2` and `\"verified\": 1` are integers while `\"role_id\": \"2\"` is a string. The clearest case is a phone extension: `GET /phone/users` returns `\"extension_number\": 419` as an integer, while `GET /phone/call_history` returns the same concept as `\"callee_ext_number\": \"400\"` and `\"caller_ext_number\": \"402\"` — strings — so a consumer joining call history to phone users must coerce types across the join. `\"caller_country_code\": \"1\"` is likewise a digit-string. Documented in the reference: `settings.recurrence.weekly_days` is `string` `\"1\"`–`\"7\"` while `recurrence.type` alongside it is `integer`; Cloud Recording `type` is `string` `\"1\"`–`\"99\"` while Meetings `type` is `integer`. Counter-evidence recorded: the Phone `users`, `numbers` and `devices` records are cleanly typed with no digit-strings, and `call_id` is correctly a string (it exceeds int64-safe range) — so this is genuine cross-endpoint variance, not a uniform house style. [live `GET /users`, `/phone/users`, `/phone/call_history`, 2026-09-08; `docs/api/meetings.md` \"Create a meeting\" request body]"
+   },
+   {
+    "id": "C2.3",
+    "cat": 2,
+    "title": "Structured errors",
+    "mark": "partial",
+    "why": "Limitation: the error body is well-formed, but the machine code is not stable across endpoints, the body shape varies, HTTP status semantics are not consistently correct, and invalid input is silently accepted. Every genuine failure does return a populated numeric `code` plus a human message — observed live: `404 code 1001` \"User does not exist\", `404 code 2300` \"This API endpoint is not recognized\", `400 code 300` \"The next page token is invalid or expired\", `404 code 3001` \"Meeting does not exist\", `404 code 2030` \"Device does not exist\". Against that, three concrete defects:"
+   },
+   {
+    "id": "C2.4",
+    "cat": 2,
+    "title": "Duplicate prevention",
+    "mark": "no",
+    "why": "no idempotency key, natural-idempotency guarantee, unique request identifier, or equivalent mechanism is documented anywhere: zero occurrences of \"idempoten\" across the Meetings, Phone, Users and Accounts corpora (4.7 MB), and none in the guides after the controlled verification pass. Confirmed live: three identical `POST /users/me/meetings` calls with identical bodies produced three distinct meetings — ids `86806188345`, `81344794266`, `83226566052`. A retried scheduling call duplicates the meeting."
+   },
+   {
+    "id": "C2.5",
+    "cat": 2,
+    "title": "Graceful handling under load",
+    "mark": "partial",
+    "why": "Limitation: 429 is documented with numeric per-plan quotas (\"When you exceed a rate limit, the API request will fail and return a HTTP 429 status code\"; Free 4/2/1 per second, Pro 30/20/10, Business+ 80/60/40, plus daily caps), but no `Retry-After` header is documented, none was observed on live responses, and the recovery guidance is qualitative — \"implement a wait before retrying\", with exponential backoff and jitter advised for 5xx rather than for 429. Responses do carry `x-ratelimit-category` (observed: `Light`, `Medium`) but no `x-ratelimit-remaining` or `x-ratelimit-limit`. [developers.zoom.us/docs/api/rate-limits/; live header capture, 2026-09-08]"
+   },
+   {
+    "id": "C2.6",
+    "cat": 2,
+    "title": "Pagination for large collections",
+    "mark": "partial",
+    "why": "Limitation: traversal works reliably, but no ordering guarantee is documented and the total/next signals are not uniformly present across endpoints. Documented: `next_page_token`, `page_size`, `page_count`, `total_records`, with `page_number` being phased out. Verified live on two independent collections: a complete traversal of `/users` at `page_size=1` returned all 10 records across 10 pages, and `/phone/users` at `page_size=2` returned all 9 records — both with zero duplicates, an empty `next_page_token` on the final page, and an identical record sequence across two independent full traversals. Against that: the pagination page documents neither a stable-ordering guarantee nor token expiry; the documented `page_size` ceiling (\"Up to 300 items per page\") did not match live behaviour, which accepted and echoed `page_size: 2000`; and the signal set is inconsistent across endpoints — measured live, `/phone/users`, `/phone/numbers`, `/phone/devices` and `/phone/recordings` return `total_records` but no `page_count`; `/phone/call_history` returns both; and `/phone/common_areas` returns neither, offering only `next_page_token`. A generic sync client cannot rely on a total-count signal being present. [developers.zoom.us/docs/api/pagination/; live traversals and signal survey, 2026-09-08]"
+   },
+   {
+    "id": "C2.7",
+    "cat": 2,
+    "title": "Bulk or incremental export",
+    "mark": "partial",
+    "why": "Limitation: incremental sync is possible on standard list endpoints, but there is no dedicated bulk or export path. Verified live: `GET /users/me/recordings?from=2026-01-01&to=2026-09-08` honoured the date range and reported `total_records: 33`; `?status=active` vs `?status=inactive` returned 10 vs 0, confirming filters are applied. No async export job or bulk-read endpoint exists; the batch operations present are writes (`Batch add users`, `Bulk update features for users`, `Perform batch registration`), not exports. A full dataset is therefore assembled by paging list endpoints, not by requesting an extract."
+   },
+   {
+    "id": "C2.8",
+    "cat": 2,
+    "title": "Webhook security and delivery reliability",
+    "mark": "yes",
+    "why": "documentation-graded (step 8 not run; disclosed). All three elements are documented: signed payloads — \"Zoom uses the value of the secret token to hash the webhook data, which it sends in the `x-zm-signature` webhook request header\", HMAC SHA-256 over `v0:{timestamp}:{body}` with a CRC URL-validation challenge; a documented retry policy — first retry at 5 minutes, second at 20 minutes, third at 60 minutes, then no further delivery; and consumer replay/idempotency guidance — a unique webhook request identifier that \"remains unchanged across retry attempts\" together with a retry-attempt count where `0` denotes the initial send. [developers.zoom.us/docs/api/webhooks/]"
+   },
+   {
+    "id": "C2.9",
+    "cat": 2,
+    "title": "Concurrency and conflict control",
+    "mark": "no",
+    "why": "neither optimistic concurrency nor documented conflict semantics exist. Zero occurrences of `ETag`, `If-Match`, `409`, \"optimistic\", or a version field across the Meetings, Phone, Users and Accounts corpora, and none in the guides after the controlled verification pass. No `ETag` header was returned on any live response. Concurrent writers to the same meeting will silently overwrite one another."
+   },
+   {
+    "id": "C2.10",
+    "cat": 2,
+    "title": "Versioning and backward compatibility",
+    "mark": "partial",
+    "why": "Limitation: the version identifier exists but the compatibility policy is informal. An explicit path version is present (`/v2`), the lifecycle page defines Initial Release → Deprecation → Sunset and states that deprecation notices \"often include\" migration paths and timelines, and the changelog tags entries \"Breaking change\". But no policy defines what counts as breaking versus non-breaking, and no committed deprecation window is published — observed notice periods vary from 3 months (SDK minimum versions) to 6 months (pagination migration) to 12 months (endpoint removal). [developers.zoom.us/docs/build/lifecycle/; developers.zoom.us/changelog/]"
+   },
+   {
+    "id": "C2.11",
+    "cat": 2,
+    "title": "Request traceability",
+    "mark": "partial",
+    "why": "Limitation: the identifier is present but undocumented as a response header and not evidenced as usable with support. Every live response carried `x-zm-trackingid` (e.g. `v=2.0;clid=us02;rid=WEB_8c8075a650a75f4249f4820ac0f1834b`), including on error responses. However the controlled verification pass established that Zoom documents `x-zm-trackingid` only as a header on inbound webhook requests, not as an API response header, and no first-party source documents quoting it to Zoom support. [live header capture on all calls, 2026-09-08; developers.zoom.us/docs/api/webhooks/]"
+   },
+   {
+    "id": "C2.12",
+    "cat": 2,
+    "title": "Service availability and status transparency",
+    "mark": "partial",
+    "why": "Limitation: incident history is published, uptime and SLA are not. A public status page exists with per-component status and an \"Incident History\" archive covering dated past incidents. It publishes no uptime percentage and no SLA metric, and no SLA was evidenced outside a contract. [https://www.zoomstatus.com/, reached via a 302 from https://status.zoom.us/]"
+   },
+   {
+    "id": "C3.1",
+    "cat": 3,
+    "title": "Read-only credentials",
+    "mark": "yes",
+    "why": "the scope system separates read from write at the individual operation level, so an app can be granted read scopes only. Observed live: the issued token's 92 scopes are discretely typed, e.g. `meeting:read:meeting:admin` alongside `meeting:write:meeting:admin`, and `user:read:user:admin` with no corresponding user-write scope granted. [live token introspection, 2026-09-08]"
+   },
+   {
+    "id": "C3.2",
+    "cat": 3,
+    "title": "Scoped credentials",
+    "mark": "yes",
+    "why": "fine-grained resource and action scoping, not merely role-based, and demonstrated by a controlled before/after. Scopes take the form `{product}:{action}:{resource}:{admin}` (e.g. `cloud_recording:read:meeting_transcript:admin`, `meeting:delete:registrant:admin`, `phone:delete:call_recording:admin`). Enforcement verified live rather than assumed: with the initial 92-scope grant, `GET /phone/users` was refused with HTTP 400 `code 104` — \"Invalid access token, does not contain scopes:[phone:read:list_users:admin]\" — while the same token succeeded on meeting and user endpoints. After the operator added Phone permissions the same credential returned 497 scopes (405 of them Phone) and the identical call succeeded with HTTP 200. The granularity is unusually fine: Zoom Phone alone decomposes into 405 separately grantable scopes, so a credential can be confined to, say, reading call logs without touching call queues, devices, or recordings. [developers.zoom.us/docs/integrations/oauth-scopes-overview/; live token introspection before and after the grant change, 2026-09-08]"
+   },
+   {
+    "id": "C3.3",
+    "cat": 3,
+    "title": "Multiple keys",
+    "mark": "yes",
+    "why": "multiple Server-to-Server OAuth apps may be created per account, and Zoom recommends exactly that: a unique server-to-server OAuth app per service, in order to isolate permissions, usage and logs. [developers.zoom.us/docs/internal-apps/s2s-oauth/]"
+   },
+   {
+    "id": "C3.4",
+    "cat": 3,
+    "title": "Rotation and revocation",
+    "mark": "yes",
+    "why": "self-serve, with a safe overlap and an immediate-revocation path. \"Your current secret will continue to work for 30 days after a new secret is generated\"; \"To revoke the old secret immediately, use the rotate client secret API endpoint.\" Deactivation invalidates issued tokens — verified live and unintentionally: before the app was activated, the token request was refused with `invalid_client` / \"The app has been disabled by the developer\", and the identical request succeeded immediately after activation, demonstrating that the enable/disable control is both self-serve and effective. [developers.zoom.us/docs/build-flow/basic-info/app-credentials/; live, 2026-09-08]"
+   },
+   {
+    "id": "C3.5",
+    "cat": 3,
+    "title": "Test and production isolation",
+    "mark": "na",
+    "why": "no sandbox or separate test environment for the REST API was evidenced after initial discovery and the controlled verification pass. The check is excluded from the math per its own definition. (This absence is not free: it is why the write-path testing in this run had to be conducted against live production data under the controlled-live protocol.)"
+   },
+   {
+    "id": "C4.1",
+    "cat": 4,
+    "title": "Complete self-serve reference",
+    "mark": "yes",
+    "why": "complete, public, no login, and example-rich. Every operation carries method, path, tags, prerequisites, required scopes, rate-limit label, a fully expanded request-body schema with types, enums, defaults and per-field descriptions, and response schemas per status code. Worked JSON payload examples are present — 181 example blocks in the Meetings corpus alone. Authentication is documented separately and completely. Nothing in this evaluation required reverse-engineering. [developers.zoom.us/docs/api/meetings.md; developers.zoom.us/docs/internal-apps/s2s-oauth/]"
+   },
+   {
+    "id": "C4.2",
+    "cat": 4,
+    "title": "Reliable machine-consumable integration path",
+    "mark": "yes",
+    "why": "via an operations-capable MCP server, verified live with our own credential rather than inferred from the server card. `POST https://mcp.zoom.us/mcp/zoom/streamable` `initialize` returned `serverInfo: mcp-gateway`, protocol `2025-06-18`, `capabilities.tools`; `tools/list` returned 20 tools including `meeting_create`, `meeting_update`, `meeting_delete`, `in_meeting_control`, `recordings_list`, `get_meeting_assets`, `search_meetings`. Three sibling servers responded the same way: Team Chat 20 tools (`zoom_chat_message_send`, `zoom_chat_channel_create`, …), Docs 32 tools, Whiteboard. These are core operations, not documentation search. Noted, not additionally credited: no downloadable OpenAPI/Swagger file was located — the catalog's `service-desc` links point to `text/html`, and guessed spec paths returned 404 — and Zoom's official SDKs are client-side Meeting/Video SDKs rather than REST wrappers. One strong mechanism is sufficient. [.well-known/mcp/server-card.json; live MCP probe, 2026-09-08]"
+   },
+   {
+    "id": "C4.3",
+    "cat": 4,
+    "title": "AI-readable documentation",
+    "mark": "yes",
+    "why": "comprehensively, and by deliberate design. `llms.txt` is published at the docs root; it points to an RFC 9727 `.well-known/api-catalog.json` linkset with 64 entries, each exposing a `text/markdown` `service-doc` twin of the HTML reference. Those corpora are complete rather than index-only: Meetings 988 KB / 186 operations, Phone 2.0 MB / 397 operations, Chat 375 KB / 111 operations, and each declares its origin (`OpenAPI Version: 3.1.1`, `API Version: 2`) and carries full schemas and examples. This is a first-party, machine-retrievable representation of the entire API. [developers.zoom.us/llms.txt; .well-known/api-catalog.json; docs/api/*.md]"
+   },
+   {
+    "id": "C4.4",
+    "cat": 4,
+    "title": "Kept current",
+    "mark": "yes",
+    "why": "a dated, tagged, per-product changelog with 102 pages of history and a weekly cadence. Entries verified on the rendered page: 2026-09-27 (RTMS, tagged Breaking change), 2026-09-03 (Phone), 2026-08-31 (Canvas, Cobrowse SDK, My Notes, Phone), 2026-08-24 (eight products), 2026-08-20, 2026-08-18, 2026-08-17. Entries are typed (`API release`, `SDK version`, `New feature`, `Breaking change`) and an RSS feed is offered. [developers.zoom.us/changelog/, rendered 2026-09-08]"
+   },
+   {
+    "id": "C5.1",
+    "cat": 5,
+    "title": "Self-serve API key",
+    "mark": "yes",
+    "why": "credential creation is entirely self-serve. Observed directly in this session: the operator created a Server-to-Server OAuth app in the Zoom App Marketplace, selected scopes, activated it, and produced working credentials with no sales call, no support ticket, and no key-approval step; the token request then succeeded on first attempt. Activation is a self-serve toggle in the same interface, evidenced by the app moving from `invalid_client` / \"disabled by the developer\" to issuing tokens within the session. [developers.zoom.us/docs/internal-apps/s2s-oauth/; live, 2026-09-08]"
+   },
+   {
+    "id": "C5.3",
+    "cat": 5,
+    "title": "Not commercially gated",
+    "mark": "partial",
+    "why": "Limitation: API access itself is not premium-gated, but a large share of meaningful capability is tier- or licence-gated. Not gated: the rate-limit table publishes explicit per-second and daily quotas for Free accounts, establishing that the API is usable without a paid plan. Gated: Webinar endpoints require \"Pro or a higher plan with Webinar add-on enabled\"; Zoom Phone endpoints require an assigned \"Zoom Phone license\"; cloud-recording endpoints require Cloud Recording enabled, which is a paid feature; Department Billing endpoints require \"Pro or a higher account with Department Billing option enabled\". Plan- or licence-prerequisite language appears on 102 lines of the Meetings corpus, 106 of Phone and 58 of Accounts. A free account gets a real API; it does not get recordings, webinars, or telephony through it. [developers.zoom.us/docs/api/rate-limits/; docs/api/{meetings,phone,accounts}.md]"
+   }
+  ]
  }
 }

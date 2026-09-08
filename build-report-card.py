@@ -61,7 +61,7 @@ CATEGORIES = [
     ("accounting",   "Corporate Accounting",
         ["Xero", "QuickBooks Online"]),
     ("phone",        "Phone",
-        ["RingCentral", "SimpleVOIP", "Zoom Phone", "Quo", "JustCall"]),
+        ["RingCentral", "SimpleVOIP", "Zoom", "Quo", "JustCall"]),
 ]
 
 # Platforms with no API to grade at all. The row says so across the score columns
@@ -1310,6 +1310,134 @@ RESULTS = {
             "communications layer of a property management stack, and you would "
             "still run a separate PMS, accounting system and trust accounting "
             "alongside it.",
+},
+
+"Zoom": {
+  "score": 83, "grade": "B",
+  "meta": {"run": "Sep 8, 2026", "method": "1.1", "model": "Claude Opus 5",
+           "tier": "Baseline verified", "raw": "41.25 / 50"},
+  # Listed on the board as "Zoom Phone" before this run. The report grades the
+  # whole Zoom REST API v2, not the Phone product, and states that all Phone
+  # testing was read-only. Publishing it under the old name would have said the
+  # Phone API scored 83 when that is not what was measured.
+  "note": "Graded as the Zoom REST API v2 as a whole, not as the Phone product "
+          "alone, which is why this row is named Zoom rather than Zoom Phone. "
+          "The run is honest about how much of that surface it actually touched. "
+          "Live observation covers Meetings, Users, Cloud Recording and Zoom "
+          "Phone; Team Chat, Rooms, Calendar, Whiteboard, Contact Center "
+          "operations, Mail, Events and the remaining catalog groups are graded "
+          "from documentation. All Phone testing was read-only, with no Phone "
+          "write, update or delete performed, even after the credential was "
+          "expanded to 497 scopes including destructive ones, because call logs "
+          "and recordings are business records and call-queue and device objects "
+          "affect live call routing. One battery step was not run: registering a "
+          "webhook and observing signed delivery needs an HTTPS receiver the "
+          "operator controls, so webhook security is documentation-graded. The "
+          "report records no unresolved disagreements but flags one close call "
+          "that moves the letter. Structured errors were marked partial; a "
+          "second evaluator applying the check's literal wording could "
+          "reasonably mark it no, which would give 82 and a B minus. The "
+          "published mark holds partial, and the evidence for both readings is "
+          "set out in the report so a re-grader can decide without re-running "
+          "anything.",
+  "cats": [
+    (15.0, 15, "Within Zoom's own domain there is essentially nothing you can do "
+               "in the web interface that you cannot also do through the API. You "
+               "can schedule meetings, change them, cancel them, pull the "
+               "attendance list, and fetch the recording and transcript. The "
+               "create, update and delete path was confirmed working on a live "
+               "account rather than just claimed in a manual. Change notification "
+               "is excellent: the meetings event catalogue alone defines 105 "
+               "events, so you can be pushed an event the moment a meeting ends "
+               "or a recording finishes instead of polling for it."),
+    (5.0, 10, "This is where Zoom's API costs you engineering time, and the two "
+              "hard failures matter in opposite ways. There is no idempotency, "
+              "proven by sending the same schedule-a-meeting call three times and "
+              "getting three separate meetings, so any automation that retries "
+              "after a timeout must track what it already created or it will "
+              "litter your calendar with duplicates. And there is no concurrency "
+              "control, so if two automations edit the same meeting the later one "
+              "silently wins with no conflict raised. Add a habit of accepting "
+              "bad input with a 200, where a mistyped filter value returns a "
+              "normal-looking result set rather than an error, and bugs in your "
+              "code surface as quietly wrong data rather than loud failures. None "
+              "of it is fatal. All of it means more defensive code than a "
+              "top-tier API would need."),
+    (5, 5, "The strongest part of the API, and exactly the part that matters for "
+           "handing work to an AI agent. You can mint a credential that reads "
+           "meetings but cannot touch phone, cannot delete users and cannot see "
+           "recordings, and Zoom enforces it, which the run confirmed by watching "
+           "a call get refused for a missing scope and then succeed once the "
+           "scope was granted. The granularity is unusual: Zoom Phone alone "
+           "decomposes into 405 separately grantable scopes. You can issue a "
+           "separate key per integration and kill any one of them yourself in "
+           "seconds. The one gap is that there is no sandbox, which is why the "
+           "write testing here had to run against live production data under a "
+           "controlled protocol."),
+    (5, 5, "An AI coding tool can build against this without you babysitting it. "
+           "Zoom publishes a machine-readable Markdown copy of its entire "
+           "reference, every endpoint, every field, every example, and an "
+           "llms.txt index pointing at it, which is exactly what a coding agent "
+           "needs to stop guessing. It also runs its own MCP servers that create, "
+           "update and delete meetings directly, verified live rather than "
+           "inferred from a server card. The changelog runs to 102 pages on a "
+           "weekly cadence with breaking changes tagged as such."),
+    (11.3, 15, "You can be building today, with no gatekeeper and no procurement "
+               "call: the operator created a server-to-server app, picked scopes "
+               "and had working credentials inside the session. The catch is not "
+               "the API, it is the licence behind it. The endpoints a property "
+               "manager would want most, cloud recordings and their transcripts, "
+               "return nothing unless you are paying for cloud recording, and "
+               "Phone endpoints do nothing without Phone licences assigned. "
+               "Webinar endpoints need Pro or higher with the add-on. Check what "
+               "you are licensed for before you scope a build."),
+  ],
+  "strengths": [
+    "Everything the product does, the API does: create, update, delete and read confirmed on a live account",
+    "105 documented meeting events, so you are pushed changes rather than polling for them",
+    "Scopes that separate read from write per operation, and are actually enforced",
+    "Unusually fine granularity: Zoom Phone alone is 405 separately grantable scopes",
+    "A machine-readable Markdown twin of the entire reference, indexed by llms.txt",
+    "First-party MCP servers that create, update and delete meetings, probed live",
+    "Self-serve credentials with 30-day secret overlap and an immediate-revocation endpoint",
+    "A 102-page changelog on a weekly cadence, with breaking changes tagged",
+  ],
+  "watch": [
+    "No idempotency: three identical scheduling calls produced three separate meetings",
+    "No concurrency control, so two automations editing one meeting silently overwrite each other",
+    "Invalid input is accepted with a 200 on five endpoints, including a malformed date filter",
+    "The machine error code is not stable: one endpoint returns the HTTP status echoed back",
+    "No Retry-After header on rate limiting, and no remaining or limit headers",
+    "Pagination signals vary by endpoint, and one returns neither a total nor a page count",
+    "No published uptime percentage or SLA, only an incident history",
+    "No sandbox, so testing happens against live production data",
+    "Cloud recordings, transcripts, webinars and Phone all need the right paid licence",
+    "The request id on every response is undocumented as a response header",
+  ],
+  "bottom": "Zoom's API is a solid, genuinely buildable B, and its strengths sit "
+            "exactly where an operator automating with AI would want them: you "
+            "can create a scoped, read-only key in minutes without talking to "
+            "anyone, Zoom enforces those scopes properly, and the entire "
+            "reference is published in a machine-readable form an AI coding tool "
+            "can consume without guessing. Zoom even runs its own MCP servers "
+            "that create and update meetings directly. Everything the product "
+            "does, the API does too. What holds it to a B is production plumbing "
+            "rather than features. There is no idempotency, proven by sending the "
+            "identical scheduling request three times and getting three meetings, "
+            "and no concurrency control, so retry-safe multi-writer automation is "
+            "your job rather than Zoom's. The API also tends to accept bad input "
+            "with a cheerful 200 instead of an error, which turns your bugs into "
+            "quietly wrong data. Budget for defensive code and a record of what "
+            "you have already created. The more important caveat is fit rather "
+            "than quality. Zoom is general-purpose, not a property management "
+            "system, and nothing in its 64 API groups knows what a property, "
+            "unit, lease, tenant or owner is. It is not a bank, holds no client "
+            "funds, and documents no trust, security-deposit or escrow workflow, "
+            "so a high API score here says nothing about its suitability for any "
+            "of that. Its real role is the conversation layer: owner calls, "
+            "tenant meetings and recorded walkthroughs, with the attendance "
+            "record and transcript pulled out automatically and filed against the "
+            "right property in the PMS or CRM you still need alongside it.",
 },
 
 "Rentvine": {
@@ -2615,7 +2743,10 @@ def build_pending_page(co, cat_heading):
 
 # Pages for platforms that have left the board under an old name. They are hand
 # written redirects, not generated, and must never be clobbered by a build.
-KEEP_AS_IS = {"api-grader-openphone.html"}   # OpenPhone -> Quo, Sept 2026
+KEEP_AS_IS = {
+    "api-grader-openphone.html",   # OpenPhone -> Quo, Sept 2026
+    "api-grader-zoom-phone.html",  # "Zoom Phone" -> "Zoom", Sept 2026
+}
 
 
 def build_subpages(checks_data):
