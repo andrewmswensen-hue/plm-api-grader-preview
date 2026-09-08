@@ -1808,6 +1808,207 @@
    }
   ]
  },
+ "Rent Manager": {
+  "source": "rent-manager-2026-09-07.md",
+  "meta": {
+   "tier": "Baseline verified",
+   "battery": "steps 1–5 complete. Step 6 (create/update) not run — operator declined live-data writes. Step 7 (idempotency) not run — the API documents no idempotency mechanism, and no write was authorized. Step 8 (webhooks) not run — no write authorized, and the read-only credential lacks the Manage Webhooks privilege.",
+   "date": "2026-09-06 / 2026-09-07 (live observations 2026-09-06 21:01–21:40 UTC; login-gated reference obtained 2026-09-07)",
+   "model": "claude-opus-5 (the model serving this session may differ)",
+   "coverage": "96.3% — 26 of 27 applicable checks verified (C2.12 unverified); lowest category coverage 91.7%, above the 0.70 floor; no category Unable to verify; gate satisfied (overall ≥ 80%)"
+  },
+  "checks": [
+   {
+    "id": "C1.1",
+    "cat": 1,
+    "title": "Object coverage",
+    "mark": "yes",
+    "why": "weighted coverage = 100% (38 / 38). All seven critical objects present with operations. Live: `/Properties` 334, `/Units` 445, `/Leases` 790, `/Tenants` 745, `/Charges` 20,917, `/Payments` 17,493, `/GLAccounts` 521, `/Journals` 1,995, `/Owners` 380, `/Bills` 12,992, `/ServiceManagerIssues` 5,345, `/Prospects` 1,025, `/UserDefinedFields` 261, `/InventoryItems` 41 — all HTTP 200 with `x-total-results`, 2026-09-06. `Banks` returned 204/0 and `Reconciliations` 403 under this deliberately read-only, location-scoped user; both appear in the 369-resource index and are scored present, not absent. Files raised to 1.0 in F2 on `Properties/PropertyFiles`, `Properties/PropertyFileFolders`, `Bills/Attachments`, `Bills/UploadAttachment`, `Journals/Attachments`, `Units/Images`."
+   },
+   {
+    "id": "C1.2",
+    "cat": 1,
+    "title": "Core operational actions",
+    "mark": "yes",
+    "why": "weighted coverage = 100% (38 / 38). Documentation-graded. Confirmed per-resource in F2: all twelve core resources — Charges, Payments, Journals, Leases, Tenants, Properties, Units, Owners, Bills, ServiceManagerIssues, Banks, GLAccounts — expose the identical five methods `Retrieve/Collection`, `Retrieve/Instance`, `Save`, `Delete/Collection`, `Delete/Instance` (`/Help/Resource/{Resource}`, 2026-09-07). `/Help/Method/WebhookDetails/Save` shows the request contract: `POST {Resource}` with an `items` list of the resource's model. Corroborated by the Overview: POST to a collection resource \"Creates or Updates entities\". No write was executed — operator authorized read-path only."
+   },
+   {
+    "id": "C1.3",
+    "cat": 1,
+    "title": "Delete or lifecycle actions",
+    "mark": "yes",
+    "why": "weighted coverage = 100% (16 / 16). Documentation-graded. `Delete/Collection` and `Delete/Instance` on all twelve core resources. Lifecycle actions as named subresources: `Leases/LeaseRenew`; `ServiceManagerIssues/Advance` and `/Status`; `Tenants/TransferTenant`, `/Evictions`, `/RefundSecurityDeposit`. Void and reversal — raised to 1.0 in F2 — are explicit: `Charges/ConvertChargeToCredit`, `Payments/PaymentReversal`, `Journals/ReverseJournal`, `Journals/RemoveJournalReversal`, `Bills/Reversal`, `Tenants/CreditReversals`, `Properties/RollbackLastManagementFeePosting`. Move-out via LeaseModel `MoveOutDate`/`NoticeDate`/`IsMoveOutConfirmed`; archive via `IsActive` (live)."
+   },
+   {
+    "id": "C1.4",
+    "cat": 1,
+    "title": "Change notification",
+    "mark": "partial",
+    "why": "Webhooks exist but their event coverage cannot be established, so credit rests on the polling limb of the rubric. `WebhookDetails` is a real resource with `WebhookEventType` and `URL` fields, and `/Help/Method/WebhookDetails/Save` documents registration. But `/Help/Model/eWebhookEventType/…` returns Not Found in both the Retrieve-Collection and Save contexts, and the live Overview's complete 16-topic index contains no webhooks section — the event catalogue is undocumented, so no weighted event coverage can be computed. Efficient incremental polling is verified live: `GET /Tenants?filters=UpdateDate,gt,2026-01-01` returned `x-total-results: 214` against an unfiltered 745 — the filter is honoured. Combined with `pagesize=5000` (observed) this detects critical state changes reliably."
+   },
+   {
+    "id": "C2.1",
+    "cat": 2,
+    "title": "Modern API conventions",
+    "mark": "yes",
+    "why": "Resource-oriented REST over HTTPS/JSON, standard collection and instance URLs, conventional status codes. Overview PDF, \"Resources\" and \"HTTP Response Codes\"; verified live across 27 resources. Only GET, POST and DELETE are used — POST serves both create and update — which is a common and interoperable modern pattern rather than a defect."
+   },
+   {
+    "id": "C2.2",
+    "cat": 2,
+    "title": "Consistent typing",
+    "mark": "partial",
+    "why": "Limitation: primary-key identifiers are numeric on core resources but strings on others. Live 2026-09-06: `/Properties` returned `\"PropertyID\":854`, `/Tenants` `\"TenantID\":920` (numbers), while `/Reports` returned `\"ReportID\":\"1\"` and `/SystemPreferences` `\"PreferenceID\":\"1\"` (strings). Booleans and numbers are otherwise consistent across all core resources and live reads matched the published models. The inconsistency is confined to non-core resources, hence partial rather than no. Separately, the published schema declares `UnitID` as `Int32` while every other integer is `Integer` — cosmetic, same underlying type."
+   },
+   {
+    "id": "C2.3",
+    "cat": 2,
+    "title": "Structured errors",
+    "mark": "partial",
+    "why": "Limitation: four distinct error shapes, no stable API-specific machine code, and incorrect status semantics in several places. Live: (1) ErrorModel `{DeveloperMessage, UserMessage, ErrorCode, Exception, MoreInfoUri}` on 401/403/500; (2) bare `{\"Message\":\"No HTTP resource was found…\"}` on an unknown route; (3) `{Message, ModelState}` on a bad filter; (4) empty body on `GET /Properties/99999999`, contradicting the Overview's \"All 400 codes should return an ErrorModel object\". `ErrorCode` is a .NET HRESULT keyed to exception class (`-2146233088` System.Exception, `-2146232969` KeyNotFoundException), undocumented anywhere in the packet. Status semantics: a forced password reset returned 500; insufficient privileges returned 403 on `/Reconciliations` but 500 on `/WebhookDetails`; an invalid `orderingOptions` value returned 404. The ErrorModel's `DeveloperMessage` is genuinely actionable, which is what keeps this at partial."
+   },
+   {
+    "id": "C2.4",
+    "cat": 2,
+    "title": "Duplicate prevention",
+    "mark": "no",
+    "why": "Documentation-graded. Reconciled from `partial` after runs 2 and 3 independently marked `no`. The Overview's 409 clause (\"For Create requests this indicates that a record with the same parameters already exists and duplicates are not allowed\") describes a database uniqueness constraint, not an idempotency mechanism: it offers nothing for the writes that matter operationally, since posting the same charge or payment twice is legitimate and no uniqueness constraint guards it. A full-text search of the live Overview across all 16 topics returns ABSENT for \"idempot\". No idempotency key, request identifier, or equivalent exists anywhere in the first-party materials, so a consequential write retried after a network timeout can duplicate."
+   },
+   {
+    "id": "C2.5",
+    "cat": 2,
+    "title": "Graceful handling under load",
+    "mark": "yes",
+    "why": "429 is documented and every response carries machine-readable numeric backoff data. Overview PDF, \"429 – Too Many Requests\"; live: every response carried `x-ratelimit-limit: 500`, `x-ratelimit-remaining`, `x-ratelimit-reset` (Unix timestamp) and `x-ratelimit-resettime` (HTTP date, consistently exactly 60 s after the request). No 429 was induced — the limit is shared per company with the operator's live integrations. The published limit values are wrong (see C4.4); the mechanism itself is sound."
+   },
+   {
+    "id": "C2.6",
+    "cat": 2,
+    "title": "Pagination for large collections",
+    "mark": "partial",
+    "why": "Limitation: no stable ordering guarantee, and none of the three documented sort parameters works. Strengths, verified live: `Link` header carrying `first`/`previous`/`next`/`last`, plus `x-total-results` and `x-results`; traversed `/Tenants` at 249 pages and `/Charges` at 20,917 records; `pagesize=5000` returned 5,000 rows. Failures, all tested live: (1) `orderby` (Overview) — accepted and silently ignored; six spellings including `orderby=NotAField` all returned HTTP 200 with identical default order, on both `/Tenants` and `/Properties`. (2) `orderingOptions` (the per-resource URL template) — HTTP 404 `KeyNotFoundException` for all 13 value formats tested, including valid field names. (3) `Orderings` (documented in `/Help/Model/TenantOrderingOptions/…` with the worked example `?Orderings=TenantName` and permitted values `LastFirst` and `TenantName`) — the vendor's own example value returned HTTP 200 with the identical default order. Most resources define no ordering at all: `/Help/Model/{Lease,Property,Charge,ServiceManagerIssue,WebhookDetail}OrderingOptions/…` each state \"This endpoint has no available Ordering Options.\" No default ordering guarantee is documented anywhere."
+   },
+   {
+    "id": "C2.7",
+    "cat": 2,
+    "title": "Bulk or incremental export",
+    "mark": "partial",
+    "why": "Limitation: no dedicated bulk or async export path; extraction runs through standard list endpoints. Incremental sync verified live (`filters=UpdateDate,gt,…` honoured, 214 of 745). `pagesize=5000` returned 5,000 rows despite the Overview's stated 1,000 cap. A `Reports` resource with 319 reports exists and the QuickStart references report generation and download, but no export-job endpoint was evidenced in the packet."
+   },
+   {
+    "id": "C2.8",
+    "cat": 2,
+    "title": "Webhook security and delivery reliability",
+    "mark": "no",
+    "why": "`/Help/Method/WebhookDetails/Save` (2026-09-07) documents the complete registration contract — `POST WebhookDetails` with an `items` list of `WebhookDetailModel` — and the model contains exactly: `WebhookDetailID`, `WebhookEventType`, `URL`, `PartnerProductID`, `CreateDate`, `CreateUserID`, `UpdateDate`, `UpdateUserID`, `ConcurrencyID`, `CreateUser`, `UpdateUser`, `MetaTag`. There is no signing-secret field, no HMAC key, and no signature configuration of any kind in either the request or the response model, so a consumer cannot verify that a delivered payload genuinely originated from Rent Manager. On retries and replay: a full-text search of the live Overview across all 16 topics returns ABSENT for \"signature\", \"signing\", \"retry\" and \"webhook\" alike; webhooks are likewise unmentioned in the QuickStart and the public Technical Documentation. Neither limb of the check is satisfied. Not double-counted with C1.4, which scores detection of change; this scores the security and reliability of the push mechanism."
+   },
+   {
+    "id": "C2.9",
+    "cat": 2,
+    "title": "Concurrency and conflict control",
+    "mark": "yes",
+    "why": "Documentation-graded. Overview PDF, \"Concurrency\": enabled by default and \"Concurrency cannot currently be disabled\"; updates must carry the concurrency key. \"409 – Conflict\": \"for Update requests this indicates that a record was found but the concurrency information has changed … the client should request the latest version of the data, and attempt their update again.\" Version field confirmed in the live reference: `ConcurrencyID` carries the attribute \"Concurrency Key\" on WebhookDetailModel, and `ConcurrencyID` was observed live on `/Properties` and `/Journals`. Noted but not penalised here: the Overview names `UpdateDate` as the key while the reference names `ConcurrencyID`, and LeaseModel exposes neither attribute — that documentation conflict is scored in C4.1."
+   },
+   {
+    "id": "C2.10",
+    "cat": 2,
+    "title": "Versioning and backward compatibility",
+    "mark": "partial",
+    "why": "Limitation: the deprecation policy is informal and there is no client-selectable version. Overview PDF, \"Backwards Compatibility\", explicitly defines non-breaking changes (new resource, new data model, added field) versus breaking ones (renaming a resource, removing or renaming a field) — a real policy. \"Versioning\": a deprecated resource \"will respond with a custom header for a period of time before it is removed\", then 410 Gone. The header is never named and the period never specified. `x-api-version` is returned on every response (`12.2607.9741.10976`) but is informational only — a client cannot request a version."
+   },
+   {
+    "id": "C2.11",
+    "cat": 2,
+    "title": "Request traceability",
+    "mark": "no",
+    "why": "No request or correlation identifier appears on any response. The complete authenticated header set observed live is: `cache-control`, `content-length`, `content-type`, `date`, `expires`, `pragma`, `x-api-version`, `x-api-user`, and the five `x-ratelimit-` headers. No `x-request-id`, `x-correlation-id`, or `traceparent`. `x-api-user` echoes the username, not a per-request identifier. Confirmed in F2: a full-text search of the live Overview returns ABSENT for both \"correlation\" and \"request id\" — no alternative trace mechanism is documented.*"
+   },
+   {
+    "id": "C2.12",
+    "cat": 2,
+    "title": "Service availability and status transparency",
+    "mark": "unverified",
+    "why": "could not access — Corrected from `yes`. Run 1's original citation was not verified.** The F1 report cited `https://status.lcs.com/` and described its contents specifically (component-level status, incident history to 2026-08-23, 90-day uptime 100.0%). That page was never actually retrieved — the URL surfaced in a discovery search result and was carried into the manifest and the citation without being fetched. The described details were not observed. No status-page, uptime, incident-history or SLA evidence exists anywhere in packet F2 in either direction. Per Core rule 4, `no` requires that relevant first-party materials were accessible and checked; they were not. Marked `unverified`, excluded from the category score and retained in the coverage denominator."
+   },
+   {
+    "id": "C3.1",
+    "cat": 3,
+    "title": "Read-only credentials",
+    "mark": "yes",
+    "why": "RM12 Admin ▸ Setup ▸ Users, 2026-09-06: user `crane` has Read-Only and API Access both checked, Administrator unchecked. Verified live — the credential authenticated and performed reads throughout this run."
+   },
+   {
+    "id": "C3.2",
+    "cat": 3,
+    "title": "Scoped credentials",
+    "mark": "yes",
+    "why": "Fine-grained resource and action scoping. The user record carries per-Property and per-Property-Group selection, per-Location selection (`crane` is restricted to MBPM; CCPM and MBVR unchecked), a Banks/Credit Cards selection list, a Roles list, and a dedicated Privileges tab. Scoping confirmed live by observed enforcement: `/Reconciliations` → 403 \"Insufficient privileges to access some or any banks\"; `/WebhookDetails` → \"Required privilege: Manage Webhooks\"; `/Banks` → 0 records."
+   },
+   {
+    "id": "C3.3",
+    "cat": 3,
+    "title": "Multiple keys",
+    "mark": "yes",
+    "why": "36 users listed in the RM12 user manager, any of which can carry the API Access flag. Support email 2026-09-02 confirms additional dedicated integration users are the intended pattern and that \"Logging into the API does NOT take up a session.\" The operator already runs multiple integrations against this instance."
+   },
+   {
+    "id": "C3.4",
+    "cat": 3,
+    "title": "Rotation and revocation",
+    "mark": "yes",
+    "why": "Fully self-serve for a Rent Manager administrator. The same user screen exposes the password field, an Active checkbox, the API Access checkbox, and an Unlock User button. Overview PDF, \"Authentication Process\": \"A token is always invalidated if the pertinent information about the user changes, such as permissions or password\" — so a password change revokes live tokens immediately. Demonstrated in this run: a forced password reset invalidated the original credential until reset."
+   },
+   {
+    "id": "C3.5",
+    "cat": 3,
+    "title": "Test and production isolation",
+    "mark": "partial",
+    "why": "Limitation: a separate environment exists only as a paid additional production location, and no test/live credential distinction is a documented product feature. Support email 2026-09-02: \"You are always able to create a new database location for testing purposes … you would simply need to ensure that the user with API Access has access to that sandbox location. However, just be aware that there are monthly costs involved with adding a new location.\" Location-level isolation demonstrably works — `crane` is confined to MBPM and `LocationID` is a required authentication parameter — but this is the production authentication system partitioned by location, not an isolated sandbox."
+   },
+   {
+    "id": "C4.1",
+    "cat": 4,
+    "title": "Complete self-serve reference",
+    "mark": "partial",
+    "why": "Limitation: the reference is not publicly accessible; its own narrative layer is wrong about core parameters; and rate limiting is undocumented in it entirely. The reference sits behind a customer login at `<corpid>.api.rentmanager.com/Help` (verified: an API token does not open it — `GET /Help/Resource/Tenants` with a valid `X-RM12Api-ApiToken` redirects to `/Help/Login`). Behind that login the per-resource pages are genuinely good, and better than F1 could establish: URL templates, typed parameter tables, complete model property tables with attributes, per-operation `Save`/`Delete` pages, and `FilterFields` pages documenting the exact operator set available per field (`lt`, `le`, `gt`, `ge`, `ne`, `eq`, `in`, `ni`, `bt`, `ct`, `hv`, `ltn`, `len`, `gtn`, `gen`) with plain-language descriptions. Against that: the live Overview — not merely the 2015 PDF — still states \"All Data Models include the 'APIURI' field\" and gives the `?embed=Color` example, both false against the running build (`GET /Properties/854` returned 32 fields, none of them `ApiUri`; the singular `embed` returns an empty array). The live Overview documents `orderby` while the per-resource reference documents `orderingOptions` and `Orderings` — three mutually inconsistent names for one feature, none functional. Rate limiting is absent from the live reference altogether (\"rate limit\" and \"X-RateLimit\" both return ABSENT across all 16 Overview topics) even though the server enforces a 500-per-minute budget and returns five headers describing it. Sample response bodies are stubs (`[{\"LeaseID\":1,\"TenantID\":2}]`)."
+   },
+   {
+    "id": "C4.2",
+    "cat": 4,
+    "title": "Reliable machine-consumable integration path",
+    "mark": "partial",
+    "why": "Limitation: the only first-party artefact is a sample application covering a limited subset. The vendor's own API Download Resources page (`/Help/Download`, 2026-09-07) lists exactly two items: \"Quick Start Download\" and \"Overview Download\" — both PDFs. No OpenAPI or Swagger specification (the portal is ASP.NET Web API HelpPage, which emits none; `/swagger` and `/openapi.json` are not served). No official SDK, no Postman collection, no MCP server in any packet source. The QuickStart references a C# sample console application at `/content/quickstartapp/LCS.UI.API.QuickStart.Examples.zip`, described as giving \"a head start\" — a sample, not a maintained SDK. Third-party GitHub clients exist but are not first-party and are not credited."
+   },
+   {
+    "id": "C4.3",
+    "cat": 4,
+    "title": "AI-readable documentation",
+    "mark": "no",
+    "why": "No `llms.txt`, `llms-full.txt`, per-endpoint Markdown, or downloadable text/Markdown corpus is offered. The vendor's own downloads inventory enumerates two PDFs and nothing else. The reference itself is login-gated HTML whose content is hidden behind client-side collapse toggles, so it is unreachable to any retrieval tool that is not authenticated as a customer — the printed resource pages in this packet captured only collapsed shells, which is precisely that failure mode."
+   },
+   {
+    "id": "C4.4",
+    "cat": 4,
+    "title": "Kept current",
+    "mark": "partial",
+    "why": "Limitation: currency signals exist but demonstrably do not cover the API. LCS publishes recurring release-note recaps (`rentmanager.com/release-notes-may-july-2026/` and siblings back through 2024) — but the May–July 2026 edition contains no mention of the Web API, endpoints, or resources. The Overview PDF carries a 2015 copyright. Direct evidence of drift: the supplied documentation is build `12.2607.9741.11295` while the server reports `12.2607.9741.10976`, and the guides assert behaviours the running build contradicts (`ApiUri`, `embed`, `orderby`, 206 on pagination, a 1,000-row `pagesize` cap that was not enforced at 5,000). F2 established this is worse than stale downloads: the same errors are live on the documentation site today, so the narrative layer is not maintained against the code at all. Offsetting this, the per-resource reference is evidently generated from the running code — it correctly documents `embeds`, `ConcurrencyID`, and per-field filter operators — and deprecated filters carry deprecation dates. Graded on currency of change communication only; the versioning contract is scored in C2.10."
+   },
+   {
+    "id": "C5.1",
+    "cat": 5,
+    "title": "Self-serve API key",
+    "mark": "yes",
+    "why": "Once an account is entitled, credential creation is entirely self-serve: a Rent Manager administrator ticks API Access on a user in Admin ▸ Setup ▸ Users. Support email 2026-05-26: \"You just need to make sure you have 'API' access on your user. Go to Admin – Setup – Users … check the API Access box.\" No approval step, ticket, or key-request process. Demonstrated in this run — the operator created and enabled user `crane` unaided, and it authenticated live."
+   },
+   {
+    "id": "C5.3",
+    "cat": 5,
+    "title": "Not commercially gated",
+    "mark": "no",
+    "why": "QuickStart, \"Requirements\": \"You must purchase access to the RM API – contact your Sales Representative for pricing.\" API access is a separately purchased add-on, not an included capability, and it requires a sales conversation. The pricing page (`rentmanager.com/pricing/`) shows Basic, Plus and Premium bundles with no published figures and quote-gated access throughout. No first-party source states a price or indicates any tier includes API access. This is commercial gating, not identity or regulatory verification."
+   }
+  ]
+ },
  "RentEngine": {
   "source": "rentengine-2026-09-03.md",
   "meta": {

@@ -32,6 +32,7 @@ SOURCES = {
     "property-meld":     "property-meld-2026-09-01.md",
     "quickbooks-online": "quickbooks-online-2026-09-02.md",
     "rentengine":        "rentengine-2026-09-03.md",
+    "rent-manager":      "rent-manager-2026-09-07.md",
     "rentvine":          "rentvine-2026-09-02.md",
     "ringcentral":       "ringcentral-2026-09-01.md",
     "showmojo":          "showmojo-2026-09-02.md",

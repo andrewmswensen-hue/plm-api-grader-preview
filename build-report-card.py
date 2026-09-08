@@ -1072,6 +1072,135 @@ RESULTS = {
             "property-specific objects in the API.",
 },
 
+"Rent Manager": {
+  "score": 64, "grade": "D",
+  "meta": {"run": "Sep 7, 2026", "method": "1.1", "model": "Claude Opus 5",
+           "tier": "Baseline verified", "raw": "32.00 / 50"},
+  # Carries two integrity disclosures the graders volunteered. Both are about
+  # the process rather than about Rent Manager, and both are published because
+  # a run that hides its own near-misses is worth less than one that does not.
+  "note": "Graded three independent times, scoring 66, 64 and 60, unanimous on "
+          "20 of the 27 checks and reconciled to 64. Every contested variant "
+          "lands between 63 and 66, and all of them are a D: the letter is the "
+          "robust finding, the exact integer is not. Two disclosures the graders "
+          "made on their own initiative belong on the record. First, a withdrawn "
+          "citation: the first run marked service-status transparency a pass and "
+          "cited a vendor status page with specific contents, but that page was "
+          "never actually retrieved. The URL had surfaced in a search result and "
+          "was carried into the evidence in error. The two independent graders "
+          "caught it, the source was withdrawn, and the check now stands as "
+          "unverified rather than credited. Second, a contaminated packet: the "
+          "evidence handed to the two independent graders ended with the first "
+          "run's own score. Both spotted it unprompted, said they were treating "
+          "it as non-evidence, and then scored four and six points below that "
+          "run anyway. The line was removed and the incident disclosed rather "
+          "than quietly fixed.",
+  "cats": [
+    (13.1, 15, "The strongest part of the API by a wide margin, and genuinely "
+               "strong. Everything a property management business runs on is "
+               "reachable: properties, units, leases, tenants, the lease ledger, "
+               "the general ledger, owners, work orders, prospects, even HOA "
+               "violations and utility billing. It is not a read-only window "
+               "either. The documentation is consistent that you can create and "
+               "update records and drive real workflows like lease renewals. The "
+               "one gap is knowing when something changed. Webhooks exist, but "
+               "nothing in the available documentation says which events they "
+               "cover, so in practice you poll. That works well here, because "
+               "date filters are honoured and you can pull 5,000 records a call."),
+    (5.0, 10, "The plumbing is decent but leaky in ways that cost developer time. "
+              "Pagination and rate limiting are handled well: you can pull a "
+              "whole database efficiently and the server tells you exactly how "
+              "much budget is left. But you cannot sort results at all. One sort "
+              "parameter is silently ignored and the other throws an error for "
+              "every value tried. Errors come back in four different formats with "
+              "no stable error code, and no response carries a request id, so a "
+              "support call about a failed request has no reference number to "
+              "quote. Webhooks have no way to sign payloads, so whatever receives "
+              "them cannot verify the message genuinely came from Rent Manager."),
+    (4.5, 5, "The API's best category and a real strength for anyone nervous "
+             "about handing access to an outside developer or an AI agent. You "
+             "can create a dedicated user, tick read-only, restrict it to "
+             "specific properties, property groups, locations and bank accounts, "
+             "and hand that over knowing it cannot write anything. The run proved "
+             "it live: the read-only user was refused on reconciliations and "
+             "webhooks, exactly as intended. You can revoke it yourself in "
+             "seconds by changing the password or unticking Active, with no call "
+             "to Rent Manager. The one real gap is that a proper test environment "
+             "costs money every month, so most operators develop against live "
+             "data."),
+    (1.9, 5, "Where Rent Manager scores worst, and it has a direct cash cost. The "
+             "good reference material is locked behind a customer login, so a "
+             "developer you hire cannot read the documentation until you have "
+             "given them a login, and AI coding tools cannot read it at all. That "
+             "matters a great deal if you plan to build with an AI assistant. "
+             "Worse, the two guides you can download are wrong about things that "
+             "will silently break working code: following the published example "
+             "for pulling a tenant's addresses returns an empty list rather than "
+             "an error, which looks exactly like 'this tenant has no address'. "
+             "That was found by testing, not by reading. Budget for a developer "
+             "discovering these by trial and error."),
+    (7.5, 15, "Two very different answers. Once you are paying for API access, "
+              "getting a credential is genuinely easy and entirely in your hands, "
+              "with no ticket, no waiting and no Rent Manager involvement, which "
+              "is better than many competitors. But getting to that point means "
+              "buying the API as an add-on at a price you can only learn by "
+              "calling a salesperson. For a hundred-property operator deciding "
+              "whether to build automation, that unpriced gate is a real barrier, "
+              "and it is why this category, worth the same 15 points as "
+              "functional coverage, costs the overall score so heavily."),
+  ],
+  "strengths": [
+    "Reaches essentially everything the business runs on, down to HOA violations and utility billing",
+    "Writes as well as reads, including real workflows like lease renewals",
+    "Read-only users restricted to named properties, property groups, locations and bank accounts",
+    "That restriction proven live: the read-only user was refused on reconciliations and webhooks",
+    "Revocable by you in seconds, with no call to the vendor",
+    "Pagination and rate limiting done properly, 5,000 records a call with the remaining budget reported",
+    "Date filters are honoured, so polling for changes works well",
+  ],
+  "watch": [
+    "API access is a separately purchased add-on at a price only a salesperson will quote",
+    "The good reference sits behind a customer login, so AI coding tools cannot read it at all",
+    "Two downloadable guides are wrong in ways that break working code silently, not loudly",
+    "Sorting does not work through either documented parameter",
+    "No request id on any response, so a support call has no reference number",
+    "Webhooks cannot be cryptographically verified",
+    "No documented list of webhook events, so you poll rather than subscribe",
+    "Errors arrive in four different formats with no stable machine code",
+    "A real test environment costs money monthly, so most operators develop against live data",
+    "Service-status transparency could not be verified either way",
+  ],
+  "bottom": "Rent Manager's API reaches essentially everything a property "
+            "management business runs on, and the live test pulled hundreds of "
+            "properties, units and leases plus twenty thousand charges cleanly. "
+            "It lets you write as well as read, so real automation is genuinely "
+            "buildable on it. Its standout strength is safety: you can create a "
+            "read-only user locked to specific properties, locations and bank "
+            "accounts, hand it to a developer or an AI agent, and switch it off "
+            "yourself in seconds, which is exactly what happened during this "
+            "evaluation. The score is dragged down by two things that have "
+            "nothing to do with what the API can do. First, documentation: the "
+            "good reference is behind a customer login where no AI coding tool "
+            "can reach it, and the two guides you can actually download are wrong "
+            "about details that break working code silently rather than loudly. "
+            "Second, cost: API access is a separately purchased add-on at a price "
+            "only a salesperson will tell you, and that single fact costs 7.5 of "
+            "the 15 points in the accessibility category. Add the smaller "
+            "operational gaps, no working sort, no request id to quote to "
+            "support, and webhooks that cannot be cryptographically verified, and "
+            "a solid, capable API lands at 64. Practically: if you are already "
+            "paying for API access, build on it, plan to poll for changes rather "
+            "than rely on webhooks, and budget developer hours for discovering "
+            "documentation errors by testing. If you are not yet paying for it, "
+            "the number to weigh against the quote is not this score but what the "
+            "automation would save you. Rent Manager is not a bank and holds none "
+            "of your funds. It does document real trust and security-deposit "
+            "constructs, which is more than most software in this category, but "
+            "you still need your own bank, your own payment processor, and your "
+            "own hosting for anything you build. This grades the API's "
+            "buildability, not Rent Manager as a product.",
+},
+
 "Rentvine": {
   "score": 69, "grade": "D+",
   "meta": {"run": "Sep 2, 2026", "method": "1.1", "model": "Claude Opus 5",
@@ -1615,11 +1744,8 @@ def build_rows():
                     f'<tr class="pending looking" data-co="{slug(co)}">'
                     f'<td class="plat">'
                     f'<a class="co-btn" href="{GUIDE_URL}">'
-                    f'<span class="co-name">{co}</span>'
-                    f'<span class="co-hint">Click here to grade &rarr;</span></a></td>'
+                    f'<span class="co-name">{co}</span></a></td>'
                     f'<td class="num" colspan="7">'
-                    f'<span class="pend-tag look"><i></i>Looking for a customer '
-                    f'to run it</span>'
                     f'<a class="look-cta" href="{GUIDE_URL}">'
                     f'Are you a {co} customer? Click here to grade &rarr;</a>'
                     f'</td></tr>'
@@ -1725,7 +1851,7 @@ def build_data():
 # a line here, rerun the build, and all 16 pages move together.
 # =============================================================================
 
-CONTACT = "mailto:peter@rlpmg.com?subject=API%20Report%20Card%3A%20factual%20correction"
+CONTACT = "https://www.peterlohmann.com/contact"
 
 COPY = {
     # Thin bar across the top of every page.
