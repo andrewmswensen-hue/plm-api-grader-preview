@@ -213,9 +213,12 @@
 
   /* Call to action beside the "looking for a customer" pill. The wide cell has
      the room the platform column does not, so the full ask goes here. */
-  /* The whole ask, unpilled, as the row's only statement. */
-  .look-cta{ font-size:14.5px; font-weight:700; color:var(--primary); }
-  .look-cta:hover{ text-decoration:underline; }
+  /* The whole ask, unpilled, as the row's only statement. Deliberately quiet:
+     lighter weight, smaller and in the muted tone, so a row with no score does
+     not shout louder than the rows that have one. Picks up the primary colour
+     on hover so it still reads as clickable. */
+  .look-cta{ font-size:13.5px; font-weight:500; color:var(--muted); }
+  .look-cta:hover{ color:var(--primary); text-decoration:underline; }
 
   /* Two sections that belong together, so the facing padding is cut from 60px
      to 22px each and they read as one block. Written as .band.band-pair-* to
