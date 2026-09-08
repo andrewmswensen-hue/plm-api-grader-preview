@@ -47,9 +47,11 @@ CAT_LABELS = [
 # ---------------------------------------------------------------------------
 CATEGORIES = [
     ("pm-software",  "PM Software",
-        ["AppFolio", "Buildium", "Rentvine", "Propertyware", "Rent Manager"]),
+        ["AppFolio", "Buildium", "Rentvine", "Propertyware", "Rent Manager",
+         "DoorLoop", "Revela", "Rentec Direct", "Yardi Breeze", "Magic Door"]),
     ("listings",     "Listings, Applications &amp; Tenant Screening",
-        ["Boom", "ShowMojo", "Tenant Turner", "RentEngine", "Rently"]),
+        ["Boom", "ShowMojo", "Tenant Turner", "RentEngine", "Rently",
+         "Showdigs", "Findigs", "RentSpree"]),
     ("workflow",     "Workflow &amp; CRM",
         ["LeadSimple", "Aptly", "Process Street"]),
     ("maintenance",  "Maintenance",
@@ -65,6 +67,14 @@ CATEGORIES = [
 # Platforms with no API to grade at all. The row says so across the score columns
 # rather than showing dashes, which would imply "not graded yet".
 NO_API = {"Enterprise Bank"}
+
+# Platforms we cannot grade until an operator who uses one runs the file against
+# their own account. Distinct from "scoring in progress", which means the run is
+# under way: these are waiting on a customer, and saying so is how we get one.
+LOOKING = {"DoorLoop", "Revela", "Rentec Direct", "Yardi Breeze", "Magic Door",
+           "Showdigs", "Findigs", "RentSpree"}
+
+GUIDE_URL = "https://www.peterlohmann.com/api-grader-guide"
 
 # Short labels for the pills (the headings above are too long for a pill row).
 PILL_LABELS = {
@@ -1563,9 +1573,26 @@ def build_pills():
     return "\n        ".join(out)
 
 
+def order_by_grade(companies):
+    """Best score first, then platforms still being graded, then the ones waiting
+    on a customer, then anything with no API. Sorting by grade rather than
+    alphabetically is the whole point of a ranking table."""
+    def key(co):
+        r = RESULTS.get(co)
+        if r:
+            return (0, -r["score"], co.lower())
+        if co in NO_API:
+            return (3, 0, co.lower())
+        if co in LOOKING:
+            return (2, 0, co.lower())
+        return (1, 0, co.lower())
+    return sorted(companies, key=key)
+
+
 def build_rows():
     rows = []
     for s, heading, companies in CATEGORIES:
+        companies = order_by_grade(companies)
         rows.append(
             f'<tr class="grp" id="cat-{s}"><td colspan="8">{heading}'
             f'<span class="grp-n">{len(companies)} listed</span></td></tr>'
@@ -1578,6 +1605,18 @@ def build_rows():
                     f'<span class="co-name">{co}</span></td>'
                     f'<td class="num" colspan="7">'
                     f'<span class="cat-legacy">No API available</span></td></tr>'
+                )
+                continue
+            if co in LOOKING:
+                rows.append(
+                    f'<tr class="pending looking" data-co="{slug(co)}">'
+                    f'<td class="plat">'
+                    f'<a class="co-btn" href="api-grader-{slug(co)}.html">'
+                    f'<span class="co-name">{co}</span>'
+                    f'<span class="co-hint">How to get it graded &rarr;</span></a></td>'
+                    f'<td class="num" colspan="7">'
+                    f'<span class="pend-tag look"><i></i>Looking for a customer '
+                    f'to run it</span></td></tr>'
                 )
                 continue
             if not r:
@@ -1620,6 +1659,11 @@ def build_rows():
                 f'<td class="num"><span class="grade {grade_class(r["grade"])}">'
                 f'{r["grade"]}</span></td></tr>'
             )
+        rows.append(
+            f'<tr class="add-row"><td colspan="8">'
+            f'<a href="{GUIDE_URL}">Add a platform to {re.sub("&amp;", "&", heading)}'
+            f'<span>&rarr;</span></a></td></tr>'
+        )
     return "\n            ".join(rows)
 
 
@@ -1693,29 +1737,29 @@ COPY = {
         "piece of first-party evidence or a live API call, and the full report is "
         "published so you can see exactly what was checked and what it was checked "
         "against.",
-        "<strong>Confirmed factual errors are corrected immediately, in real time.</strong> "
-        "If a mark rests on something that was wrong, out of date, or misread, that "
-        "gets fixed as soon as it is verified, and the page says so.",
+        "<strong>Confirmed factual errors are corrected immediately.</strong>",
         "Everything else waits. We do not rescore piecemeal on request, because a "
         "board where some vendors have been re-run and others have not is not a fair "
         "comparison. Shipped improvements, changed documentation and disagreements "
         "about judgement all go into the next full rerun.",
     ],
-    "fix_cta":  "Email peter@rlpmg.com",
+    "fix_cta":  "Contact us with a factual error",
 
     # The rerun policy, stated once.
     "rerun_head": "Preview scores, and what happens next.",
     "rerun_body": [
-        "This is a pre-release. It is published now, before it is finished, because "
-        "the fastest way to find a bad score is to show it to the people who know the "
-        "product. Feedback on the methodology itself is as welcome as feedback on the "
-        "facts.",
-        "Every graded platform gets its complete markdown report published up front, "
-        "so any vendor can see precisely how the score was reached rather than "
-        "arguing with a number.",
-        "<strong>A full rerun of every platform follows in roughly 30 to 60 days</strong>, "
-        "against the same rubric, at the same time. That refreshed board is then "
-        "expected to hold for six to twelve months before the next update.",
+        "Every graded platform's preliminary score is published along with the full "
+        "report that generated it, so any vendor can see precisely how the score was "
+        "reached rather than arguing with a number.",
+        "This is a pre-release. Scores are not yet final. The intention of this "
+        "60-day pre-release period is:",
+        "<b>1.</b> For the community to provide feedback on the scoring methodology, "
+        "both the overall weighting and the specifics of each category.",
+        "<b>2.</b> For vendors to address any low-hanging fruit or simple technical "
+        "fixes that can improve their score.",
+        "<strong>A full rerun of every platform is planned in 60 days.</strong> At "
+        "that time the scores will be final, and this page will not be updated again "
+        "until a planned re-score in roughly 6 months.",
     ],
 }
 
@@ -1960,12 +2004,9 @@ SUB_PAGE = """<!--
   <!-- VERDICT + PROVENANCE, side by side -->
   <section class="band tight">
     <div class="wrap">
-      <div class="rc-pair">
-        <div class="panel t-blue">
-          <h2>The bottom line for a property manager</h2>
-          <p>{bottom}</p>
-        </div>
-        {notesec}
+      <div class="panel t-blue">
+        <h2>The bottom line for a property manager</h2>
+        <p>{bottom}</p>
       </div>
     </div>
   </section>
@@ -1994,16 +2035,6 @@ SUB_PAGE = """<!--
   <section class="band tight">
     <div class="wrap">
       {fixnote}
-    </div>
-  </section>
-
-  <!-- SWITCHER -->
-  <section class="band tight">
-    <div class="wrap">
-      <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">Compare another platform</h2>
-      <p class="sub" style="margin:10px 0 16px;">Same rubric, same process, every one.</p>
-      {switcher}
-      {nextprev}
     </div>
   </section>
 
@@ -2177,7 +2208,7 @@ PENDING_PAGE = """<!--
           <div class="lab">Status</div>
           <div class="rc-gnum">
             <span class="pend-dot" aria-hidden="true"></span>
-            <span class="pend-word">Scoring<br />in progress</span>
+            <span class="pend-word">{status}</span>
           </div>
           <div class="raw">Not yet graded</div>
         </div>
@@ -2191,7 +2222,7 @@ PENDING_PAGE = """<!--
         </div>
       </div>
 
-      <p class="sub" style="margin-top:24px;max-width:70ch;">{name} is on the list but has not been graded yet. Nothing here is a judgement about the product or its API: it means the run has not happened. When it does, this page fills in with the score, all 27 checks and the full report, exactly like every platform already graded.</p>
+      <p class="sub" style="margin-top:24px;max-width:70ch;">{intro}</p>
     </div>
   </section>
 
@@ -2226,7 +2257,7 @@ PENDING_PAGE = """<!--
         <div class="panel t-orange">
           <h2>Use {name} and want it graded?</h2>
           <p>Say so. The order platforms get graded in is driven by what property managers actually ask about, and a request from an operator moves a platform up the list faster than anything else.</p>
-          <p style="margin-top:16px;"><a class="btn btn-ghost" href="mailto:peter@rlpmg.com?subject=API%20Report%20Card%3A%20please%20grade%20{name_url}">Ask for {name} next</a></p>
+          <p style="margin-top:16px;"><a class="btn btn-ghost" href="{contact}">Ask for {name} next</a></p>
         </div>
       </div>
     </div>
@@ -2236,16 +2267,6 @@ PENDING_PAGE = """<!--
   <section class="band tight wash">
     <div class="wrap">
       {fixnote}
-    </div>
-  </section>
-
-  <!-- SWITCHER -->
-  <section class="band tight">
-    <div class="wrap">
-      <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">Platforms already graded</h2>
-      <p class="sub" style="margin:10px 0 16px;">Same rubric, same process, every one.</p>
-      {switcher}
-      {nextprev}
     </div>
   </section>
 
@@ -2302,15 +2323,31 @@ def build_pending_page(co, cat_heading):
             f'</div>'
             f'<div class="rc-bar"><span style="width:0"></span></div>'
             f'</div>')
+    looking = co in LOOKING
+    if looking:
+        status = "Looking for<br />a customer"
+        intro = (f"{co} is on the list but has not been graded yet, and it needs "
+                 f"someone who actually uses it. Grading runs against a real "
+                 f"account, so a platform stays here until an operator runs the "
+                 f"file against their own. Nothing on this page is a judgement "
+                 f"about the product or its API.")
+    else:
+        status = "Scoring<br />in progress"
+        intro = (f"{co} is on the list but has not been graded yet. Nothing here "
+                 f"is a judgement about the product or its API: it means the run "
+                 f"has not happened. When it does, this page fills in with the "
+                 f"score, all 27 checks and the full report, exactly like every "
+                 f"platform already graded.")
     return PENDING_PAGE.format(
         name=co,
         name_url=quote(co),
+        status=status,
+        intro=intro,
+        contact=CONTACT,
         cat=re.sub("&amp;", "&", cat_heading),
         catcards="\n        ".join(cards),
         bands=build_bands(None),
         fixnote=fix_html(),
-        switcher=build_switcher(co),
-        nextprev=build_nextprev(co),
         banner=banner_html(co),
     )
 
@@ -2388,15 +2425,6 @@ def build_subpages(checks_data):
                     f'<span class="pts">{fmt_pts(p)} / {mx}</span></div>'
                     f'{"".join(body)}</div>')
 
-            # --- the run note, when the report carries one ----------------
-            note = r.get("note") or r.get("rescored")
-            notesec = ""
-            if note:
-                notesec = (
-                    '<div class="panel t-orange">'
-                    '<h2>About this run</h2>'
-                    f'<p>{note}</p></div>')
-
             # --- the markdown download ------------------------------------
             md = Path(f"files/reports/{slug(co)}.md")
             if md.exists():
@@ -2423,13 +2451,10 @@ def build_subpages(checks_data):
                 reads="\n      ".join(reads),
                 strengths="".join(f"<li>{s}</li>" for s in r["strengths"]),
                 watch="".join(f"<li>{s}</li>" for s in r["watch"]),
-                notesec=notesec,
                 bottom=r["bottom"],
                 checkblocks="\n      ".join(blocks),
                 dlbtn=dl,
                 fixnote=fix_html(),
-                switcher=build_switcher(co),
-                nextprev=build_nextprev(co),
                 banner=banner_html(co),
             )
             Path(f"api-grader-{slug(co)}.html").write_text(page, encoding="utf-8")
@@ -2471,10 +2496,7 @@ def main():
     checks_data = load_checks()
     html = PAGE.read_text(encoding="utf-8")
 
-    results_block = f"""      {build_stats()}
-      <p class="sub" style="margin-top:16px;font-size:14px;">Scores are point-in-time and tied to the evidence access date. Methodology v1.1.</p>
-
-      <h2 class="h-lead" style="margin-top:46px;">The results.</h2>
+    results_block = f"""      <h2 class="h-lead">The results.</h2>
       <p class="sub" style="margin:10px 0 18px;">Scores are point-in-time, based on first-party documentation and, where available, live testing. Open any graded platform for its own page: all 27 checks, the evidence behind each mark, and the full report to download.</p>
 
         {build_pills()}
@@ -2486,7 +2508,9 @@ def main():
             <tr>
               <th>Platform</th>
 {chr(10).join(f'              <th class="num col-cat">{l}<span class="th-max">/{m}</span></th>' for l, m in CAT_LABELS)}
-              <th class="num">Score</th>
+              <th class="num">Score<button class="info" type="button"
+                    aria-label="How the score is calculated"
+                    data-tip="The five category scores add up to a raw total out of 50, which is doubled to a score out of 100 and mapped to a letter grade: A+ at 97 and above, down to F below 60. Scores are absolute, never curved against other platforms. A number is only published when the run clears the methodology&#x27;s verification bar; otherwise the score is withheld."><span aria-hidden="true">i</span></button></th>
               <th class="num">Grade</th>
             </tr>
           </thead>
@@ -2494,7 +2518,10 @@ def main():
             {build_rows()}
           </tbody>
         </table>
-      </div>"""
+      </div>
+
+      <p class="tbl-note">Scores are point-in-time and tied to the evidence access date. Methodology v1.1.</p>
+      <p class="tbl-note"><strong>Categories still to come:</strong> Market Rent &amp; Property Data, Inspections, Pets, Security Deposits, Insurance, E-sign, and Other. Platforms in those categories are not graded yet and are not counted anywhere on this page.</p>"""
 
     html = re.sub(
         r"(<!-- RESULTS:START -->\n).*?(\s*<!-- RESULTS:END -->)",

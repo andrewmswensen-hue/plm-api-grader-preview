@@ -171,12 +171,9 @@
   <!-- VERDICT + PROVENANCE, side by side -->
   <section class="band tight">
     <div class="wrap">
-      <div class="rc-pair">
-        <div class="panel t-blue">
-          <h2>The bottom line for a property manager</h2>
-          <p>LeadSimple's REST API has improved markedly, from 78 (C+) to 87 (B+), because it fixed its two weakest areas. You can now create multiple labeled keys, make a key read-only, and revoke any key on its own, so you can hand a reporting agent something safe and cut off one integration without breaking the rest. The documentation is public now, with a downloadable OpenAPI 3.0 file and request samples in five languages, so a developer or an AI tool can build against it without a login. The remaining weaknesses are in reliability rather than access: money fields come back as text, errors carry no stable code, webhooks have no signature or retry policy, and there is no clear version policy. LeadSimple is not a bank and not your system of record. It sits on top of your PMS, so you still need that PMS for property, lease, ledger and money data.</p>
-        </div>
-        <div class="panel t-orange"><h2>About this run</h2><p>This is the first platform here to move because the vendor changed the product, rather than because the evidence or the rubric changed. Between the 2026-08-27 run and this one, LeadSimple shipped five fixes, all of them in its two weakest categories: a public documentation site, multiple API keys, read-only keys, per-key revoke, and key labels. Access Control went from 1.3 out of 5 to 4.4, and Documentation from 2.5 to 3.1, taking the score from 78 (C+) to 87 (B+). Coverage and cost did not move, because the API surface and plan access did not change. Two independent graders then scored the same frozen evidence and agreed on 25 of the 27 checks, with the two splits resolved against the evidence rather than averaged. The three runs landed at 85, 86 and 87, so the result is robustly B or B+.</p></div>
+      <div class="panel t-blue">
+        <h2>The bottom line for a property manager</h2>
+        <p>LeadSimple's REST API has improved markedly, from 78 (C+) to 87 (B+), because it fixed its two weakest areas. You can now create multiple labeled keys, make a key read-only, and revoke any key on its own, so you can hand a reporting agent something safe and cut off one integration without breaking the rest. The documentation is public now, with a downloadable OpenAPI 3.0 file and request samples in five languages, so a developer or an AI tool can build against it without a login. The remaining weaknesses are in reliability rather than access: money fields come back as text, errors carry no stable code, webhooks have no signature or retry policy, and there is no clear version policy. LeadSimple is not a bank and not your system of record. It sits on top of your PMS, so you still need that PMS for property, lease, ledger and money data.</p>
       </div>
     </div>
   </section>
@@ -207,47 +204,10 @@
       <div class="fix-note" id="correct">
         <h3>Found a factual error in your grade?</h3>
         <p>Tell us and we will fix it. Every mark on this page traces to a specific piece of first-party evidence or a live API call, and the full report is published so you can see exactly what was checked and what it was checked against.</p>
-        <p><strong>Confirmed factual errors are corrected immediately, in real time.</strong> If a mark rests on something that was wrong, out of date, or misread, that gets fixed as soon as it is verified, and the page says so.</p>
+        <p><strong>Confirmed factual errors are corrected immediately.</strong></p>
         <p>Everything else waits. We do not rescore piecemeal on request, because a board where some vendors have been re-run and others have not is not a fair comparison. Shipped improvements, changed documentation and disagreements about judgement all go into the next full rerun.</p>
-        <a class="btn btn-primary" href="mailto:peter@rlpmg.com?subject=API%20Report%20Card%3A%20factual%20correction">Email peter@rlpmg.com</a>
+        <a class="btn btn-primary" href="mailto:peter@rlpmg.com?subject=API%20Report%20Card%3A%20factual%20correction">Contact us with a factual error</a>
       </div>
-    </div>
-  </section>
-
-  <!-- SWITCHER -->
-  <section class="band tight">
-    <div class="wrap">
-      <h2 class="h-lead" style="font-size:clamp(22px,2.8vw,28px);">Compare another platform</h2>
-      <p class="sub" style="margin:10px 0 16px;">Same rubric, same process, every one.</p>
-      <div class="rc-switch" aria-label="Other platforms">
-        <a href="api-grader-appfolio.html"><span class="grade grade-f">F</span>AppFolio</a>
-        <a href="api-grader-buildium.html"><span class="grade grade-c">C+</span>Buildium</a>
-        <a href="api-grader-rentvine.html"><span class="grade grade-d">D+</span>Rentvine</a>
-        <a href="api-grader-propertyware.html" class="is-pending"><span class="grade grade-none">&middot;&middot;&middot;</span>Propertyware</a>
-        <a href="api-grader-rent-manager.html" class="is-pending"><span class="grade grade-none">&middot;&middot;&middot;</span>Rent Manager</a>
-        <a href="api-grader-boom.html"><span class="grade grade-d">D</span>Boom</a>
-        <a href="api-grader-showmojo.html"><span class="grade grade-f">F</span>ShowMojo</a>
-        <a href="api-grader-tenant-turner.html"><span class="grade grade-f">F</span>Tenant Turner</a>
-        <a href="api-grader-rentengine.html"><span class="grade grade-c">C</span>RentEngine</a>
-        <a href="api-grader-rently.html" class="is-pending"><span class="grade grade-none">&middot;&middot;&middot;</span>Rently</a>
-        <a href="api-grader-leadsimple.html" aria-current="page"><span class="grade grade-b">B+</span>LeadSimple</a>
-        <a href="api-grader-aptly.html"><span class="grade grade-f">F</span>Aptly</a>
-        <a href="api-grader-process-street.html"><span class="grade grade-c">C</span>Process Street</a>
-        <a href="api-grader-property-meld.html"><span class="grade grade-f">F</span>Property Meld</a>
-        <a href="api-grader-vendoroo.html" class="is-pending"><span class="grade grade-none">&middot;&middot;&middot;</span>Vendoroo</a>
-        <a href="api-grader-mason.html" class="is-pending"><span class="grade grade-none">&middot;&middot;&middot;</span>Mason</a>
-        <a href="api-grader-latchel.html" class="is-pending"><span class="grade grade-none">&middot;&middot;&middot;</span>Latchel</a>
-        <a href="api-grader-lula.html" class="is-pending"><span class="grade grade-none">&middot;&middot;&middot;</span>Lula</a>
-        <a href="api-grader-column.html"><span class="grade grade-b">B</span>Column</a>
-        <a href="api-grader-xero.html"><span class="grade grade-b">B-</span>Xero</a>
-        <a href="api-grader-quickbooks-online.html"><span class="grade grade-d">D</span>QuickBooks Online</a>
-        <a href="api-grader-ringcentral.html"><span class="grade grade-a">A</span>RingCentral</a>
-        <a href="api-grader-simplevoip.html" class="is-pending"><span class="grade grade-none">&middot;&middot;&middot;</span>SimpleVOIP</a>
-        <a href="api-grader-zoom-phone.html" class="is-pending"><span class="grade grade-none">&middot;&middot;&middot;</span>Zoom Phone</a>
-        <a href="api-grader-openphone.html" class="is-pending"><span class="grade grade-none">&middot;&middot;&middot;</span>OpenPhone</a>
-        <a href="api-grader-justcall.html" class="is-pending"><span class="grade grade-none">&middot;&middot;&middot;</span>JustCall</a>
-        </div>
-      <div class="rc-nextprev"><a href="api-grader-rently.html">&larr; Rently</a><a href="api-grader-aptly.html">Aptly &rarr;</a></div>
     </div>
   </section>
 

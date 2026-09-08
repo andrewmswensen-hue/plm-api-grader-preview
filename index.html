@@ -171,6 +171,44 @@
   .pend-tag i{ width:7px; height:7px; border-radius:50%; background:var(--orange);
                flex:none; }
   tr.pending .co-name{ color:var(--navy); }
+  /* Waiting on a customer, not on a run. Calmer than the orange pending pill so
+     the two states are told apart at a glance. */
+  .pend-tag.look{ color:var(--primary-dark); background:var(--wash-soft);
+                  border-color:#cfe0ed; }
+  .pend-tag.look i{ background:var(--primary); }
+
+  /* Closing row of each category group. Subtle: it is an invitation, not a row
+     of data, so it should not compete with the platforms above it. */
+  tr.add-row td{ padding:0; border-top:1px dashed var(--line); background:#fcfdfe; }
+  tr.add-row a{ display:block; padding:11px 14px; font-size:13.5px; font-weight:700;
+                color:var(--muted); text-decoration:none; }
+  tr.add-row a span{ margin-left:7px; color:var(--primary); }
+  tr.add-row a:hover{ color:var(--primary); background:var(--wash-soft);
+                      text-decoration:none; }
+
+  /* Info affordance on the Score header. Hover and keyboard focus both open it,
+     and it is a button so it is reachable without a mouse. */
+  .info{ display:inline-flex; align-items:center; justify-content:center;
+         width:15px; height:15px; margin-left:6px; padding:0; vertical-align:1px;
+         border:1px solid #b9c6d1; border-radius:50%; background:none;
+         color:#8b9aa6; font-size:10px; font-weight:800; font-style:italic;
+         line-height:1; cursor:help; position:relative; }
+  .info:hover, .info:focus, .info:focus-visible{ border-color:var(--primary); color:var(--primary); }
+  .info::after{ content:attr(data-tip); position:absolute; top:calc(100% + 10px);
+                right:-6px; width:320px; padding:13px 15px; border-radius:10px;
+                background:var(--navy); color:#e6eef5; font-size:13px;
+                font-weight:500; font-style:normal; line-height:1.55;
+                letter-spacing:0; text-align:left; text-transform:none;
+                white-space:normal; box-shadow:0 16px 40px rgba(31,58,77,.28);
+                opacity:0; visibility:hidden; transition:opacity .13s ease;
+                z-index:40; pointer-events:none; }
+  .info:hover::after, .info:focus::after, .info:focus-visible::after{ opacity:1; visibility:visible; }
+  @media (max-width:640px){ .info::after{ width:min(74vw,300px); } }
+
+  /* Notes under the table. */
+  .tbl-note{ margin:14px 0 0; font-size:14px; line-height:1.6; color:var(--muted);
+             max-width:96ch; }
+  .tbl-note strong{ color:var(--navy); }
   .row-flag{ display:inline-block; margin-left:7px; padding:2px 7px; border-radius:999px;
              background:#fdf0e6; color:var(--orange-dark); font-size:10px;
              font-weight:800; letter-spacing:.04em; vertical-align:middle; }
@@ -418,10 +456,7 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
       </p>
 
       <!-- RESULTS:START -->
-      <div class="stats stats-color g4" aria-label="At a glance"><div class="stat"><div class="v">27</div><div class="k">Platforms listed</div></div><div class="stat"><div class="v">15</div><div class="k">Graded so far</div></div><div class="stat"><div class="v">68</div><div class="k">Average score</div></div><div class="stat"><div class="v">A</div><div class="k">Highest grade (RingCentral)</div></div></div>
-      <p class="sub" style="margin-top:16px;font-size:14px;">Scores are point-in-time and tied to the evidence access date. Methodology v1.1.</p>
-
-      <h2 class="h-lead" style="margin-top:46px;">The results.</h2>
+      <h2 class="h-lead">The results.</h2>
       <p class="sub" style="margin:10px 0 18px;">Scores are point-in-time, based on first-party documentation and, where available, live testing. Open any graded platform for its own page: all 27 checks, the evidence behind each mark, and the full report to download.</p>
 
         <div class="pill-row" aria-label="Jump to a category">
@@ -445,48 +480,68 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
               <th class="num col-cat">Access Control<span class="th-max">/5</span></th>
               <th class="num col-cat">Docs &amp; AI-Ready<span class="th-max">/5</span></th>
               <th class="num col-cat">Access &amp; Cost<span class="th-max">/15</span></th>
-              <th class="num">Score</th>
+              <th class="num">Score<button class="info" type="button"
+                    aria-label="How the score is calculated"
+                    data-tip="The five category scores add up to a raw total out of 50, which is doubled to a score out of 100 and mapped to a letter grade: A+ at 97 and above, down to F below 60. Scores are absolute, never curved against other platforms. A number is only published when the run clears the methodology&#x27;s verification bar; otherwise the score is withheld."><span aria-hidden="true">i</span></button></th>
               <th class="num">Grade</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="grp" id="cat-pm-software"><td colspan="8">PM Software<span class="grp-n">5 listed</span></td></tr>
-            <tr class="has-detail" data-co="appfolio"><td class="plat"><a class="co-btn" href="api-grader-appfolio.html"><span class="co-name">AppFolio</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score lo">5.6</span></td><td class="num"><span class="cat-score hi">7.9</span></td><td class="num"><span class="cat-score lo">1.9</span></td><td class="num"><span class="cat-score lo">1.3</span></td><td class="num"><span class="cat-score mid">7.5</span></td><td class="num"><span class="cat-total">48</span></td><td class="num"><span class="grade grade-f">F</span></td></tr>
+            <tr class="grp" id="cat-pm-software"><td colspan="8">PM Software<span class="grp-n">10 listed</span></td></tr>
             <tr class="has-detail" data-co="buildium"><td class="plat"><a class="co-btn" href="api-grader-buildium.html"><span class="co-name">Buildium</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score hi">15</span></td><td class="num"><span class="cat-score hi">7.5</span></td><td class="num"><span class="cat-score hi">5</span></td><td class="num"><span class="cat-score hi">3.75</span></td><td class="num"><span class="cat-score mid">7.5</span></td><td class="num"><span class="cat-total">78</span></td><td class="num"><span class="grade grade-c">C+</span></td></tr>
             <tr class="has-detail" data-co="rentvine"><td class="plat"><a class="co-btn" href="api-grader-rentvine.html"><span class="co-name">Rentvine</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score mid">9.4</span></td><td class="num"><span class="cat-score lo">2.5</span></td><td class="num"><span class="cat-score hi">5</span></td><td class="num"><span class="cat-score mid">2.5</span></td><td class="num"><span class="cat-score hi">15</span></td><td class="num"><span class="cat-total">69</span></td><td class="num"><span class="grade grade-d">D+</span></td></tr>
+            <tr class="has-detail" data-co="appfolio"><td class="plat"><a class="co-btn" href="api-grader-appfolio.html"><span class="co-name">AppFolio</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score lo">5.6</span></td><td class="num"><span class="cat-score hi">7.9</span></td><td class="num"><span class="cat-score lo">1.9</span></td><td class="num"><span class="cat-score lo">1.3</span></td><td class="num"><span class="cat-score mid">7.5</span></td><td class="num"><span class="cat-total">48</span></td><td class="num"><span class="grade grade-f">F</span></td></tr>
             <tr class="pending" data-co="propertyware"><td class="plat"><a class="co-btn" href="api-grader-propertyware.html"><span class="co-name">Propertyware</span><span class="co-hint">What we grade &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag"><i></i>Scoring in progress</span></td></tr>
             <tr class="pending" data-co="rent-manager"><td class="plat"><a class="co-btn" href="api-grader-rent-manager.html"><span class="co-name">Rent Manager</span><span class="co-hint">What we grade &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag"><i></i>Scoring in progress</span></td></tr>
-            <tr class="grp" id="cat-listings"><td colspan="8">Listings, Applications &amp; Tenant Screening<span class="grp-n">5 listed</span></td></tr>
+            <tr class="pending looking" data-co="doorloop"><td class="plat"><a class="co-btn" href="api-grader-doorloop.html"><span class="co-name">DoorLoop</span><span class="co-hint">How to get it graded &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag look"><i></i>Looking for a customer to run it</span></td></tr>
+            <tr class="pending looking" data-co="magic-door"><td class="plat"><a class="co-btn" href="api-grader-magic-door.html"><span class="co-name">Magic Door</span><span class="co-hint">How to get it graded &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag look"><i></i>Looking for a customer to run it</span></td></tr>
+            <tr class="pending looking" data-co="rentec-direct"><td class="plat"><a class="co-btn" href="api-grader-rentec-direct.html"><span class="co-name">Rentec Direct</span><span class="co-hint">How to get it graded &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag look"><i></i>Looking for a customer to run it</span></td></tr>
+            <tr class="pending looking" data-co="revela"><td class="plat"><a class="co-btn" href="api-grader-revela.html"><span class="co-name">Revela</span><span class="co-hint">How to get it graded &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag look"><i></i>Looking for a customer to run it</span></td></tr>
+            <tr class="pending looking" data-co="yardi-breeze"><td class="plat"><a class="co-btn" href="api-grader-yardi-breeze.html"><span class="co-name">Yardi Breeze</span><span class="co-hint">How to get it graded &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag look"><i></i>Looking for a customer to run it</span></td></tr>
+            <tr class="add-row"><td colspan="8"><a href="https://www.peterlohmann.com/api-grader-guide">Add a platform to PM Software<span>&rarr;</span></a></td></tr>
+            <tr class="grp" id="cat-listings"><td colspan="8">Listings, Applications &amp; Tenant Screening<span class="grp-n">8 listed</span></td></tr>
+            <tr class="has-detail" data-co="rentengine"><td class="plat"><a class="co-btn" href="api-grader-rentengine.html"><span class="co-name">RentEngine</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score lo">5.6</span></td><td class="num"><span class="cat-score hi">7.9</span></td><td class="num"><span class="cat-score hi">4</span></td><td class="num"><span class="cat-score hi">5</span></td><td class="num"><span class="cat-score hi">15</span></td><td class="num"><span class="cat-total">75</span></td><td class="num"><span class="grade grade-c">C</span></td></tr>
             <tr class="has-detail" data-co="boom"><td class="plat"><a class="co-btn" href="api-grader-boom.html"><span class="co-name">Boom</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score mid">7.5</span></td><td class="num"><span class="cat-score mid">5</span></td><td class="num"><span class="cat-score hi">5</span></td><td class="num"><span class="cat-score mid">3.1</span></td><td class="num"><span class="cat-score hi">11.3</span></td><td class="num"><span class="cat-total">64</span></td><td class="num"><span class="grade grade-d">D</span></td></tr>
             <tr class="has-detail" data-co="showmojo"><td class="plat"><a class="co-btn" href="api-grader-showmojo.html"><span class="co-name">ShowMojo</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score lo">1.9</span></td><td class="num"><span class="cat-score mid">6.7</span></td><td class="num"><span class="cat-score lo">0.8</span></td><td class="num"><span class="cat-score lo">1.3</span></td><td class="num"><span class="cat-score hi">15</span></td><td class="num"><span class="cat-total">51</span></td><td class="num"><span class="grade grade-f">F</span></td></tr>
             <tr class="has-detail" data-co="tenant-turner"><td class="plat"><a class="co-btn" href="api-grader-tenant-turner.html"><span class="co-name">Tenant Turner</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score lo">3.8</span></td><td class="num"><span class="cat-score mid">4.2</span></td><td class="num"><span class="cat-score lo">1.3</span></td><td class="num"><span class="cat-score lo">1.3</span></td><td class="num"><span class="cat-score hi">15</span></td><td class="num"><span class="cat-total">51</span></td><td class="num"><span class="grade grade-f">F</span></td></tr>
-            <tr class="has-detail" data-co="rentengine"><td class="plat"><a class="co-btn" href="api-grader-rentengine.html"><span class="co-name">RentEngine</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score lo">5.6</span></td><td class="num"><span class="cat-score hi">7.9</span></td><td class="num"><span class="cat-score hi">4</span></td><td class="num"><span class="cat-score hi">5</span></td><td class="num"><span class="cat-score hi">15</span></td><td class="num"><span class="cat-total">75</span></td><td class="num"><span class="grade grade-c">C</span></td></tr>
             <tr class="pending" data-co="rently"><td class="plat"><a class="co-btn" href="api-grader-rently.html"><span class="co-name">Rently</span><span class="co-hint">What we grade &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag"><i></i>Scoring in progress</span></td></tr>
+            <tr class="pending looking" data-co="findigs"><td class="plat"><a class="co-btn" href="api-grader-findigs.html"><span class="co-name">Findigs</span><span class="co-hint">How to get it graded &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag look"><i></i>Looking for a customer to run it</span></td></tr>
+            <tr class="pending looking" data-co="rentspree"><td class="plat"><a class="co-btn" href="api-grader-rentspree.html"><span class="co-name">RentSpree</span><span class="co-hint">How to get it graded &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag look"><i></i>Looking for a customer to run it</span></td></tr>
+            <tr class="pending looking" data-co="showdigs"><td class="plat"><a class="co-btn" href="api-grader-showdigs.html"><span class="co-name">Showdigs</span><span class="co-hint">How to get it graded &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag look"><i></i>Looking for a customer to run it</span></td></tr>
+            <tr class="add-row"><td colspan="8"><a href="https://www.peterlohmann.com/api-grader-guide">Add a platform to Listings, Applications & Tenant Screening<span>&rarr;</span></a></td></tr>
             <tr class="grp" id="cat-workflow"><td colspan="8">Workflow &amp; CRM<span class="grp-n">3 listed</span></td></tr>
             <tr class="has-detail" data-co="leadsimple"><td class="plat"><a class="co-btn" href="api-grader-leadsimple.html"><span class="co-name">LeadSimple</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score hi">15</span></td><td class="num"><span class="cat-score mid">5.8</span></td><td class="num"><span class="cat-score hi">4.4</span></td><td class="num"><span class="cat-score mid">3.1</span></td><td class="num"><span class="cat-score hi">15</span></td><td class="num"><span class="cat-total">87</span></td><td class="num"><span class="grade grade-b">B+</span></td></tr>
-            <tr class="has-detail" data-co="aptly"><td class="plat"><a class="co-btn" href="api-grader-aptly.html"><span class="co-name">Aptly</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score mid">7.5</span></td><td class="num"><span class="cat-score mid">4.1</span></td><td class="num"><span class="cat-score hi">5</span></td><td class="num"><span class="cat-score hi">5</span></td><td class="num"><span class="cat-score mid">7.5</span></td><td class="num"><span class="cat-total">58</span></td><td class="num"><span class="grade grade-f">F</span></td></tr>
             <tr class="has-detail" data-co="process-street"><td class="plat"><a class="co-btn" href="api-grader-process-street.html"><span class="co-name">Process Street</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score hi">13.1</span></td><td class="num"><span class="cat-score mid">5</span></td><td class="num"><span class="cat-score mid">3.1</span></td><td class="num"><span class="cat-score hi">3.8</span></td><td class="num"><span class="cat-score hi">11.3</span></td><td class="num"><span class="cat-total">73</span></td><td class="num"><span class="grade grade-c">C</span></td></tr>
+            <tr class="has-detail" data-co="aptly"><td class="plat"><a class="co-btn" href="api-grader-aptly.html"><span class="co-name">Aptly</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score mid">7.5</span></td><td class="num"><span class="cat-score mid">4.1</span></td><td class="num"><span class="cat-score hi">5</span></td><td class="num"><span class="cat-score hi">5</span></td><td class="num"><span class="cat-score mid">7.5</span></td><td class="num"><span class="cat-total">58</span></td><td class="num"><span class="grade grade-f">F</span></td></tr>
+            <tr class="add-row"><td colspan="8"><a href="https://www.peterlohmann.com/api-grader-guide">Add a platform to Workflow & CRM<span>&rarr;</span></a></td></tr>
             <tr class="grp" id="cat-maintenance"><td colspan="8">Maintenance<span class="grp-n">5 listed</span></td></tr>
             <tr class="has-detail" data-co="property-meld"><td class="plat"><a class="co-btn" href="api-grader-property-meld.html"><span class="co-name">Property Meld</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score lo">5.6</span></td><td class="num"><span class="cat-score mid">5</span></td><td class="num"><span class="cat-score mid">2.5</span></td><td class="num"><span class="cat-score hi">3.8</span></td><td class="num"><span class="cat-score mid">7.5</span></td><td class="num"><span class="cat-total">49</span></td><td class="num"><span class="grade grade-f">F</span></td></tr>
-            <tr class="pending" data-co="vendoroo"><td class="plat"><a class="co-btn" href="api-grader-vendoroo.html"><span class="co-name">Vendoroo</span><span class="co-hint">What we grade &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag"><i></i>Scoring in progress</span></td></tr>
-            <tr class="pending" data-co="mason"><td class="plat"><a class="co-btn" href="api-grader-mason.html"><span class="co-name">Mason</span><span class="co-hint">What we grade &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag"><i></i>Scoring in progress</span></td></tr>
             <tr class="pending" data-co="latchel"><td class="plat"><a class="co-btn" href="api-grader-latchel.html"><span class="co-name">Latchel</span><span class="co-hint">What we grade &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag"><i></i>Scoring in progress</span></td></tr>
             <tr class="pending" data-co="lula"><td class="plat"><a class="co-btn" href="api-grader-lula.html"><span class="co-name">Lula</span><span class="co-hint">What we grade &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag"><i></i>Scoring in progress</span></td></tr>
+            <tr class="pending" data-co="mason"><td class="plat"><a class="co-btn" href="api-grader-mason.html"><span class="co-name">Mason</span><span class="co-hint">What we grade &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag"><i></i>Scoring in progress</span></td></tr>
+            <tr class="pending" data-co="vendoroo"><td class="plat"><a class="co-btn" href="api-grader-vendoroo.html"><span class="co-name">Vendoroo</span><span class="co-hint">What we grade &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag"><i></i>Scoring in progress</span></td></tr>
+            <tr class="add-row"><td colspan="8"><a href="https://www.peterlohmann.com/api-grader-guide">Add a platform to Maintenance<span>&rarr;</span></a></td></tr>
             <tr class="grp" id="cat-banks"><td colspan="8">Banks<span class="grp-n">2 listed</span></td></tr>
             <tr class="has-detail" data-co="column"><td class="plat"><a class="co-btn" href="api-grader-column.html"><span class="co-name">Column</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score hi">15</span></td><td class="num"><span class="cat-score hi">7.5</span></td><td class="num"><span class="cat-score hi">5</span></td><td class="num"><span class="cat-score hi">3.8</span></td><td class="num"><span class="cat-score hi">11.3</span></td><td class="num"><span class="cat-total">85</span></td><td class="num"><span class="grade grade-b">B</span></td></tr>
             <tr class="no-api"><td class="plat"><span class="co-name">Enterprise Bank</span></td><td class="num" colspan="7"><span class="cat-legacy">No API available</span></td></tr>
+            <tr class="add-row"><td colspan="8"><a href="https://www.peterlohmann.com/api-grader-guide">Add a platform to Banks<span>&rarr;</span></a></td></tr>
             <tr class="grp" id="cat-accounting"><td colspan="8">Corporate Accounting<span class="grp-n">2 listed</span></td></tr>
             <tr class="has-detail" data-co="xero"><td class="plat"><a class="co-btn" href="api-grader-xero.html"><span class="co-name">Xero</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score hi">13.1</span></td><td class="num"><span class="cat-score mid">6.7</span></td><td class="num"><span class="cat-score hi">4.5</span></td><td class="num"><span class="cat-score hi">4.4</span></td><td class="num"><span class="cat-score hi">11.3</span></td><td class="num"><span class="cat-total">80</span></td><td class="num"><span class="grade grade-b">B-</span></td></tr>
             <tr class="has-detail" data-co="quickbooks-online"><td class="plat"><a class="co-btn" href="api-grader-quickbooks-online.html"><span class="co-name">QuickBooks Online</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score mid">7.5</span></td><td class="num"><span class="cat-score hi">9.2</span></td><td class="num"><span class="cat-score mid">3.5</span></td><td class="num"><span class="cat-score hi">4.4</span></td><td class="num"><span class="cat-score mid">7.5</span></td><td class="num"><span class="cat-total">64</span></td><td class="num"><span class="grade grade-d">D</span></td></tr>
+            <tr class="add-row"><td colspan="8"><a href="https://www.peterlohmann.com/api-grader-guide">Add a platform to Corporate Accounting<span>&rarr;</span></a></td></tr>
             <tr class="grp" id="cat-phone"><td colspan="8">Phone<span class="grp-n">5 listed</span></td></tr>
             <tr class="has-detail" data-co="ringcentral"><td class="plat"><a class="co-btn" href="api-grader-ringcentral.html"><span class="co-name">RingCentral</span><span class="co-hint">Full report &rarr;</span></a></td><td class="num"><span class="cat-score hi">15</span></td><td class="num"><span class="cat-score hi">7.9</span></td><td class="num"><span class="cat-score hi">5</span></td><td class="num"><span class="cat-score hi">3.8</span></td><td class="num"><span class="cat-score hi">15</span></td><td class="num"><span class="cat-total">93</span></td><td class="num"><span class="grade grade-a">A</span></td></tr>
+            <tr class="pending" data-co="justcall"><td class="plat"><a class="co-btn" href="api-grader-justcall.html"><span class="co-name">JustCall</span><span class="co-hint">What we grade &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag"><i></i>Scoring in progress</span></td></tr>
+            <tr class="pending" data-co="openphone"><td class="plat"><a class="co-btn" href="api-grader-openphone.html"><span class="co-name">OpenPhone</span><span class="co-hint">What we grade &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag"><i></i>Scoring in progress</span></td></tr>
             <tr class="pending" data-co="simplevoip"><td class="plat"><a class="co-btn" href="api-grader-simplevoip.html"><span class="co-name">SimpleVOIP</span><span class="co-hint">What we grade &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag"><i></i>Scoring in progress</span></td></tr>
             <tr class="pending" data-co="zoom-phone"><td class="plat"><a class="co-btn" href="api-grader-zoom-phone.html"><span class="co-name">Zoom Phone</span><span class="co-hint">What we grade &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag"><i></i>Scoring in progress</span></td></tr>
-            <tr class="pending" data-co="openphone"><td class="plat"><a class="co-btn" href="api-grader-openphone.html"><span class="co-name">OpenPhone</span><span class="co-hint">What we grade &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag"><i></i>Scoring in progress</span></td></tr>
-            <tr class="pending" data-co="justcall"><td class="plat"><a class="co-btn" href="api-grader-justcall.html"><span class="co-name">JustCall</span><span class="co-hint">What we grade &rarr;</span></a></td><td class="num" colspan="7"><span class="pend-tag"><i></i>Scoring in progress</span></td></tr>
+            <tr class="add-row"><td colspan="8"><a href="https://www.peterlohmann.com/api-grader-guide">Add a platform to Phone<span>&rarr;</span></a></td></tr>
           </tbody>
         </table>
-      </div>      <!-- RESULTS:END -->
+      </div>
+
+      <p class="tbl-note">Scores are point-in-time and tied to the evidence access date. Methodology v1.1.</p>
+      <p class="tbl-note"><strong>Categories still to come:</strong> Market Rent &amp; Property Data, Inspections, Pets, Security Deposits, Insurance, E-sign, and Other. Platforms in those categories are not graded yet and are not counted anywhere on this page.</p>      <!-- RESULTS:END -->
     </div>
   </section>
 
@@ -609,9 +664,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
       <div style="max-width:1000px;">
         <!-- RERUN:START -->
       <h2 class="h-lead">Preview scores, and what happens next.</h2>
-        <p class="sub" style="margin-top:12px;">This is a pre-release. It is published now, before it is finished, because the fastest way to find a bad score is to show it to the people who know the product. Feedback on the methodology itself is as welcome as feedback on the facts.</p>
-        <p class="sub" style="margin-top:14px;">Every graded platform gets its complete markdown report published up front, so any vendor can see precisely how the score was reached rather than arguing with a number.</p>
-        <p class="sub" style="margin-top:14px;"><strong>A full rerun of every platform follows in roughly 30 to 60 days</strong>, against the same rubric, at the same time. That refreshed board is then expected to hold for six to twelve months before the next update.</p>        <!-- RERUN:END -->
+        <p class="sub" style="margin-top:12px;">Every graded platform's preliminary score is published along with the full report that generated it, so any vendor can see precisely how the score was reached rather than arguing with a number.</p>
+        <p class="sub" style="margin-top:14px;">This is a pre-release. Scores are not yet final. The intention of this 60-day pre-release period is:</p>
+        <p class="sub" style="margin-top:14px;"><b>1.</b> For the community to provide feedback on the scoring methodology, both the overall weighting and the specifics of each category.</p>
+        <p class="sub" style="margin-top:14px;"><b>2.</b> For vendors to address any low-hanging fruit or simple technical fixes that can improve their score.</p>
+        <p class="sub" style="margin-top:14px;"><strong>A full rerun of every platform is planned in 60 days.</strong> At that time the scores will be final, and this page will not be updated again until a planned re-score in roughly 6 months.</p>        <!-- RERUN:END -->
       </div>
     </div>
   </section>
@@ -624,9 +681,9 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
       <div class="fix-note" id="correct">
         <h3>Found a factual error in your grade?</h3>
         <p>Tell us and we will fix it. Every mark on this page traces to a specific piece of first-party evidence or a live API call, and the full report is published so you can see exactly what was checked and what it was checked against.</p>
-        <p><strong>Confirmed factual errors are corrected immediately, in real time.</strong> If a mark rests on something that was wrong, out of date, or misread, that gets fixed as soon as it is verified, and the page says so.</p>
+        <p><strong>Confirmed factual errors are corrected immediately.</strong></p>
         <p>Everything else waits. We do not rescore piecemeal on request, because a board where some vendors have been re-run and others have not is not a fair comparison. Shipped improvements, changed documentation and disagreements about judgement all go into the next full rerun.</p>
-        <a class="btn btn-primary" href="mailto:peter@rlpmg.com?subject=API%20Report%20Card%3A%20factual%20correction">Email peter@rlpmg.com</a>
+        <a class="btn btn-primary" href="mailto:peter@rlpmg.com?subject=API%20Report%20Card%3A%20factual%20correction">Contact us with a factual error</a>
       </div>        <!-- FIXNOTE:END -->
       </div>
     </div>
