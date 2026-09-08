@@ -2910,7 +2910,7 @@ def main():
             <tr>
               <th>Platform</th>
 {chr(10).join(f'              <th class="num col-cat">{l}<span class="th-max">/{m}</span></th>' for l, m in CAT_LABELS)}
-              <th class="num">Score<button class="info" type="button"
+              <th class="num">Preliminary<br />Score<button class="info" type="button"
                     aria-label="How the score is calculated"
                     data-tip="The five category scores add up to a raw total out of 50, which is doubled to a score out of 100 and mapped to a letter grade: A+ at 97 and above, down to F below 60. Scores are absolute, never curved against other platforms. A number is only published when the run clears the methodology&#x27;s verification bar; otherwise the score is withheld."><span aria-hidden="true">i</span></button></th>
               <th class="num">Preliminary<br />Grade</th>
