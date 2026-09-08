@@ -1808,6 +1808,207 @@
    }
   ]
  },
+ "Quo": {
+  "source": "quo-2026-09-08.md",
+  "meta": {
+   "tier": "Baseline verified — controlled live (read-path fully live; write-path C1.2/C1.3 observed on operator-authorized sentinel fixtures with verified cleanup; C2.8 webhook delivery and the message-send portion of C1.2 documentation-graded)",
+   "battery": "complete for a Baseline-verified run — steps 1–6 performed live; step 7 (idempotency) N-A (no idempotency mechanism exists); step 8 (webhook delivery) documentation-graded (no operator-controlled HTTPS endpoint available and webhook writes were out of the authorized scope)",
+   "date": "2026-09-08",
+   "model": "Claude Opus 4.8 (claude-opus-4-8)",
+   "coverage": "100% (26/26 applicable checks verified; no category Unable to verify; overall ≥ 80% — gate passes)"
+  },
+  "checks": [
+   {
+    "id": "C1.1",
+    "cat": 1,
+    "title": "Object coverage",
+    "mark": "yes",
+    "why": "weighted coverage = 98% (21.5/22; no critical object absent). Contacts [v1 `/v1/contacts` GET/POST/PATCH/DELETE; 2026-03-30 `/contacts`], messages [v1 `/v1/messages` GET/POST, `/v1/messages/{id}`], calls + media [v1 `/v1/calls`, `/v1/call-recordings|summaries|transcripts|voicemails/{id}`], conversations [v1 `/v1/conversations` + `/conversations/{id}/mark-as-`], phone numbers [v1 `/v1/phone-numbers`], tasks [`/v1/tasks`], users [`/users`], webhooks [`/webhooks*`], organization [`GET /organization`], contact custom fields [`/v1/contact-custom-fields`]. Live-confirmed reads 2026-09-08 on users, contacts, conversations, phone numbers (4), organization."
+   },
+   {
+    "id": "C1.2",
+    "cat": 1,
+    "title": "Core operational actions",
+    "mark": "yes",
+    "why": "weighted coverage = 100% (no critical write absent). Observed live 2026-09-08: contact create (`POST /v1/contacts` → 201) and update (`PATCH /v1/contacts/{id}` → 200, `company` changed); task create (`POST /v1/tasks` → 201) and update (`PUT /v1/tasks/{id}` → 200). Message send [`POST /v1/messages`] and conversation-state writes [`/conversations/{id}/mark-as-*`] and webhook create/update [`POST/PATCH /webhooks`] present; message send is documentation-graded (hard-excluded from live test as external communication)."
+   },
+   {
+    "id": "C1.3",
+    "cat": 1,
+    "title": "Delete or lifecycle actions",
+    "mark": "yes",
+    "why": "weighted coverage = 100% (no critical lifecycle absent). Observed live: contact delete (`DELETE /v1/contacts/{id}` → 204, then 404); task complete (`/complete` → 200), reopen (`/reopen` → 200), delete (→ 204, then 404). Also documented: conversation mark done/open, message retry, webhook delete + `POST /webhooks/{id}/rotate`."
+   },
+   {
+    "id": "C1.4",
+    "cat": 1,
+    "title": "Change notification",
+    "mark": "yes",
+    "why": "webhooks cover message (`received`/`delivered`/`failed`/`undelivered`), the full call lifecycle (incl. `call.completed`, `call.summary.completed`, `call.transcript.completed`, `call.menu.selected`), `contact.updated`/`deleted`, and 12 `task.*` events [docs/2026-03-30/webhooks-overview; changelog 2026-06-18/07-09/08-25]; incremental polling (`updatedAfter`/`since`/`createdAfter`) is available as a backup and was honored live on conversations."
+   },
+   {
+    "id": "C2.1",
+    "cat": 2,
+    "title": "Modern API conventions",
+    "mark": "yes",
+    "why": "resource-oriented REST, JSON in/out, standard verbs (GET/POST/PATCH/PUT/DELETE) observed live [OpenAPI paths; docs/2026-03-30/requests]."
+   },
+   {
+    "id": "C2.2",
+    "cat": 2,
+    "title": "Consistent typing",
+    "mark": "yes",
+    "why": "OpenAPI 3.1 with explicit types, `anyOf`+`{type:null}` nullability, `format`/`pattern` constraints; live `GET /users` and `GET /contacts` payloads matched documented types exactly (2026-09-08)."
+   },
+   {
+    "id": "C2.3",
+    "cat": 2,
+    "title": "Structured errors",
+    "mark": "partial",
+    "why": "(reconciled: R1 yes → resolved partial with R2/R3) — structured envelope with correct HTTP status semantics, human-readable `message`, field-level `errors[].path/value/schema`, and a `trace` id, all observed live (`live/e_ver.json`, `e_lim.json`, `e_auth.json`, `e_404.json`). Limitation — error shapes vary across endpoints: the flagship 2026-03-30 core-resource errors (users/contacts/tasks) carry no stable top-level machine `code`, whereas v1 and webhook-family errors do (e.g. `live/msg.json` `code:\"0100400\"`; spec consts `0300401`/`0301500`). No single populated stable machine code across the surface → partial."
+   },
+   {
+    "id": "C2.4",
+    "cat": 2,
+    "title": "Duplicate prevention",
+    "mark": "no",
+    "why": "no idempotency mechanism is documented in either spec (0 occurrences of idempotency/`Idempotency-Key`), and the errors guide explicitly warns that a retried `POST` such as a message send \"can repeat its effect\" [docs/2026-03-30/errors → \"Retrying\"]. Consequential creates/sends are unprotected. (Not N-A: the API has consequential writes.)"
+   },
+   {
+    "id": "C2.5",
+    "cat": 2,
+    "title": "Graceful handling under load",
+    "mark": "yes",
+    "why": "documented `429` at 10 req/s/key plus machine-readable `ratelimit` and `ratelimit-policy` response headers observed live (`\"per-second\"; q=10; w=1`, `r=9; t=1`) and explicit exponential-backoff-with-jitter guidance [docs/2026-03-30/rate-limits; live headers 2026-09-08]."
+   },
+   {
+    "id": "C2.6",
+    "cat": 2,
+    "title": "Pagination for large collections",
+    "mark": "yes",
+    "why": "cursor pagination (`limit` 1–50 default 10, `after`, `nextCursor`) in 2026-03-30; v1 adds `totalItems` + `nextPageToken`. Live multi-page traversal returned distinct, stable pages [docs/2026-03-30/requests; live 2026-09-08]."
+   },
+   {
+    "id": "C2.7",
+    "cat": 2,
+    "title": "Bulk or incremental export",
+    "mark": "partial",
+    "why": "incremental sync is possible on list endpoints (`since`/`createdAfter`/`updatedAfter` + pagination; `updatedAfter` honored live on conversations), but there is no dedicated bulk/export path (no async export jobs or bulk endpoints), messages/calls lists require `phoneNumberId`+`participants` (per-conversation scope, not a whole-dataset pull — confirmed live via a 400), and contacts have no updated-since filter."
+   },
+   {
+    "id": "C2.8",
+    "cat": 2,
+    "title": "Webhook security and delivery reliability",
+    "mark": "yes",
+    "why": "(documentation-graded)** — HMAC-SHA256 signatures (`webhook-signature`, svix-compatible, `whsec_` secret), a documented 8-attempt retry schedule (~27h), consumer idempotency via `webhook-id`, replay protection, and delivery inspection/retry endpoints [docs/2026-03-30/webhooks-overview, webhooks-signature-validation]. Management endpoints exist and are in-spec; end-to-end delivery was not live-observed (no operator-controlled endpoint; out of authorized write scope)."
+   },
+   {
+    "id": "C2.9",
+    "cat": 2,
+    "title": "Concurrency and conflict control",
+    "mark": "partial",
+    "why": "documented `409 Conflict` on all contact writes [v1 `/v1/contacts*`] and a `revision` version field on tasks (observed incrementing on update, 2026-09-08), but no documented optimistic-concurrency mechanism (no `If-Match`/`ETag` write path — the response `etag` is a generic weak validator — and no way to submit an expected `revision`) and no documented concurrency behavior."
+   },
+   {
+    "id": "C2.10",
+    "cat": 2,
+    "title": "Versioning and backward compatibility",
+    "mark": "yes",
+    "why": "required dated `Quo-Api-Version` header, an explicit breaking-vs-non-breaking policy, and a retirement/migration-window commitment [docs/2026-03-30/versioning; changelog 2026-03-30]."
+   },
+   {
+    "id": "C2.11",
+    "cat": 2,
+    "title": "Request traceability",
+    "mark": "yes",
+    "why": "(reconciled: R1/R2 yes, R3 partial → resolved yes) — a documented `trace` id explicitly usable with support (\"we can pull up the exact request\") satisfies the yes clause \"an equivalent documented trace mechanism\"; an `x-correlation-id` is additionally present on every response observed live [docs/2026-03-30/errors → \"The trace id\"; `live/headers_users.txt`]."
+   },
+   {
+    "id": "C2.12",
+    "cat": 2,
+    "title": "Service availability and status transparency",
+    "mark": "yes",
+    "why": "(reconciled: R1 yes, R2/R3 no due to a packet-completeness gap, now fixed → resolved yes) — public first-party status page `status.quo.com` (statuspage.io) with a Quo API component, per-service uptime (API 99.997%) and a Jun–Sep 2026 incident-history calendar; persisted to the packet as `live/status_page.html` + `live/status_summary.json` (\"All Systems Operational\", 0 active incidents)."
+   },
+   {
+    "id": "C3.1",
+    "cat": 3,
+    "title": "Read-only credentials",
+    "mark": "no",
+    "why": "keys are full workspace access; no read-only credential option (\"each key has full access to your workspace's API\"; \"the same reach as an admin\") [docs/2026-03-30/authentication]."
+   },
+   {
+    "id": "C3.2",
+    "cat": 3,
+    "title": "Scoped credentials",
+    "mark": "no",
+    "why": "a key cannot be restricted to specific resources/actions/roles; it is a single all-powerful credential [same citation]."
+   },
+   {
+    "id": "C3.3",
+    "cat": 3,
+    "title": "Multiple keys",
+    "mark": "yes",
+    "why": "multiple named keys, one per integration, are supported and encouraged [docs/2026-03-30/authentication → \"one key per integration\"]."
+   },
+   {
+    "id": "C3.4",
+    "cat": 3,
+    "title": "Rotation and revocation",
+    "mark": "yes",
+    "why": "self-serve generate/delete in Workspace Settings → API; \"access ends immediately\" [docs/2026-03-30/authentication → \"Revoke a key\"]."
+   },
+   {
+    "id": "C3.5",
+    "cat": 3,
+    "title": "Test and production isolation",
+    "mark": "na",
+    "why": "no sandbox/separate test environment is documented."
+   },
+   {
+    "id": "C4.1",
+    "cat": 4,
+    "title": "Complete self-serve reference",
+    "mark": "yes",
+    "why": "complete public reference with auth, per-endpoint params, and worked request/response examples; usable without reverse-engineering (verified across many pages, 2026-09-08)."
+   },
+   {
+    "id": "C4.2",
+    "cat": 4,
+    "title": "Reliable machine-consumable path",
+    "mark": "yes",
+    "why": "published, complete OpenAPI 3.1 specs (v1 and 2026-03-30) plus an official MCP server; the docs name the spec the \"ground truth\" [docs/2026-03-30/ai-agents]."
+   },
+   {
+    "id": "C4.3",
+    "cat": 4,
+    "title": "AI-readable documentation",
+    "mark": "yes",
+    "why": "`llms.txt`, `llms-full.txt`, per-endpoint `.md`, and a downloadable docs-bundle zip [docs/2026-03-30/ai-agents; docs/llms.txt]."
+   },
+   {
+    "id": "C4.4",
+    "cat": 4,
+    "title": "Kept current",
+    "mark": "yes",
+    "why": "a detailed, dated changelog through September 2026 with RSS, plus versioning/deprecation guidance [docs/2026-03-30/changelog]."
+   },
+   {
+    "id": "C5.1",
+    "cat": 5,
+    "title": "Self-serve API key",
+    "mark": "yes",
+    "why": "an owner/admin generates a key in Workspace Settings → API with no sales call, ticket, or approval step [docs/2026-03-30/authentication]."
+   },
+   {
+    "id": "C5.3",
+    "cat": 5,
+    "title": "Not commercially gated",
+    "mark": "partial",
+    "why": "the core API (messaging, contacts, calls metadata, conversations, tasks, webhooks, users) and the MCP connector are included on all three plans, including entry-level Starter ($15/user/mo annual) [quo.com/pricing]; but two meaningful capabilities — AI call summaries and transcripts — require Business/Scale plans [docs/mdx/api-reference/calls/get-a-summary-for-a-call, .../get-a-transcription-for-a-call], and an active paid subscription is required for any API access [pricing-overview → \"Requirements & limitations\"]."
+   }
+  ]
+ },
  "Rent Manager": {
   "source": "rent-manager-2026-09-07.md",
   "meta": {

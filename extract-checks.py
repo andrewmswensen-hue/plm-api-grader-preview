@@ -32,6 +32,7 @@ SOURCES = {
     "LeadSimple":        "leadsimple-2026-08-28.md",
     "Property Meld":     "property-meld-2026-09-01.md",
     "QuickBooks Online": "quickbooks-online-2026-09-02.md",
+    "Quo":               "quo-2026-09-08.md",
     "RentEngine":        "rentengine-2026-09-03.md",
     "Rent Manager":     "rent-manager-2026-09-07.md",
     "Process Street":    "process-street-2026-08-31.md",

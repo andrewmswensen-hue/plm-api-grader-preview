@@ -61,7 +61,7 @@ CATEGORIES = [
     ("accounting",   "Corporate Accounting",
         ["Xero", "QuickBooks Online"]),
     ("phone",        "Phone",
-        ["RingCentral", "SimpleVOIP", "Zoom Phone", "OpenPhone", "JustCall"]),
+        ["RingCentral", "SimpleVOIP", "Zoom Phone", "Quo", "JustCall"]),
 ]
 
 # Platforms with no API to grade at all. The row says so across the score columns
@@ -1199,6 +1199,116 @@ RESULTS = {
             "you still need your own bank, your own payment processor, and your "
             "own hosting for anything you build. This grades the API's "
             "buildability, not Rent Manager as a product.",
+},
+
+"Quo": {
+  "score": 83, "grade": "B",
+  "meta": {"run": "Sep 8, 2026", "method": "1.1", "model": "Claude Opus 4.8",
+           "tier": "Baseline verified, controlled live", "raw": "41.67 / 50"},
+  # Listed as OpenPhone until the Sep 2026 rebrand. The API moved with it:
+  # api.quo.com, a Quo-Api-Version header, docs on quo.com. The S3 bucket the
+  # spec is served from is still openphone-public-api-prod, which is how the
+  # two are tied together in the evidence.
+  "note": "Listed here as OpenPhone until the September 2026 rebrand to Quo. "
+          "The API moved with the name: the host is api.quo.com, the required "
+          "version header is Quo-Api-Version, and the documentation now sits on "
+          "quo.com. Graded three independent times, one orchestrator and two "
+          "blind graders, landing at 84, 82 and 81 before reconciliation with 23 "
+          "of the 26 applicable marks identical. The published 83 is recomputed "
+          "from the reconciled marks rather than averaged. One residual "
+          "sensitivity is worth knowing because it is large and all three runs "
+          "flagged it independently: AI call summaries and transcripts sit behind "
+          "the Business and Scale plans. Read literally, that is commercial "
+          "gating of API capability and the check is a partial, which is what is "
+          "published. Read instead as ordinary product-feature pricing that "
+          "happens to be visible through the API, the check becomes a pass, "
+          "Accessibility goes to 15 out of 15, and the score is 91 (A-). The "
+          "published result holds the stricter reading.",
+  "cats": [
+    (15.0, 15, "For its domain, business phone and SMS, this API is genuinely "
+               "complete. You can sync tenant, owner and vendor contacts both "
+               "ways, send and receive texts, pull call logs with AI transcripts "
+               "and summaries, manage conversations and tasks, and get real-time "
+               "events. Contact and task writes were exercised live, created and "
+               "then deleted, with cleanup verified. The main gaps are richness "
+               "rather than reach: no outbound call initiation through the API, "
+               "and no MMS in the current version."),
+    (7.9, 10, "A modern, well-instrumented API that code and AI agents can run in "
+              "production: predictable types, actionable errors carrying a trace "
+              "id you can quote to support, real rate-limit headers, clean cursor "
+              "pagination, a genuine versioning contract with a retirement "
+              "window, and strong webhook security with HMAC signatures and a "
+              "documented eight-attempt retry schedule. Two things to engineer "
+              "around. There is no idempotency key, and the vendor's own error "
+              "guide warns that a retried message send can repeat its effect, so "
+              "you must dedupe consequential retries yourself. And there is no "
+              "bulk export path, with message and call lists scoped to a single "
+              "conversation rather than the whole dataset."),
+    (2.5, 5, "The weakest area by a distance. Every key is an admin-equivalent, "
+             "full-access credential, described in the vendor's own documentation "
+             "as having the same reach as an admin. You cannot mint a read-only "
+             "key or scope one to particular resources or actions, which matters "
+             "a great deal if you are handing a key to an AI agent or an outside "
+             "tool. Your only real controls are issuing a separate key per "
+             "integration and revoking fast, both of which are self-serve and "
+             "take effect immediately. Treat every key like an admin password."),
+    (5.0, 5, "Full marks, and about as good as this gets for building, including "
+             "with AI. The public reference is complete and needs no "
+             "reverse-engineering, there are published OpenAPI 3.1 specs for both "
+             "versions, an official MCP server, an llms.txt and llms-full.txt "
+             "plus per-endpoint markdown and a downloadable docs bundle, and a "
+             "dated changelog running through September 2026 with an RSS feed. "
+             "Hand a coding agent the spec and the llms file and it can build "
+             "against this correctly."),
+    (11.3, 15, "You can get in the door on the cheapest paid plan and turn the API "
+               "on yourself in about a minute, with no sales call, ticket or "
+               "approval step. The core API and the MCP connector are included on "
+               "all three plans. Two things to budget for: SMS is billed per "
+               "segment from a prepaid credit balance, and AI call summaries and "
+               "transcripts require a Business or Scale plan. An active paid "
+               "subscription is required for any API access at all."),
+  ],
+  "strengths": [
+    "Complete coverage of its own domain: contacts, messages, calls, conversations, tasks, webhooks",
+    "Contact and task writes exercised live, created then deleted, with cleanup verified",
+    "Webhooks with HMAC signatures, a documented 8-attempt retry schedule and replay protection",
+    "A real versioning contract: dated version header, breaking-change policy, retirement window",
+    "Published OpenAPI 3.1 specs, an official MCP server, llms.txt and a downloadable docs bundle",
+    "Rate limiting that tells you where you stand, with machine-readable headers verified live",
+    "A trace id on errors that the documentation says support can look up directly",
+    "Self-serve keys on the entry-level paid plan, with revocation that takes effect immediately",
+  ],
+  "watch": [
+    "Every key is full workspace access: no read-only option and no scoping of any kind",
+    "No idempotency key, and the vendor's own guide warns a retried send can repeat its effect",
+    "No bulk export, and message and call lists are scoped to one conversation at a time",
+    "Contacts have no updated-since filter, so incremental sync does not reach them",
+    "No optimistic concurrency: tasks carry a revision field but nothing accepts it on write",
+    "Error codes vary across endpoints, so there is no single stable machine code to match on",
+    "AI call summaries and transcripts need a Business or Scale plan",
+    "An active paid subscription is required before any API access at all",
+    "No sandbox or separate test environment",
+    "No outbound call initiation and no MMS in the current version",
+  ],
+  "bottom": "Quo, formerly OpenPhone, is a general-purpose business phone system "
+            "with an unusually good, modern API. It is not a property management "
+            "platform, not a bank, and it holds no funds. Today you can build a "
+            "lot on it: two-way contact sync for tenants, owners and vendors, "
+            "automated SMS with receipt through signed webhooks, call logs with "
+            "AI transcripts and summaries, conversation triage, and task "
+            "tracking. All of that was verified live here except message send, "
+            "which was excluded from testing because it would text real people. "
+            "The API's real strengths are developer and agent readiness: clean "
+            "REST, strong typing, actionable errors with trace ids, real "
+            "versioning, first-class webhooks, and an OpenAPI spec alongside an "
+            "MCP server. Its real weaknesses are access control, where every key "
+            "is full-access with no read-only or scoped option, which matters if "
+            "you hand a key to an AI agent, and the absence of both idempotency "
+            "keys and a bulk export path. Read the score for what it measures. "
+            "This grades the API, not the product. As a tool, Quo is the "
+            "communications layer of a property management stack, and you would "
+            "still run a separate PMS, accounting system and trust accounting "
+            "alongside it.",
 },
 
 "Rentvine": {
@@ -2502,6 +2612,11 @@ def build_pending_page(co, cat_heading):
     )
 
 
+# Pages for platforms that have left the board under an old name. They are hand
+# written redirects, not generated, and must never be clobbered by a build.
+KEEP_AS_IS = {"api-grader-openphone.html"}   # OpenPhone -> Quo, Sept 2026
+
+
 def build_subpages(checks_data):
     """One standalone page per graded platform. Returns the count written."""
     written = 0
@@ -2511,8 +2626,10 @@ def build_subpages(checks_data):
                 continue
             r = RESULTS.get(co)
             if not r:
-                Path(f"api-grader-{slug(co)}.html").write_text(
-                    build_pending_page(co, cat_heading), encoding="utf-8")
+                out = Path(f"api-grader-{slug(co)}.html")
+                if out.name in KEEP_AS_IS:
+                    continue
+                out.write_text(build_pending_page(co, cat_heading), encoding="utf-8")
                 written += 1
                 continue
             cd = checks_data.get(co)
@@ -2607,7 +2724,10 @@ def build_subpages(checks_data):
                 fixnote=fix_html(),
                 banner=banner_html(co),
             )
-            Path(f"api-grader-{slug(co)}.html").write_text(page, encoding="utf-8")
+            out = Path(f"api-grader-{slug(co)}.html")
+            if out.name in KEEP_AS_IS:
+                continue
+            out.write_text(page, encoding="utf-8")
             written += 1
     return written
 
