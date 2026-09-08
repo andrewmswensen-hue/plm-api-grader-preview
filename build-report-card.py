@@ -185,7 +185,8 @@ RESULTS = {
           "guessed. There is no idempotency mechanism to test, so that check was "
           "graded from documented absence. And webhooks could not be established "
           "either way: Aptly's developer portal contains no webhook content at "
-          "all across a 250,000-byte corpus, while its customer help centre "
+          "all across its 250,953-byte documentation corpus, while its customer "
+          "help centre "
           "carries one row that reads like an outbound event. The report "
           "computed the score both ways and it is 58 either way, so the "
           "unresolved check changes nothing.",
