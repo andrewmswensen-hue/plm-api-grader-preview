@@ -1854,14 +1854,6 @@ def build_data():
 CONTACT = "https://www.peterlohmann.com/contact"
 
 COPY = {
-    # Thin bar across the top of every page.
-    "banner_tag":  "Preview Version",
-    "banner":      ("These are <b>pre-release scores</b>, not final grades. "
-                    "Every vendor's full markdown report is published here so the "
-                    "scoring can be checked line by line. A complete rerun follows "
-                    "in roughly 60 days."),
-    "banner_link": "Found a factual error?",
-
     # Long form. Used at the foot of the index and on every vendor page.
     "fix_head": "Found a factual error in your grade?",
     "fix_body": [
@@ -1894,17 +1886,6 @@ COPY = {
         "until a planned re-score in roughly 6 months.",
     ],
 }
-
-
-def banner_html(here=""):
-    link = CONTACT if here else "#correct"
-    return (
-        '<div class="pre-bar">\n  <div class="wrap">\n'
-        f'    <span class="pre-tag">{COPY["banner_tag"]}</span>\n'
-        f'    <span>{COPY["banner"]} '
-        f'<a href="#correct">{COPY["banner_link"]}</a></span>\n'
-        '  </div>\n</div>'
-    )
 
 
 def fix_html():
@@ -2054,7 +2035,6 @@ SUB_PAGE = """<!--
   </div>
 </nav>
 
-{banner}
 
 <main id="main">
 
@@ -2325,7 +2305,6 @@ PENDING_PAGE = """<!--
   </div>
 </nav>
 
-{banner}
 
 <main id="main">
 
@@ -2480,7 +2459,6 @@ def build_pending_page(co, cat_heading):
         catcards="\n        ".join(cards),
         bands=build_bands(None),
         fixnote=fix_html(),
-        banner=banner_html(co),
     )
 
 
@@ -2587,8 +2565,7 @@ def build_subpages(checks_data):
                 checkblocks="\n      ".join(blocks),
                 dlbtn=dl,
                 fixnote=fix_html(),
-                banner=banner_html(co),
-            )
+                    )
             Path(f"api-grader-{slug(co)}.html").write_text(page, encoding="utf-8")
             written += 1
     return written
@@ -2672,8 +2649,7 @@ def main():
 
     # Shared copy blocks, rendered into the index from the same strings the
     # vendor pages use, so the wording can only be changed in one place.
-    for marker, blockfn in (("BANNER", lambda: banner_html()),
-                            ("FIXNOTE", fix_html),
+    for marker, blockfn in (("FIXNOTE", fix_html),
                             ("RERUN", rerun_html)):
         html = re.sub(
             rf"(<!-- {marker}:START -->\n).*?(\s*<!-- {marker}:END -->)",
