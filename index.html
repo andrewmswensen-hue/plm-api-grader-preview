@@ -248,6 +248,15 @@
   #results .rank-table{ table-layout:fixed; }
   #results .rank-table th, #results .rank-table td{ padding-left:12px; padding-right:12px; }
   #results .rank-table th{ white-space:normal; }
+  /* Sticky column headers park below the nav AND the preview bar. Both heights
+     are measured at runtime, so this holds when the bar wraps to a third line
+     on a narrow screen. The bar's z-index (99) stays above the header's (3), so
+     the header slides under the bar rather than over it, and the header stops
+     being sticky on its own once the table scrolls past. */
+  #results .rank-table thead th{
+    top:calc(var(--nav-h, 59px) + var(--prebar-h, 67px));
+    z-index:3;
+  }
   #results .rank-table th:first-child,  #results .rank-table td:first-child{ width:23%; }
   #results .rank-table .col-cat{ width:11.2%; }
   #results .rank-table th:nth-last-child(2), #results .rank-table td:nth-last-child(2){ width:9%; }
@@ -772,14 +781,39 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
 /* Pin the preview bar directly under the sticky nav. The nav's height changes
    with the viewport, so it is measured rather than assumed. */
 (function () {
-  var nav = document.querySelector('nav.top');
+  var nav = document.querySelector('nav.top'),
+      bar = document.querySelector('.pre-bar');
   if (!nav) return;
+  var lastNav = -1, lastBar = -1, lastRun = 0;
   function sync() {
-    document.documentElement.style.setProperty('--nav-h', nav.offsetHeight + 'px');
+    lastRun = Date.now();
+    var n = nav.offsetHeight, b = bar ? bar.offsetHeight : 0;
+    if (n === lastNav && b === lastBar) return;   // nothing moved, no write
+    lastNav = n; lastBar = b;
+    var root = document.documentElement.style;
+    root.setProperty('--nav-h', n + 'px');
+    root.setProperty('--prebar-h', b + 'px');
   }
+  /* Time-throttled rather than rAF-throttled: rAF does not fire while the page
+     is not being rendered, so a queued update could be dropped entirely. The
+     early return above means the common case reads two heights and writes
+     nothing. */
+  function onScroll() { if (Date.now() - lastRun > 200) sync(); }
+
   sync();
   window.addEventListener('resize', sync);
-  if (window.ResizeObserver) new ResizeObserver(sync).observe(nav);
+  window.addEventListener('orientationchange', sync);
+  window.addEventListener('load', sync);
+  /* Also on scroll, because the bar re-wrapping from two lines to three on a
+     narrow viewport was not reliably caught by ResizeObserver, which left the
+     table header pinning about 45px too high on a phone. Scroll is exactly when
+     the offset is used. */
+  window.addEventListener('scroll', onScroll, { passive: true });
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(sync);
+    ro.observe(nav);
+    if (bar) ro.observe(bar);
+  }
 })();
 </script>
 </body>
