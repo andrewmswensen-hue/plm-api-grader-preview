@@ -1608,15 +1608,21 @@ def build_rows():
                 )
                 continue
             if co in LOOKING:
+                # These are blocked on finding an operator, so every link in the
+                # row goes straight to the guide rather than to a page that can
+                # only repeat the same ask.
                 rows.append(
                     f'<tr class="pending looking" data-co="{slug(co)}">'
                     f'<td class="plat">'
-                    f'<a class="co-btn" href="api-grader-{slug(co)}.html">'
+                    f'<a class="co-btn" href="{GUIDE_URL}">'
                     f'<span class="co-name">{co}</span>'
-                    f'<span class="co-hint">How to get it graded &rarr;</span></a></td>'
+                    f'<span class="co-hint">Click here to grade &rarr;</span></a></td>'
                     f'<td class="num" colspan="7">'
                     f'<span class="pend-tag look"><i></i>Looking for a customer '
-                    f'to run it</span></td></tr>'
+                    f'to run it</span>'
+                    f'<a class="look-cta" href="{GUIDE_URL}">'
+                    f'Are you a {co} customer? Click here to grade &rarr;</a>'
+                    f'</td></tr>'
                 )
                 continue
             if not r:
@@ -2520,7 +2526,7 @@ def main():
         </table>
       </div>
 
-      <p class="tbl-note">Scores are point-in-time and tied to the evidence access date. Methodology v1.1.</p>
+      <p class="tbl-note small">Scores are point-in-time and tied to the evidence access date. Methodology v1.1.</p>
       <p class="tbl-note"><strong>Categories still to come:</strong> Market Rent &amp; Property Data, Inspections, Pets, Security Deposits, Insurance, E-sign, and Other. Platforms in those categories are not graded yet and are not counted anywhere on this page.</p>"""
 
     html = re.sub(
