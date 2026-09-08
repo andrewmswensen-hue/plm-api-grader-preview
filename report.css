@@ -17,10 +17,14 @@
 /* Block, not flex: as flex items the pill and the sentence were separate boxes
    and the sentence wrapped away onto its own line. Inline, the pill sits in the
    first line of the text and the whole thing runs to two lines. */
-.pre-bar .wrap{ padding:10px 0; }
+.pre-bar .wrap{ padding:11px 0; }
+/* The site's base p carries a 14.5px bottom margin, which was landing inside
+   the bar and pushing the text off centre: 10px of space above it against 24.5
+   below. Reset so the wrap's own padding is the only vertical space. */
+.pre-bar p{ margin:0; }
 .pre-bar b{ color:#fff; font-weight:800; letter-spacing:.02em; }
 .pre-bar .pre-tag{ display:inline-flex; align-items:center; margin-right:11px;
-                   vertical-align:1px;
+                   line-height:1; vertical-align:1px;
                    background:rgba(255,255,255,.13); color:#fff; border-radius:999px;
                    padding:3px 11px; font-size:12px; font-weight:800;
                    letter-spacing:.09em; text-transform:uppercase;
