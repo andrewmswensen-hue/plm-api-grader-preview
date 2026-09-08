@@ -364,6 +364,28 @@
                   border-radius:var(--radius); background:#fdf8f3;
                   font-size:16px; }
 
+  /* Short rule between the sponsor credit and the subhead, matching the Largest
+     PM Companies hero. */
+  .hero-rule{ width:56px; height:3px; background:var(--primary); border-radius:2px;
+              margin:0 0 18px; }
+
+  /* Areas rather than source order, so the phone gets paragraph, video, buttons
+     while the desktop keeps the video in one tall right column. Named
+     .hero-vidgrid, not .hero-grid: styles.css already owns .hero-grid for the
+     homepage hero, where it is a column-reverse flex column. Colliding with it
+     silently reversed the order on phones. */
+  .hero-vidgrid{ display:grid; margin-top:30px; gap:22px 30px;
+                 grid-template-columns:1fr 1fr;
+                 grid-template-areas:"copy video" "btns video";
+                 align-items:start; }
+  .hg-copy{ grid-area:copy; margin-top:0; }
+  .hg-video{ grid-area:video; align-self:center; }
+  .hg-btns{ grid-area:btns; display:flex; flex-wrap:wrap; gap:12px; align-self:start; }
+  @media (max-width:820px){
+    .hero-vidgrid{ grid-template-columns:1fr;
+                   grid-template-areas:"copy" "video" "btns"; }
+  }
+
   /* Intro video. Same thumbnail-plus-lightbox pattern as the tester guide page:
      the base state is a plain link to YouTube, so a phone or a visitor with no
      JavaScript gets a working video with no special casing, and on wider screens
@@ -459,7 +481,7 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
       <!-- DOM order is paragraph, video, buttons, which IS the phone order.
            On desktop the grid areas below put the video in the right column
            spanning both rows, so the copy and buttons stack on the left. -->
-      <div class="hero-grid">
+      <div class="hero-vidgrid">
         <p class="sub hg-copy">Grading the property management platforms we all use, on whether they&#x27;ll actually let you access your own data. Same rubric for every platform: five weighted categories totalling 100 points. No cherry-picking, no platform-specific tuning, and the grading file is yours to download and check.</p>
 
         <div class="hg-video">
@@ -476,6 +498,11 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
             </span>
           </a>
           <a class="vid-link" href="https://youtu.be/Go39ZQyuyjo" target="_blank" rel="noopener">Click to watch on YouTube &rarr;</a>
+        </div>
+
+        <div class="hero-jump hg-btns">
+          <a class="btn btn-primary" href="#results">See the results &darr;</a>
+          <a class="btn btn-ghost" href="#method">How we grade</a>
         </div>
       </div>
     </div>
@@ -835,8 +862,13 @@ document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.g
 <div class="vlight" id="vidLight" aria-hidden="true">
   <button class="vlight-close" id="vidClose" aria-label="Close video">&times;</button>
   <div class="vlight-frame" role="dialog" aria-modal="true" aria-label="The PM API Report Card intro">
+    <!-- cc_load_policy=0 asks YouTube not to turn captions on. YouTube documents
+         this as following the viewer's own preference rather than forcing them
+         off, so a viewer who has captions switched on globally may still see
+         them. The video is burned-in captioned, so the durable fix is removing
+         the auto-generated caption track in YouTube Studio. -->
     <iframe id="vidFrame"
-            data-src="https://www.youtube.com/embed/Go39ZQyuyjo?rel=0&amp;autoplay=1"
+            data-src="https://www.youtube.com/embed/Go39ZQyuyjo?rel=0&amp;autoplay=1&amp;cc_load_policy=0"
             title="The PM API Report Card intro"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
