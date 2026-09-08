@@ -620,34 +620,24 @@ RESULTS = {
   # The first row that moved because the VENDOR changed the product, not because
   # the evidence or the rubric changed. Worth saying out loud: it is the clearest
   # evidence the report card is doing what it is for.
-  "note": "This is the first platform here to move because the vendor changed the "
-          "product, rather than because the evidence or the rubric changed. "
-          "Between the 2026-08-27 run and this one, LeadSimple shipped five "
-          "fixes, all of them in its two weakest categories: a public "
-          "documentation site, multiple API keys, read-only keys, per-key revoke, "
-          "and key labels. Access Control went from 1.3 out of 5 to 4.4, and "
-          "Documentation from 2.5 to 3.1, taking the score from 78 (C+) to 87 "
-          "(B+). Coverage and cost did not move, because the API surface and plan "
-          "access did not change. Two independent graders then scored the same "
-          "frozen evidence and agreed on 25 of the 27 checks, with the two splits "
-          "resolved against the evidence rather than averaged. The three runs "
-          "landed at 85, 86 and 87, so the result is robustly B or B+.",
+  "note": "Graded three times against the same frozen evidence and "
+          "reconciled rather than averaged. Categories 2, 3 and 5 were "
+          "unanimous across the runs.",
   "cats": [
     (15, 15, "You can build real tools on this. Read and change your main "
              "records, contacts, deals, and processes, and receive change events "
              "by webhook. Two gaps: you cannot create or complete a task through "
              "the API, and you cannot delete records through it."),
-    (5.8, 10, "The one category the improvements did not touch, and it shows. "
+    (5.8, 10, "The weakest of the technical categories, and it shows. "
               "Good in places: live rate-limit counters on every response, a "
               "request id on each one, and page totals so you can plan a full "
-              "sync. Weaker elsewhere, and unchanged from the last run. Money "
+              "sync. Weaker elsewhere. Money "
               "fields come back as text rather than numbers, errors give a "
               "message but no fixed code, webhooks have no signature and no "
               "stated retry rule, and there is no version in the path and no "
               "deprecation policy."),
-    (4.4, 5, "This was the weakest area on the card at 1.3 out of 5, and it is "
-             "now one of the stronger ones. LeadSimple shipped read-only keys, "
-             "multiple named keys, and per-key revoke. You can hand a reporting "
+    (4.4, 5, "One of the stronger areas on this card. LeadSimple offers "
+             "read-only keys, multiple named keys and per-key revoke. You can hand a reporting "
              "agent a key that cannot change anything, give every integration its "
              "own key, and cut one off without breaking the rest. The gap left is "
              "fine-grained scoping: the create-key dialog offers only read-only or "
@@ -679,12 +669,12 @@ RESULTS = {
     "Keys are read-only or full access; still no per-resource scoping",
     "No version in the path, and no deprecation policy",
   ],
-  "bottom": "LeadSimple's REST API has improved markedly, from 78 (C+) to 87 (B+), "
-            "because it fixed its two weakest areas. You can now create multiple "
+  "bottom": "LeadSimple's REST API is strongest exactly where it matters most for "
+            "safe automation. You can create multiple "
             "labeled keys, make a key read-only, and revoke any key on its own, so "
             "you can hand a reporting agent something safe and cut off one "
-            "integration without breaking the rest. The documentation is public "
-            "now, with a downloadable OpenAPI 3.0 file and request samples in five "
+            "integration without breaking the rest. The documentation is public, "
+            "with a downloadable OpenAPI 3.0 file and request samples in five "
             "languages, so a developer or an AI tool can build against it without "
             "a login. The remaining weaknesses are in reliability rather than "
             "access: money fields come back as text, errors carry no stable code, "
@@ -875,25 +865,15 @@ RESULTS = {
   # critical objects are applications, screening and lease lifecycle, and all
   # three are read-only. The write surface RentEngine does have sits outside the
   # classified core, so it cannot be counted toward it.
-  "note": "This replaces the 2026-09-01 run that scored 78 (C+), which itself "
-          "replaced a 2026-08-27 run that scored 74. Worth understanding why the "
-          "number went down when the API got better. Three of the five categories "
-          "improved: Design and Reliability 7.1 to 7.9, Access Control 3.0 to "
-          "4.0, and Documentation 4.4 to a perfect 5.0. What fell is functional "
-          "coverage, 9.4 to 5.6, and that is a grading change rather than a "
-          "product change. This run adopted the methodology's default "
-          "leasing-and-screening classification word for word and committed it to "
-          "a file before the API was examined. Under it the critical objects are "
+  "note": "Graded against the methodology's default leasing-and-screening "
+          "classification, adopted word for word and committed to a file "
+          "before the API was examined. Under it the critical objects are "
           "applications, screening decisions and the lease lifecycle, and all "
-          "three are read-only. RentEngine's real write surface, units, prospects, "
-          "showings, lockboxes and notes, sits outside that classified core, so "
-          "the rubric cannot count it there. Two other things belong on the "
-          "record. RentEngine sent a written response to the earlier report card, "
-          "and the run used it only to decide where to look: no check was marked "
-          "on the vendor's say-so, and every mark cites first-party documentation "
-          "or a live observation. And three showing endpoints the vendor said "
-          "would ship that afternoon returned 404 when the evidence was frozen, so "
-          "they were not credited.",
+          "three are read-only. RentEngine's substantial write surface, units, "
+          "prospects, showings, lockboxes and notes, sits outside that "
+          "classified core, so the rubric cannot count it there. Four checks "
+          "were documentation-graded because live write testing was not "
+          "authorized and no sandbox credential was available.",
   "cats": [
     (5.6, 15, "You can see everything and change almost nothing that matters most "
               "in a leasing tool. Reading is excellent: applications, screening "

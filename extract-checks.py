@@ -3,45 +3,43 @@
 Pull the per-check detail out of the grader markdown reports and freeze it into
 data/checks.json, which build-report-card.py reads.
 
-Why a separate step: the reports live in the OTHER repo under grader-reports/,
-which is gitignored because both repos are public and the reports carry live
-account details. Extraction runs on Andrew's machine only. What lands in git is
-this script's OUTPUT, which is reviewed before it is committed. That also makes
-the page build reproducible without the reports present.
+Reads the PUBLISHED reports in files/reports/, not the archive. Those are the
+copies a reader can actually download, so whatever this extracts is by
+construction the same text the download shows. Run publish-reports.py first: it
+copies the archive into files/reports/ and applies redaction and suppression on
+the way.
 
-Run it only when a new report arrives:
-
-    python3 extract-checks.py
+    python3 publish-reports.py && python3 extract-checks.py
 
 Nothing here scores anything. It copies marks and reasoning verbatim.
 """
 import json, re, sys, unicodedata
 from pathlib import Path
 
-REPORTS = Path("../peterlohmann-website/grader-reports/reports")
+REPORTS = Path("files/reports")
 OUT     = Path("data/checks.json")
 
 # Company -> the report file that produced the PUBLISHED score. Kept explicit
 # rather than inferred, so a superseded run can never leak onto the page.
 SOURCES = {
-    "AppFolio":          "appfolio-2026-09-01.md",
-    "Aptly":             "aptly-2026-09-03.md",
-    "Boom":              "boom-2026-09-03.md",
-    "Buildium":          "buildium-2026-08-27.md",   # + reconciliation, below
-    "Column":            "column-2026-09-02.md",
-    "LeadSimple":        "leadsimple-2026-08-28.md",
-    "Property Meld":     "property-meld-2026-09-01.md",
-    "QuickBooks Online": "quickbooks-online-2026-09-02.md",
-    "Quo":               "quo-2026-09-08.md",
-    "RentEngine":        "rentengine-2026-09-03.md",
-    "Rent Manager":     "rent-manager-2026-09-07.md",
-    "Process Street":    "process-street-2026-08-31.md",
-    "Rentvine":          "rentvine-2026-09-02.md",
-    "RingCentral":       "ringcentral-2026-09-01.md",
-    "ShowMojo":          "showmojo-2026-09-02.md",
-    "Tenant Turner":     "tenant-turner-2026-09-01.md",
-    "Xero":              "xero-2026-08-27.md",
-    "Zoom":              "zoom-2026-09-08.md",
+    "AppFolio":            "appfolio.md",
+    "Aptly":               "aptly.md",
+    "Boom":                "boom.md",
+    "Buildium":            "buildium.md",
+    "Column":              "column.md",
+    "LeadSimple":          "leadsimple.md",
+    "Process Street":      "process-street.md",
+    "Property Meld":       "property-meld.md",
+    "QuickBooks Online":   "quickbooks-online.md",
+    "Quo":                 "quo.md",
+    "Rent Manager":        "rent-manager.md",
+    "RentEngine":          "rentengine.md",
+    "Rentvine":            "rentvine.md",
+    "RingCentral":         "ringcentral.md",
+    "ShowMojo":            "showmojo.md",
+    "Tenant Turner":       "tenant-turner.md",
+    "Xero":                "xero.md",
+    "Zoom":                "zoom.md",
 }
 
 # Live account identifiers that must never reach a public repo. Applied to the

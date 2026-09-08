@@ -1,6 +1,6 @@
 {
  "AppFolio": {
-  "source": "appfolio-2026-09-01.md",
+  "source": "appfolio.md",
   "meta": {
    "tier": "Baseline verified — read-path battery (steps 1–5) complete against production; write-path steps (6–8) not run pending operator review of the dry-run plan, so write-dependent checks are graded from first-party documentation and flagged below",
    "battery": "steps 1–5 complete; step 6 pending operator; step 7 N-A→pending (idempotency IS documented — live retry test moves to the write plan); step 8 pending operator",
@@ -201,7 +201,7 @@
   ]
  },
  "Aptly": {
-  "source": "aptly-2026-09-03.md",
+  "source": "aptly.md",
   "meta": {
    "tier": "Fully verified — controlled live",
    "battery": "complete — steps 1–6 run; step 7 (idempotency) N-A because the API documents no idempotency mechanism; step 8 (webhooks) N-A because no registrable webhook or event subscription was evidenced",
@@ -402,7 +402,7 @@
   ]
  },
  "Boom": {
-  "source": "boom-2026-09-03.md",
+  "source": "boom.md",
   "meta": {
    "tier": "baseline verified",
    "battery": "steps 1–5 complete. Step 6 (create/update) not run — no authorization, no sandbox. Step 7 (idempotency replay) N-A — no idempotency mechanism is documented anywhere in the vendor's materials. Step 8 (register webhook, trigger, observe) not run — registration is a write.",
@@ -603,7 +603,7 @@
   ]
  },
  "Buildium": {
-  "source": "buildium-2026-08-27.md",
+  "source": "buildium.md",
   "meta": {
    "tier": "Baseline verified",
    "battery": "read-path steps 1–5 complete; step 6 (write) not performed (read-only rule); step 7 (idempotency) N-A (no idempotency documented); step 8 (webhook) not performed (would require a production subscription + public endpoint)",
@@ -804,7 +804,7 @@
   ]
  },
  "Column": {
-  "source": "column-2026-09-02.md",
+  "source": "column.md",
   "meta": {
    "tier": "Fully verified - sandbox",
    "battery": "complete (steps 1-8 all run; no step N-A)",
@@ -1005,11 +1005,11 @@
   ]
  },
  "LeadSimple": {
-  "source": "leadsimple-2026-08-28.md",
+  "source": "leadsimple.md",
   "meta": {
    "tier": "Baseline verified (read-path battery run live 2026-08-25; write-path documentation-graded)",
    "battery": "read-path steps 1–5 complete (2026-08-25, unchanged endpoints); write-path steps 6–8 documentation-graded",
-   "date": "2026-08-28 (re-run after LeadSimple shipped access-control and documentation improvements)",
+   "date": "2026-08-28",
    "model": "Claude Opus 4.8 (claude-opus-4-8)",
    "coverage": "100% (25 of 25 applicable checks verified; C3.5 is N-A; no category Unable to verify; gate satisfied — overall ≥ 80%)"
   },
@@ -1131,7 +1131,7 @@
     "cat": 3,
     "title": "Read-only credentials",
     "mark": "yes",
-    "why": "the Create REST API key dialog has a \"Read-only access\" checkbox (\"Read-only keys can retrieve data but cannot create, change, or delete it\"). Previously the single key was full read/write (the existing default key is tagged \"Read and write\"). [operator-supplied API Keys screenshot, 2026-08-28]"
+    "why": "the Create REST API key dialog has a \"Read-only access\" checkbox (\"Read-only keys can retrieve data but cannot create, change, or delete it\"). [operator-supplied API Keys screenshot, 2026-08-28]"
    },
    {
     "id": "C3.2",
@@ -1145,14 +1145,14 @@
     "cat": 3,
     "title": "Multiple keys",
     "mark": "yes",
-    "why": "a \"Create API key\" button issues multiple distinct keys, each given a required name; the page states \"use a separate key for each integration\" and \"you can revoke this key later without interrupting your other integrations.\" Previously one key per account. [operator-supplied API Keys screenshot, 2026-08-28]"
+    "why": "a \"Create API key\" button issues multiple distinct keys, each given a required name; the page states \"use a separate key for each integration\" and \"you can revoke this key later without interrupting your other integrations.\" [operator-supplied API Keys screenshot, 2026-08-28]"
    },
    {
     "id": "C3.4",
     "cat": 3,
     "title": "Rotation and revocation",
     "mark": "yes",
-    "why": "each key exposes both \"Rotate\" and \"Revoke\" controls, self-serve; the page guidance says \"revoke a key immediately if it's exposed.\" Previously rotate-only. [operator-supplied API Keys screenshot, 2026-08-28]"
+    "why": "each key exposes both \"Rotate\" and \"Revoke\" controls, self-serve; the page guidance says \"revoke a key immediately if it's exposed.\" [operator-supplied API Keys screenshot, 2026-08-28]"
    },
    {
     "id": "C3.5",
@@ -1206,7 +1206,7 @@
   ]
  },
  "Process Street": {
-  "source": "process-street-2026-08-31.md",
+  "source": "process-street.md",
   "meta": {
    "tier": "Fully verified — controlled live",
    "battery": "complete (steps 1–8 all run; no step N-A)",
@@ -1407,7 +1407,7 @@
   ]
  },
  "Property Meld": {
-  "source": "property-meld-2026-09-01.md",
+  "source": "property-meld.md",
   "meta": {
    "tier": "fully verified — controlled live",
    "battery": "steps 1–7 complete; step 8 N-A (no webhooks)",
@@ -1608,7 +1608,7 @@
   ]
  },
  "QuickBooks Online": {
-  "source": "quickbooks-online-2026-09-02.md",
+  "source": "quickbooks-online.md",
   "meta": {
    "tier": "baseline verified",
    "battery": "steps 1-7 complete; step 8 not possible (webhook subscriptions are configured only in the developer portal UI and require a public operator-controlled endpoint, which was not available)",
@@ -1809,7 +1809,7 @@
   ]
  },
  "Quo": {
-  "source": "quo-2026-09-08.md",
+  "source": "quo.md",
   "meta": {
    "tier": "Baseline verified — controlled live (read-path fully live; write-path C1.2/C1.3 observed on operator-authorized sentinel fixtures with verified cleanup; C2.8 webhook delivery and the message-send portion of C1.2 documentation-graded)",
    "battery": "complete for a Baseline-verified run — steps 1–6 performed live; step 7 (idempotency) N-A (no idempotency mechanism exists); step 8 (webhook delivery) documentation-graded (no operator-controlled HTTPS endpoint available and webhook writes were out of the authorized scope)",
@@ -2010,7 +2010,7 @@
   ]
  },
  "Rent Manager": {
-  "source": "rent-manager-2026-09-07.md",
+  "source": "rent-manager.md",
   "meta": {
    "tier": "Baseline verified",
    "battery": "steps 1–5 complete. Step 6 (create/update) not run — operator declined live-data writes. Step 7 (idempotency) not run — the API documents no idempotency mechanism, and no write was authorized. Step 8 (webhooks) not run — no write authorized, and the read-only credential lacks the Manage Webhooks privilege.",
@@ -2211,7 +2211,7 @@
   ]
  },
  "RentEngine": {
-  "source": "rentengine-2026-09-03.md",
+  "source": "rentengine.md",
   "meta": {
    "tier": "Baseline verified",
    "battery": "steps 1–5 complete. Step 6 (create/update) and step 7 (idempotency) not run — no sandbox reachable and no recorded write authorization. Step 8 (webhooks) not runnable via the API at all: webhook subscriptions are created only in the developer portal UI, there is no webhook-management endpoint.",
@@ -2239,7 +2239,7 @@
     "cat": 1,
     "title": "Delete or lifecycle actions",
     "mark": "no",
-    "why": "weighted coverage = 50.0% (4.5 ÷ 9). Application approve/reject is a critical lifecycle action and is absent, which forces `no` regardless of the percentage. Present: unit status transitions [`UpsertUnitRequest.status`], showing cancellation [`after_upsert_action.cancel_scheduled_bookings`], soft-delete [`UpsertFloorplanRequest.deleted`, `UpsertMultifamilyPropertyRequest.deleted`]. Verified live: `POST /showings/cancel`, `/showings/approve`, and `/showings/confirm` all return 404 at 11:32 EDT on 2026-09-03, while the control `GET /showings/create` returns 405 (method not allowed), proving the probe distinguishes existing from absent routes. The vendor states these are built and due to ship by 2 pm on 2026-09-03; they were not in production when this packet was frozen and are therefore not credited."
+    "why": "weighted coverage = 50.0% (4.5 ÷ 9). Application approve/reject is a critical lifecycle action and is absent, which forces `no` regardless of the percentage. Present: unit status transitions [`UpsertUnitRequest.status`], showing cancellation [`after_upsert_action.cancel_scheduled_bookings`], soft-delete [`UpsertFloorplanRequest.deleted`, `UpsertMultifamilyPropertyRequest.deleted`]. Verified live: `POST /showings/cancel`, `/showings/approve`, and `/showings/confirm` all return 404 at 11:32 EDT on 2026-09-03, while the control `GET /showings/create` returns 405 (method not allowed), proving the probe distinguishes existing from absent routes."
    },
    {
     "id": "C1.4",
@@ -2412,7 +2412,7 @@
   ]
  },
  "Rentvine": {
-  "source": "rentvine-2026-09-02.md",
+  "source": "rentvine.md",
   "meta": {
    "tier": "Baseline verified",
    "battery": "Steps 1–6 complete. Step 7 (idempotency) N-A — the API documents no idempotency mechanism (`idempoten*` occurs zero times in the published specification). Step 8 (webhooks) not completed — Rentvine webhooks are created only through the account UI, no webhook-registration endpoint exists in the API, and no operator-controlled receiver was authorized.",
@@ -2613,7 +2613,7 @@
   ]
  },
  "RingCentral": {
-  "source": "ringcentral-2026-09-01.md",
+  "source": "ringcentral.md",
   "meta": {
    "tier": "Baseline verified",
    "battery": "read-path steps 1–5 complete; step 6 (write) documentation-graded; step 7 (idempotency) N-A (no idempotency documented); step 8 (webhook delivery) documentation-graded (no operator-controlled endpoint)",
@@ -2814,7 +2814,7 @@
   ]
  },
  "ShowMojo": {
-  "source": "showmojo-2026-09-02.md",
+  "source": "showmojo.md",
   "meta": {
    "tier": "Baseline verified",
    "battery": "Steps 1–5 complete. Steps 6, 7, 8 not run (operator declined live-data write testing).",
@@ -3015,7 +3015,7 @@
   ]
  },
  "Tenant Turner": {
-  "source": "tenant-turner-2026-09-01.md",
+  "source": "tenant-turner.md",
   "meta": {
    "tier": "Baseline verified",
    "battery": "steps 1–5 complete; step 7 N-A (no idempotency documented); steps 6 and 8 not run",
@@ -3216,7 +3216,7 @@
   ]
  },
  "Xero": {
-  "source": "xero-2026-08-27.md",
+  "source": "xero.md",
   "meta": {
    "tier": "Baseline verified",
    "battery": "read-path steps 1–5 complete live; write-path steps 6–8 N/A (read-only connection) and documentation-graded",
@@ -3417,7 +3417,7 @@
   ]
  },
  "Zoom": {
-  "source": "zoom-2026-09-08.md",
+  "source": "zoom.md",
   "meta": {
    "tier": "Baseline verified",
    "battery": "steps 1–7 complete; step 8 (webhook registration + delivery) not run — requires an HTTPS receiver the operator controls, and the controlled live-data protocol forbids pointing a subscription at a third-party or shared endpoint",
