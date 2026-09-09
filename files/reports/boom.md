@@ -1,3 +1,12 @@
+> **Correction, 2026-09-09.** C5.3 (not commercially gated) was published
+> as *partial* and has been corrected to *yes*. The check asks whether API
+> access is included or free, not whether pricing is published; the run found
+> no tier gating, and the account owner has since confirmed they were not
+> charged extra for API access. Run 1 marked this yes originally. The
+> published score moves from **64 (D)** to **71 (C-)**. No other mark,
+> finding or piece of evidence changed. Figures below that derive from C5.3
+> have been recomputed; the archived report retains the original.
+
 # API Report Card: Boom — BoomScreen / BoomReport / BoomCRM Partner API
 
 ## Run metadata
@@ -56,7 +65,7 @@ Explicitly excluded (different company, not the evaluated vendor):
 - **C3.1, C3.2, C3.4** — changelog "Scoped API keys" and "Read-only API access" (2026-03-31), "API key regeneration warning" (2026-04-08); operator screenshot of the Create API key dialog. Raised from unverified to **yes**.
 - **C4.4** — `www.boompay.app/product-updates`; `boompay/api-docs` commit history. Raised from partial to **yes**; held at yes through reconciliation.
 - **C4.2** — npm registry record for `@boompay/screening`; structural validation of both specs. Run 1 held at yes; **reduced to partial in reconciliation**. The npm package is a React UI component library, not an API client.
-- **C5.3** — `www.boompay.app` sitemap (no pricing page); `/legal`; changelog scan for tier, add-on and upgrade language. Run 1 set yes; **reduced to partial in reconciliation**.
+- **C5.3** — `www.boompay.app` sitemap (no pricing page); `/legal`; changelog scan for tier, add-on and upgrade language. Run 1 set yes; reduced to partial in reconciliation, then **restored to yes by the 2026-09-09 correction**.
 
 Runs 2 and 3 added no sources; they graded the frozen packet only.
 
@@ -161,20 +170,20 @@ Score math: earned 2.5 of 4 applicable checks; unrounded fraction = 0.6250; cate
 
 What this means for you: Point your developer — or your coding assistant — at the OpenAPI file on GitHub, not at the documentation site's endpoint pages. The screening spec is accurate, current and complete enough to generate a working client. The rent-reporting half will cost you a day of trial and error: its spec points at the sandbox host, describes form-encoded bodies the live API does not use, and calls numbers and booleans strings. The endpoint pages in the docs navigation have pointed at a developer's dead tunnel since March 2024 — ignore them. The same applies to AI tools: `llms-full.txt` looks authoritative and will quietly give an agent the wrong endpoint list, so hand it the spec file explicitly. The redeeming feature is that Boom clearly maintains this: the changelog is weekly and the spec repo was updated a week before this evaluation.
 
-## Category 5: Accessibility and Cost: 11.3/15
+## Category 5: Accessibility and Cost: 15.0/15
 
 - C5.1 Self-serve API key: yes — directly observed, unanimous across all three runs. The account owner, a property manager rather than a software partner, created a working production key from Settings → API in their own account at 10:59 on the morning of the run, and it authenticated against the production host minutes later. Creation is a form with a name, an access type, optional scopes and a Save button — no sales call, no ticket, no approval step. Boom's documentation describes a slower route ("Fill out the 'Request API documentation' form… Your request will be reviewed, and you will be emailed and invited to a Sandbox and Production Boom Partner Platform"), but that governs partner onboarding and sandbox provisioning, not credential issuance in an existing account; the entitlement question it raises is scored in C5.3. [operator screenshots 2026-09-03; live authentication 18:25 UTC]
-- C5.3 Not commercially gated: partial — no evidence of a premium-plan gate exists: Boom publishes no plan tiers, a changelog sweep for tier, upgrade and add-on language returns only screening product add-ons (TransUnion ResidentScore, Persona TIN verification) with no API entitlement attached, scoped and read-only keys are presented as general platform capabilities without plan qualification, and an ordinary property-management account has held an API key since April 2025. **Exact limitation:** "included or free" is not established either, and that is what *yes* requires. Boom publishes no pricing whatsoever — a 119-URL sitemap with no pricing page, `/pricing` returning 404, every pricing question routed to a sales Typeform ("for details about pricing, contact sales") — the documented key-generation route runs through a request form that "will be reviewed", and the account owner cannot confirm whether their own access carried a plan upgrade or fee and has an open question with Boom. Two adjacent capabilities are also vendor-gated rather than self-serve: sandbox access requires the request form and an invitation, and enhanced-security JWT verification requires contacting Boom. Neither is identity or regulatory verification, so neither is excluded on those grounds. [`www.boompay.app` sitemap; `/legal`; docs `/support`, `/z1wr-authentication`; operator statement 2026-09-03]
+- C5.3 Not commercially gated: yes — no evidence of a premium-plan gate exists: Boom publishes no plan tiers, a changelog sweep for tier, upgrade and add-on language returns only screening product add-ons (TransUnion ResidentScore, Persona TIN verification) with no API entitlement attached, scoped and read-only keys are presented as general platform capabilities without plan qualification, and an ordinary property-management account has held an API key since April 2025. **Recorded for transparency, not scored against the check:** Boom publishes no pricing — a 119-URL sitemap with no pricing page, `/pricing` returning 404, every pricing question routed to a sales Typeform — so an operator cannot learn the cost without contacting sales. That is an opacity problem, not a commercial gate, and C5.3 asks only whether access is included or free. The account owner has confirmed they were not charged extra for API access. Two adjacent capabilities are also vendor-gated rather than self-serve: sandbox access requires the request form and an invitation, and enhanced-security JWT verification requires contacting Boom. Neither is identity or regulatory verification, so neither is excluded on those grounds. [`www.boompay.app` sitemap; `/legal`; docs `/support`, `/z1wr-authentication`; operator statement 2026-09-03]
 
-Score math: earned 1.5 of 2 applicable checks; unrounded fraction = 0.7500; category points = 0.7500 × 15 = **11.25/15**, displayed **11.3/15**; verification coverage = 2/2 = 100%.
+Score math: earned 2.0 of 2 applicable checks; unrounded fraction = 1.0000; category points = 1.0000 × 15 = **15.0/15**; verification coverage = 2/2 = 100%.
 
 What this means for you: If you are already a Boom customer you are minutes from a working key — Settings → API, name it, pick read-only if that is all you need, save. Nobody to ask, no ticket to file. What you cannot find out from anything Boom publishes is what it costs, because there is no pricing page anywhere and every pricing question routes to a sales form. Confirm in writing that API use carries no charge before you build a dependency on it, and expect to email Boom if you want a sandbox to develop against.
 
 ## Total
-- Raw: **31.875 / 50**
-- Normalized before rounding: **63.75 / 100**
-- Published numeric score: **64 / 100**
-- Letter grade: **D**
+- Raw: **35.625 / 50**
+- Normalized before rounding: **71.25 / 100**
+- Published numeric score: **71 / 100**
+- Letter grade: **C-**
 - Evidence tier: **baseline verified**
 - Overall verification coverage: **100%** — 27 of 27 applicable checks verified (yes + partial + no); 0 N-A, 0 unverified. Gate satisfied: no category below 0.70 (all five at 1.00); overall ≥ 0.80; tier publishable.
 - Partial-result flag: **yes.** Four checks — C1.2, C1.3, C2.4, C2.8 — were graded from first-party documentation rather than observation, because live-data write testing was not authorized and no sandbox credential was available. A sandbox key would resolve all four and lift the run to Fully verified: a create-and-delete on a test property for C1.2 and C1.3, an identical repeated create for C2.4, and a subscription pointed at an operator-controlled endpoint for C2.8. They could move in either direction — C2.4 in particular could fall to *no* if a duplicated `report_rental_payments` call proves to create a duplicate furnishment.
@@ -182,17 +191,17 @@ What this means for you: If you are already a Boom customer you are minutes from
 
   | Open question | Raised by | Score | Grade |
   |---|---|---|---|
-  | *Published result* — lease lifecycle 0.5, C2.11 partial, C2.6 partial, C4.4 yes | reconciled | 64 | D |
-  | **Lease lifecycle scored 0.0 instead of 0.5.** A critical object and a critical write workflow become absent, forcing C1.1 and C1.2 to *no*; Category 1 falls to 3.75. All three runs scored 0.5, but the 0.5 band's wording (read-only where writes are expected, or a missing *non-critical* operation) fits poorly. | run 2 | 56 | F |
-  | **C2.11 scored *no*.** An identifier confined to internal-error responses, absent from every success and from 30+ captured headers, and never documented for support use, arguably is not a request identifier at all. | run 2 | 63 | D |
-  | **C2.6 scored *yes*.** Ordering stability was observed live, and the methodology says to score live-tested checks on observed behaviour. | run 3 | 65 | D |
-  | **C4.4 scored *partial*.** The reference is demonstrably not maintained in step with the API, whatever the changelog says. | run 3 | 63 | D |
+  | *Published result* — lease lifecycle 0.5, C2.11 partial, C2.6 partial, C4.4 yes | reconciled | 71 | C- |
+  | **Lease lifecycle scored 0.0 instead of 0.5.** A critical object and a critical write workflow become absent, forcing C1.1 and C1.2 to *no*; Category 1 falls to 3.75. All three runs scored 0.5, but the 0.5 band's wording (read-only where writes are expected, or a missing *non-critical* operation) fits poorly. | run 2 | 64 | D |
+  | **C2.11 scored *no*.** An identifier confined to internal-error responses, absent from every success and from 30+ captured headers, and never documented for support use, arguably is not a request identifier at all. | run 2 | 70 | C- |
+  | **C2.6 scored *yes*.** Ordering stability was observed live, and the methodology says to score live-tested checks on observed behaviour. | run 3 | 72 | C- |
+  | **C4.4 scored *partial*.** The reference is demonstrably not maintained in step with the API, whatever the changelog says. | run 3 | 70 | C- |
 
   The lease-lifecycle question is the one worth a methodology ruling: what "lease lifecycle" should demand of a screening tool that deliberately hands the lease to a system of record.
 
 ## Bottom line for a property manager
 
-You can build real automation on the screening half today — pull applications with their credit, criminal, eviction and income reports, decide with your own criteria, and push approved applicants into your PMS — and you can enroll residents in rent reporting, but there is no lease record, no document upload and no e-signature anywhere in this API, so approval is where Boom stops and your system of record begins. Its biggest strength is access control: read-only keys scoped to a single owner's property group make this one of the few tools in this category you can safely hand to an AI agent or an outside vendor. Its biggest limitation is that the rent-reporting half is unreliable to build against — the published schema disagrees with what the endpoint actually returns on rent amounts and booleans, the documentation's endpoint pages have pointed at a dead developer tunnel since March 2024, and there is no request ID, concurrency control, retry guidance or idempotency key for unattended jobs. Boom is not a bank, no first-party material names any bank, processor or money transmitter behind it, and it documents no trust-accounting, client-fund, security-deposit or escrow workflow — its financial endpoints concern Boom's own billing to you, not money you hold for owners. A score of 64 reflects a narrow API with unreliable documentation rather than a weak product: treat Boom as a screening and credit-reporting layer beside your PMS, your trust accounting and your bank rather than a replacement for any of them, and expect to keep Plaid or shared ledger data behind payment verification.
+You can build real automation on the screening half today — pull applications with their credit, criminal, eviction and income reports, decide with your own criteria, and push approved applicants into your PMS — and you can enroll residents in rent reporting, but there is no lease record, no document upload and no e-signature anywhere in this API, so approval is where Boom stops and your system of record begins. Its biggest strength is access control: read-only keys scoped to a single owner's property group make this one of the few tools in this category you can safely hand to an AI agent or an outside vendor. Its biggest limitation is that the rent-reporting half is unreliable to build against — the published schema disagrees with what the endpoint actually returns on rent amounts and booleans, the documentation's endpoint pages have pointed at a dead developer tunnel since March 2024, and there is no request ID, concurrency control, retry guidance or idempotency key for unattended jobs. Boom is not a bank, no first-party material names any bank, processor or money transmitter behind it, and it documents no trust-accounting, client-fund, security-deposit or escrow workflow — its financial endpoints concern Boom's own billing to you, not money you hold for owners. A score of 71 reflects a narrow API with unreliable documentation rather than a weak product: treat Boom as a screening and credit-reporting layer beside your PMS, your trust accounting and your bank rather than a replacement for any of them, and expect to keep Plaid or shared ledger data behind payment verification.
 
 
 ---
@@ -233,7 +242,7 @@ Run 1 performed discovery, ran the live battery and assembled the packet. Runs 2
 | C4.3 | partial | partial | partial | partial |
 | C4.4 | yes | yes | **partial** | **yes** |
 | C5.1 | yes | yes | yes | yes |
-| C5.3 | **yes** | partial | partial | **partial** |
+| C5.3 | **yes** | partial | partial | **yes** (corrected 2026-09-09) |
 
 ## Totals
 
@@ -242,7 +251,7 @@ Run 1 performed discovery, ran the live battery and assembled the packet. Runs 2
 | Run 1 | discovery, live battery, packet assembly | 40.000 | 80.00 | 80 | B− |
 | Run 2 | independent, packet only | 31.875 | 63.75 | 64 | D |
 | Run 3 | independent, packet only | 31.667 | 63.33 | 63 | D |
-| **Resolved** | each split settled against the frozen evidence | **31.875** | **63.75** | **64** | **D** |
+| **Resolved** | each split settled against the frozen evidence, C5.3 corrected 2026-09-09 | **35.625** | **71.25** | **71** | **C-** |
 
 ## How each split was resolved
 
@@ -251,6 +260,6 @@ Run 1 performed discovery, ran the live battery and assembled the packet. Runs 2
 - **C2.6 → partial** (resolved against run 3). The check requires "a stable ordering guarantee". Observing identical ordering across two calls demonstrates behaviour, not a guarantee, and nothing commits to one. Run 2 adds a second partial trigger the check names explicitly: the per-page ceiling is undocumented.
 - **C4.2 → partial.** Run 1 applied the "one strong mechanism is sufficient" clause to the screening spec alone. That clause exists to stop vendors earning extra credit for multiple formats, not to let a spec covering half the API stand for the whole. The screening spec "covers a limited subset"; the rent-reporting spec "requires substantial manual correction". Both partial conditions fire.
 - **C4.4 → yes** (resolved against run 3). Run 3 marked it down for the stale endpoint pages, but those already carry their penalty in C4.1, and this check's own text confines it to currency of change communication while warning against counting the same evidence twice.
-- **C5.3 → partial.** Run 1 read the absence of any tier-gating statement as evidence of inclusion. That is the "never reward opacity" trap: Boom publishes no pricing at all, so "included or free" is not established, merely not contradicted. The account owner's own uncertainty about whether their access carried a fee is direct evidence that entitlement is unsettled.
+- **C5.3 → yes (corrected 2026-09-09).** Reconciliation moved run 1’s yes to partial on a "never reward opacity" argument: Boom publishes no pricing, so inclusion was not established, merely not contradicted. That reasoning does not track the check, which asks whether access is included or free rather than whether pricing is published, and no tier gating was found. The account owner has since confirmed they were not charged extra. Run 1’s original mark is restored.
 
-Run 1 was the outlier on four of six splits and was corrected on all four, all in the same direction — too generous, and consistently by grading against what Boom has rather than against the fixed classification. The two independents, which never saw each other's work, landed one point apart. The resolved mark set coincides with run 2's by argument rather than deference: on C2.6 and C4.4 the resolution went against run 3 and kept run 1's original marks.
+Run 1 was the outlier on four of six splits and was corrected on three of them, all in the same direction — too generous, and consistently by grading against what Boom has rather than against the fixed classification. The two independents, which never saw each other's work, landed one point apart. The resolved mark set coincides with run 2's by argument rather than deference: on C2.6 and C4.4 the resolution went against run 3 and kept run 1's original marks.

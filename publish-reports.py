@@ -96,6 +96,79 @@ SUPPRESS = {
 }
 
 
+# ---------------------------------------------------------------------------
+# PUBLISHED CORRECTIONS
+#
+# Applied on the way out, like SUPPRESS, so a rebuild cannot revert them. Each
+# rule must match or the build aborts.
+#
+# Boom C5.3, corrected 2026-09-09. The run marked "not commercially gated" as
+# partial while its own text established that no gate exists, withholding a pass
+# because Boom publishes no pricing. The methodology does not ask for published
+# pricing: C5.3 awards yes "when included or free", partial "when some meaningful
+# capabilities are tier-gated", no "when the API requires a premium plan". No
+# tier-gating was found. The one genuine gap, that the account owner could not
+# confirm whether their access carried a fee, has since been answered by the
+# operator: they were not charged extra, so access was included. Run 1 originally
+# marked this yes; the correction restores that mark.
+#
+# Nothing else in the run changes. All other marks, the evidence and the findings
+# stand; only the figures derived from C5.3 move.
+# ---------------------------------------------------------------------------
+CORRECTIONS = {
+    "boom": [
+        # 1. dated notice at the top, so a reader knows this differs from the run as first reconciled
+        ("# API Report Card: Boom",
+         "> **Correction, 2026-09-09.** C5.3 (not commercially gated) was published\n"
+         "> as *partial* and has been corrected to *yes*. The check asks whether API\n"
+         "> access is included or free, not whether pricing is published; the run found\n"
+         "> no tier gating, and the account owner has since confirmed they were not\n"
+         "> charged extra for API access. Run 1 marked this yes originally. The\n"
+         "> published score moves from **64 (D)** to **71 (C-)**. No other mark,\n"
+         "> finding or piece of evidence changed. Figures below that derive from C5.3\n"
+         "> have been recomputed; the archived report retains the original.\n\n"
+         "# API Report Card: Boom"),
+        # 2. evidence-amendment log
+        ("Run 1 set yes; **reduced to partial in reconciliation**.",
+         "Run 1 set yes; reduced to partial in reconciliation, then **restored to yes "
+         "by the 2026-09-09 correction**."),
+        # 3-5. the check, its category heading and its score math
+        ("## Category 5: Accessibility and Cost: 11.3/15",
+         "## Category 5: Accessibility and Cost: 15.0/15"),
+        ("- C5.3 Not commercially gated: partial \u2014 no evidence of a premium-plan gate exists:",
+         "- C5.3 Not commercially gated: yes \u2014 no evidence of a premium-plan gate exists:"),
+        ('**Exact limitation:** "included or free" is not established either, and that is what *yes* requires. Boom publishes no pricing whatsoever \u2014 a 119-URL sitemap with no pricing page, `/pricing` returning 404, every pricing question routed to a sales Typeform ("for details about pricing, contact sales") \u2014 the documented key-generation route runs through a request form that "will be reviewed", and the account owner cannot confirm whether their own access carried a plan upgrade or fee and has an open question with Boom.',
+         '**Recorded for transparency, not scored against the check:** Boom publishes no pricing \u2014 a 119-URL sitemap with no pricing page, `/pricing` returning 404, every pricing question routed to a sales Typeform \u2014 so an operator cannot learn the cost without contacting sales. That is an opacity problem, not a commercial gate, and C5.3 asks only whether access is included or free. The account owner has confirmed they were not charged extra for API access.'),
+        ("Score math: earned 1.5 of 2 applicable checks; unrounded fraction = 0.7500; category points = 0.7500 \u00d7 15 = **11.25/15**, displayed **11.3/15**;",
+         "Score math: earned 2.0 of 2 applicable checks; unrounded fraction = 1.0000; category points = 1.0000 \u00d7 15 = **15.0/15**;"),
+        # 6. totals
+        ("- Raw: **31.875 / 50**", "- Raw: **35.625 / 50**"),
+        ("- Normalized before rounding: **63.75 / 100**", "- Normalized before rounding: **71.25 / 100**"),
+        ("- Published numeric score: **64 / 100**", "- Published numeric score: **71 / 100**"),
+        ("- Letter grade: **D**", "- Letter grade: **C-**"),
+        # 7. sensitivity table, recomputed from the corrected baseline
+        ("| *Published result* \u2014 lease lifecycle 0.5, C2.11 partial, C2.6 partial, C4.4 yes | reconciled | 64 | D |",
+         "| *Published result* \u2014 lease lifecycle 0.5, C2.11 partial, C2.6 partial, C4.4 yes | reconciled | 71 | C- |"),
+        ("| run 2 | 56 | F |", "| run 2 | 64 | D |"),
+        ("| run 2 | 63 | D |", "| run 2 | 70 | C- |"),
+        ("| run 3 | 65 | D |", "| run 3 | 72 | C- |"),
+        ("| run 3 | 63 | D |", "| run 3 | 70 | C- |"),
+        # 8. reconciliation mark table and run totals
+        ("| C5.3 | **yes** | partial | partial | **partial** |",
+         "| C5.3 | **yes** | partial | partial | **yes** (corrected 2026-09-09) |"),
+        ("| **Resolved** | each split settled against the frozen evidence | **31.875** | **63.75** | **64** | **D** |",
+         "| **Resolved** | each split settled against the frozen evidence, C5.3 corrected 2026-09-09 | **35.625** | **71.25** | **71** | **C-** |"),
+        # 9. the resolution paragraph and the outlier count that depended on it
+        ('- **C5.3 \u2192 partial.** Run 1 read the absence of any tier-gating statement as evidence of inclusion. That is the "never reward opacity" trap: Boom publishes no pricing at all, so "included or free" is not established, merely not contradicted. The account owner\'s own uncertainty about whether their access carried a fee is direct evidence that entitlement is unsettled.',
+         '- **C5.3 \u2192 yes (corrected 2026-09-09).** Reconciliation moved run 1\u2019s yes to partial on a "never reward opacity" argument: Boom publishes no pricing, so inclusion was not established, merely not contradicted. That reasoning does not track the check, which asks whether access is included or free rather than whether pricing is published, and no tier gating was found. The account owner has since confirmed they were not charged extra. Run 1\u2019s original mark is restored.'),
+        ("Run 1 was the outlier on four of six splits and was corrected on all four, all in the same direction",
+         "Run 1 was the outlier on four of six splits and was corrected on three of them, all in the same direction"),
+        # 10. bottom line
+        ("A score of 64 reflects a narrow API", "A score of 71 reflects a narrow API"),
+    ],
+}
+
+
 def main():
     if not SRC.is_dir():
         raise SystemExit(f"source reports not found: {SRC.resolve()}")
@@ -109,6 +182,7 @@ def main():
         text = src.read_text(encoding="utf-8", errors="replace")
         hits = []
         suppressed = 0
+        corrected = 0
         for pat, repl in REDACT:
             text, count = re.subn(pat, repl, text)
             if count:
@@ -125,11 +199,21 @@ def main():
                     f"{slug}: suppression rule matched nothing, so the report may "
                     f"have changed underneath it:\n  {find[:90]}")
             suppressed += count
+        for find, repl in CORRECTIONS.get(slug, []):
+            count = text.count(find)
+            if not count:
+                raise SystemExit(
+                    f"{slug}: correction rule matched nothing, so the report may "
+                    f"have changed underneath it:\n  {find[:90]}")
+            text = text.replace(find, repl)
+            corrected += count
         (DST / f"{slug}.md").write_text(text, encoding="utf-8")
         n += 1
         note = ("  redacted: " + ", ".join(hits)) if hits else ""
         if suppressed:
             note += f"  |  {suppressed} launch-scope passage(s) suppressed"
+        if corrected:
+            note += f"  |  {corrected} correction(s) applied"
         print(f"  {slug:20} {len(text):>7,} bytes{note}")
     print(f"\nPublished {n} reports to {DST}/")
 

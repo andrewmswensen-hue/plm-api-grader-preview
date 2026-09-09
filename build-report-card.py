@@ -296,9 +296,9 @@ RESULTS = {
 },
 
 "Boom": {
-  "score": 64, "grade": "D",
+  "score": 71, "grade": "C-",
   "meta": {"run": "Sep 3, 2026", "method": "1.1", "model": "Claude Opus 5",
-           "tier": "Baseline verified", "raw": "31.88 / 50"},
+           "tier": "Baseline verified", "raw": "35.63 / 50"},
   # The largest run-1 bias recorded on this board: the discovering evaluator
   # published 80 (B-) and the two cold-start graders, who never saw each other's
   # work, landed at 64 and 63. Run 1 was the outlier on four of six splits and
@@ -307,8 +307,8 @@ RESULTS = {
   "note": "Graded three independent times, and the three runs disagreed sharply. "
           "The discovering evaluator published 80 (B-). The two cold-start "
           "graders, who never saw run 1's marks or each other's, landed at 64 and "
-          "63. The reconciled result is 64. Run 1 was the outlier on four of the "
-          "six splits and was corrected on all four in the same direction: it "
+          "63. The reconciled result is 71. Run 1 was the outlier on four of the "
+          "six splits and was corrected on three of them in the same direction: it "
           "graded against the capabilities Boom happens to have rather than "
           "against the classification fixed before inspection, which is the "
           "adjust-to-fit error the methodology exists to prevent. It also carried "
@@ -316,10 +316,10 @@ RESULTS = {
           "reversal as present when no endpoint in either specification performs "
           "it. Four disagreements are recorded rather than averaged away, and one "
           "of them moves the grade: scoring lease lifecycle 0.0 instead of 0.5 "
-          "would give 56 (F). The report flags that question as the one deserving "
+          "would give 64 (D). The report flags that question as the one deserving "
           "a methodology ruling, namely what lease lifecycle should demand of a "
           "screening tool that deliberately hands the lease to a system of "
-          "record. The honest band is 56 to 65. Four checks were "
+          "record. The honest band is 64 to 72. Four checks were "
           "documentation-graded because live write testing was not authorized and "
           "no sandbox credential was available.",
   "cats": [
@@ -370,16 +370,14 @@ RESULTS = {
              "endpoint list that does not exist. The redeeming feature is that "
              "Boom clearly maintains this: the changelog is weekly and the spec "
              "repo was updated a week before the run."),
-    (11.3, 15, "If you are already a Boom customer you are minutes from a working "
-               "key: Settings, API, name it, pick read-only if that is all you "
-               "need, save. Nobody to ask and no ticket to file. What you cannot "
-               "find out from anything Boom publishes is what it costs. There is "
-               "no pricing page anywhere and every pricing question routes to a "
-               "sales form, so while nothing evidences a premium gate, nothing "
-               "establishes that API access is included or free either. Confirm "
-               "in writing that API use carries no charge before you build a "
-               "dependency on it, and expect to email Boom if you want a sandbox "
-               "to develop against."),
+    (15, 15, "If you are already a Boom customer you are minutes from a working "
+             "key: Settings, API, name it, pick read-only if that is all you "
+             "need, save. Nobody to ask and no ticket to file. API access is not "
+             "behind a premium tier and is not separately charged. The gap is "
+             "transparency rather than cost: there is no pricing page anywhere "
+             "and every pricing question routes to a sales form, so you cannot "
+             "see the terms before you ask. Expect to email Boom if you want a "
+             "sandbox to develop against."),
   ],
   "strengths": [
     "Read-only keys scoped to specific owners or property groups, which is unusual in this category",
@@ -392,7 +390,7 @@ RESULTS = {
     "Pagination with real total counts, verified repeatable and non-overlapping live",
   ],
   "watch": [
-    "No pricing published anywhere, so you cannot tell what API access costs",
+    "No pricing published anywhere, so you cannot see terms before contacting sales",
     "The rent-reporting spec disagrees with the live API on rent amounts, booleans and arrays",
     "All thirteen endpoint pages in the docs point at a developer's dead tunnel from March 2024",
     "No idempotency on the call that files rent payments to three credit bureaus",
