@@ -1,3 +1,11 @@
+> **Correction, 2026-09-09.** This report stated that Aptly publishes no
+> plan tiers or prices. That was wrong. getaptly.com/pricing publishes three
+> tiers, Essential, Premium and Enterprise, with prices, and lists "Access to
+> Aptly API" as a Premium plan feature. The language below is corrected.
+> **The score is unchanged at 58 (F).** C5.3 was never scored on the pricing
+> page: it rests on Aptly's Help Center stating the API requires a Premium
+> Subscription, which the pricing page now independently corroborates.
+
 # API Report Card: Aptly Core API
 
 ## Run metadata
@@ -34,7 +42,7 @@ First-party documentation and product surfaces:
 - https://docs.getaptly.com/api-reference/boards/list-boards.md, .../cards/list-cards.md, .../contacts/list-contacts.md, .../tasks/search-tasks.md, .../board/get-full-board-configuration.md, .../board/add-a-tab-view-legacy.md
 - https://www.getaptly.com/ — primary navigation, Developer Portal link
 - https://www.getaptly.com/platform/api-mcp — API & MCP product page
-- https://www.getaptly.com/pricing — no published plan tiers; demo-gated pricing
+- https://www.getaptly.com/pricing — three published tiers (Essential, Premium, Enterprise) with prices; "Access to Aptly API" listed as a Premium plan feature [rechecked live 2026-09-09]
 - https://aptly.helpkit.so/integrations/vVQpukZPcgx25GULuxrwjv/connect-to-aptly's-api/fPZrn228WQW331GV7rGLct — Aptly Help Center, "Connect to Aptly's API", last updated 2026-05-26 (raw page captured, 369,402 bytes)
 - https://getaptly.com/api — returns HTTP 404 (linked from search results; not retrievable)
 - https://status.getaptly.com/ — resolves via Cloudflare but serves an unterminated 301 redirect loop; no status content retrievable at `/`, `/history`, or `/api/v2/status.json`
@@ -170,7 +178,7 @@ Score math: earned 4.0 of 4 applicable checks; unrounded fraction = 1.0000; cate
 
 ## Category 5: Accessibility and Cost: 7.5/15
 - **C5.1 Self-serve API key: yes** — once an account is entitled, credential creation is entirely self-serve with no sales call, support ticket, or approval step: "Open the board in Aptly → Go to **Card Sources → API** → Toggle the API **on** → Click **Create New Key**, enter a name, and optionally set an expiration date → Copy the key." The Help Center describes the same in-product path via the board's Integrations menu. Corroborated live: the operator's own self-created key authenticated and worked across 99 individually captured calls. Plan eligibility is scored separately in C5.3 and is not counted against this check. [`authentication.md`, "API keys"; Help Center, "How to Enable the API"; live probe 01, 2026-09-03]
-- **C5.3 Not commercially gated: no** — API access requires a premium plan. Aptly's own Help Center states of the API: "It does require a Premium Subscription. If you're interested in upgrading, please reach out to sales@getaptly.com or simply upgrade in your account. Go to Settings > Subscription > Manage > Upgrade under Premium." That is explicit top-tier gating, and it is not identity or regulatory verification, so the check's KYC/KYB carve-out does not apply. Aggravating rather than mitigating: Aptly publishes no plan tiers or prices at all — https://www.getaptly.com/pricing carries only "Book a demo to get custom pricing for your portfolio" — so an operator cannot determine the cost of API entitlement without a sales conversation. Mitigating in a small way: the upgrade itself can be self-served in-account rather than requiring the sales email. Aptly's developer portal never mentions the premium requirement, which is why this check moved from a provisional `yes` to `no` during the controlled verification pass. [Help Center page captured 2026-09-03, last updated 2026-05-26; https://www.getaptly.com/pricing]
+- **C5.3 Not commercially gated: no** — API access requires a premium plan. Aptly's own Help Center states of the API: "It does require a Premium Subscription. If you're interested in upgrading, please reach out to sales@getaptly.com or simply upgrade in your account. Go to Settings > Subscription > Manage > Upgrade under Premium." That is explicit top-tier gating, and it is not identity or regulatory verification, so the check's KYC/KYB carve-out does not apply. Corroborated by the pricing page: https://www.getaptly.com/pricing publishes three named tiers — Essential, Premium and Enterprise — with prices, and lists "Access to Aptly API" as a Premium plan feature and "Enterprise API" under Enterprise. That independently confirms the Help Center's Premium requirement, so an operator can both see the gate and price it [rechecked live 2026-09-09]. Mitigating in a small way: the upgrade itself can be self-served in-account rather than requiring the sales email. Aptly's developer portal never mentions the premium requirement, which is why this check moved from a provisional `yes` to `no` during the controlled verification pass. [Help Center page captured 2026-09-03, last updated 2026-05-26; https://www.getaptly.com/pricing]
 
 Score math: earned 1.0 of 2 applicable checks (yes: C5.1 = 1.0; no: C5.3 = 0); unrounded fraction = 0.5000; category points = 0.5000 × 15 = **7.5/15**; verification coverage = 2/2 = **100%**
 

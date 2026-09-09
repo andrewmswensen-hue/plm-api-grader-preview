@@ -237,9 +237,9 @@ RESULTS = {
     (7.5, 15, "Half marks on the heaviest category in the rubric, and the single "
               "biggest reason for the grade. Creating a key is genuinely "
               "self-serve, with no sales call and no approval step. But API "
-              "access requires Aptly's Premium plan, and Aptly publishes no plan "
-              "tiers or prices at all, so an operator cannot work out what API "
-              "entitlement costs without a sales conversation. Worth knowing for "
+              "access requires Aptly's Premium plan. The pricing page publishes "
+              "three tiers with prices and lists API access as a Premium feature, "
+              "so the gate is visible and priced before you commit. Worth knowing for "
               "a practical reason too: if a subscription is ever downgraded, the "
               "API and every automation built on it stop working, and nothing in "
               "the developer documentation warns of that dependency."),
@@ -255,7 +255,7 @@ RESULTS = {
     "Exemplary card pagination: stable ordering verified across repeat and adjacent pages",
   ],
   "watch": [
-    "API access requires a Premium plan, and Aptly publishes no prices at all",
+    "API access requires a Premium plan, so the entry-level tier cannot use it",
     "No webhooks, so every integration polls on a timer",
     "No idempotency: a timeout followed by a retry can create a duplicate card",
     "No concurrency control: a deliberately stale update was accepted and applied",
@@ -497,118 +497,131 @@ RESULTS = {
 },
 
 "Column": {
-  "score": 85, "grade": "B",
-  "meta": {"run": "Sep 2, 2026", "method": "1.1", "model": "Claude Opus 5",
-           "tier": "Fully verified, sandbox", "raw": "42.50 / 50"},
-  # Column sponsors this page, so this note leads with the audit trail rather
-  # than the score. The decisive fact is that reconciliation went AGAINST the
-  # sponsor: both blind graders would have published an A and the run held a B.
-  "note": "Column sponsors this report, and this row has been through six "
-          "independent grading runs, more than any other platform here. The first "
-          "three graded a frozen evidence packet blind and scored 85, 95 and 92. "
-          "Column then sent a written clarification, it was added to the packet, "
-          "and three further blinded runs scored 85, 86 and 86. The published 85 "
-          "is the reconciled result. The counterintuitive part is worth saying "
-          "plainly: more information moved graders toward the stricter mark, not "
-          "away from it. The only two runs that passed Column on commercial "
-          "gating were the two that had not read Column's statement, and all "
-          "three that did read it marked it partial. Three reasons converged. The "
-          "methodology requires a publicly auditable citation for a pass, and "
-          "private correspondence is not one. The statement addresses the cost of "
-          "API access but not the separate finding that several capabilities need "
-          "Column to switch them on per platform. And on the reserve, the "
-          "statement confirms that a funded reserve is required and disputes only "
-          "how it is sized. One reading stays legitimate and is recorded rather "
-          "than averaged away: a grader who takes gated to mean strictly a "
-          "purchasable plan ladder would pass it, producing 93 and an A. Worth "
-          "crediting Column for the outcome anyway: without their statement there "
-          "was no first-party evidence either way on cost, the check would have "
-          "been unverified, and the whole score would have been withheld.",
+  "score": 94, "grade": "A",
+  "meta": {"run": "Sep 9, 2026", "method": "1.1", "model": "Claude Opus 5",
+           "tier": "Fully verified, sandbox", "raw": "46.88 / 50"},
+  # The only run on the board where three independent graders agreed on all 27
+  # checks. Every battery step ran, none N-A, against a sandbox that behaves like
+  # production, so nothing here rests on documentation alone except one HMAC
+  # signature that needed a receiving endpoint nobody had.
+  "note": "Graded three independent times against the same frozen evidence, and "
+          "the three runs agreed on all 27 checks, all five category scores and "
+          "the published number. Nothing needed resolving, because nothing "
+          "diverged. The full live battery ran, all eight steps with none marked "
+          "N-A, including real writes, lifecycle transitions, an idempotency "
+          "double-send and webhook registration with delivery observed. One "
+          "disclosure: within webhook security, the HMAC payload signature was "
+          "graded from documentation rather than observed, because the "
+          "subscription deliberately pointed at a non-routable host so no data "
+          "left Column. The two blind graders also corrected the first run's "
+          "type-consistency count, which had undercounted conflicting field types "
+          "by filtering out array-versus-object clashes, and surfaced two "
+          "conflicts it had missed entirely. The mark did not move; the evidence "
+          "behind it got stronger. One sensitivity is worth knowing: reading "
+          "Column's per-platform feature enablement as tier gating would take "
+          "Accessibility to a partial and the score to 90, still an A minus. All "
+          "three runs weighed that reading and rejected it, because nothing in "
+          "the evidence ties any enablement to a price, a plan or a tier.",
   "cats": [
-    (15, 15, "The strongest part of the API. Everything a business runs on "
-             "financially is reachable in code, and you can act on it rather than "
-             "just look at it: open accounts, move money five different ways, put "
-             "a transfer on hold and then release or kill it, claw back an ACH, "
-             "stop a check, and be told about all of it automatically. In the "
-             "sandbox the grader opened an account, updated it, sent money, held "
-             "and released a payment, held and cancelled another, and closed the "
-             "account, all through the API."),
-    (7.5, 10, "The parts that stop you losing money are genuinely strong. "
-              "Retrying a payment cannot double-send it, proven live. Webhooks "
-              "are signed and retried for three days, you can page through and "
-              "bulk-export everything, and errors name the exact field you got "
-              "wrong. The weak spots are the ones you hit at 2am: Column will not "
-              "tell you its rate limits or when to retry, not-found comes back as "
-              "the wrong HTTP code so naive error handling misclassifies it, "
-              "there is no protection against two processes overwriting each "
-              "other, and the request id you would hand support is real but "
-              "undocumented."),
-    (5, 5, "A perfect score, and the category that matters most if you ever point "
-           "an AI agent at a bank account. You can mint a key that reads balances "
-           "and nothing else, or one that pays vendors by ACH but is structurally "
-           "incapable of sending a wire, scoped to a single account. You can "
-           "require a human to approve transfers from a given key, issue one key "
-           "per tool, and kill any of them instantly. With a sandbox that behaves "
-           "like production, you can build something risky without it ever "
-           "touching real money."),
-    (3.8, 5, "If you hand Claude or ChatGPT the job of writing your Column "
-             "integration, it has unusually good material: the entire "
-             "documentation as one clean file built for AI tools, plus a full "
-             "machine-readable spec. The catch is accuracy rather than coverage, "
-             "and it is why this is not a higher mark. A webhook guide prints a "
-             "URL that returns 404, three response examples show a status value "
-             "in the wrong case, the error table promises a 404 the API never "
-             "sends, and one endpoint listed as supporting idempotency is not in "
-             "the spec at all. Build from the API reference pages rather than the "
-             "narrative guides, and verify against the sandbox rather than "
-             "trusting an example."),
-    (11.3, 15, "The sandbox is free, self-serve and a complete copy of the "
-               "bank, which is unusually generous, and Column has confirmed in "
-               "writing that the API itself is free in both sandbox and "
-               "production. Two things hold this short of full marks. Production "
-               "is not self-serve, and several capabilities, including positive "
-               "pay and interest-bearing accounts, need Column to enable them for "
-               "your platform. And if you want Column to originate the ACH debits "
-               "that pull rent, it requires a funded, locked reserve. Column's own "
-               "going-live guide says that reserve must exceed your rolling 60-day "
-               "debit volume, while two other pages in the same documentation "
-               "describe a Column-determined percentage; Column confirms the "
-               "latter is correct, so get your number from them rather than the "
-               "guide."),
+    (15.0, 15, "The strongest part of Column's API, and genuinely rare. You can "
+               "open bank accounts, read exact balances broken into available, "
+               "pending, locked and holding, pull every transaction, send money "
+               "on any rail, and then cancel, clear, return, reverse or stop-pay "
+               "it. All of it from code, and all of it confirmed working live "
+               "rather than promised in documentation. If you can describe a "
+               "money movement, you can almost certainly automate it here."),
+    (7.5, 10, "The parts that protect your money are excellent. Double-clicking "
+              "send cannot double-send, and that was proven live rather than "
+              "just documented: two identical calls with the same idempotency "
+              "key produced one transfer. Retries, pagination, bulk export and "
+              "webhook security are all handled properly, and Column publishes "
+              "real uptime numbers. The soft spots are the ones you hit while "
+              "building and maintaining. Error responses do not use the right "
+              "HTTP status codes, so your code has to read the body rather than "
+              "trust the status, and a failed login returns a completely empty "
+              "response. There is no API version you can pin, so a future change "
+              "could alter behaviour under you with only a changelog post as "
+              "warning. And although every response carries a trace id that "
+              "would be perfect for a support ticket, Column never documents it, "
+              "so you cannot count on it being honoured."),
+    (5, 5, "Exactly what you want before pointing an AI agent or a new automation "
+           "at your bank account. You can mint a key that can only read, or one "
+           "that can send ACH credits but not wires, or one that touches a single "
+           "account, and you can require a human to approve every transfer that "
+           "key initiates. No amount of clever prompting gets around that, "
+           "because keys are structurally forbidden from approving transfers at "
+           "all, including their own. You get a full free sandbox with its own "
+           "keys that cannot reach live money, and you can revoke any key "
+           "yourself the moment something looks wrong."),
+    (4.4, 5, "If you or an AI coding assistant sit down to build against Column, "
+             "you have what you need: a complete machine-readable spec that tools "
+             "can generate working code from, and the entire documentation set "
+             "published in clean formats built for AI retrieval. Documentation "
+             "quality is not a barrier here. The one soft spot is knowing when "
+             "something changes. The changelog is genuinely detailed when it "
+             "appears, but it appears in irregular batches with gaps of several "
+             "months, and since there is no API version you can pin, that "
+             "changelog is your only early warning."),
+    (15, 15, "You can be building today. Sign up, create a sandbox key yourself, "
+             "and the entire API, every rail and every endpoint, works "
+             "immediately against realistic simulated money, at no cost and with "
+             "nobody to ask. Nothing is held back for an enterprise tier. The "
+             "only thing standing between the sandbox and moving real dollars is "
+             "the bank compliance review any real bank must run on you, which is "
+             "the law rather than an upsell."),
   ],
   "strengths": [
-    "Scoped keys down to a single rail on a single account, plus human approval",
-    "Idempotency proven live: the same payment sent twice created one transfer",
-    "Signed webhooks retried for three days, across 190 event types",
-    "A free sandbox that is a complete copy of the bank, every route included",
-    "The whole documentation published as one clean file built for AI tools",
+    "Every category live-tested: all eight battery steps run, none N-A",
+    "Idempotency proven live, two identical sends produced one transfer rather than two",
+    "Read-only keys, and per-rail scoping so a key can send ACH credits but not wires",
+    "Keys are structurally forbidden from approving transfers, so a human gate cannot be prompted around",
+    "A free, fully featured sandbox with simulation endpoints for incoming transfers, settlement and returns",
+    "175 documented event types across every rail, with delivery records readable through the API",
+    "A complete OpenAPI 3.0.3 spec: 180 of 180 operations carry an id, a summary and a response schema, with no dangling references",
+    "The whole documentation corpus published for AI retrieval, plus every page as clean Markdown",
+    "A public status page with per-component 90-day uptime and a dated incident history",
+    "Cursor pagination with a published stable-ordering guarantee, verified across a full traversal",
   ],
   "watch": [
-    "No published rate limits, no Retry-After, and no backoff guidance",
-    "Not-found returns HTTP 400, contradicting Column's own documentation",
-    "No protection against two processes overwriting the same record",
-    "Documentation drift: a 404 URL, wrong-case examples, a phantom endpoint",
-    "Direct ACH debit origination needs a reserve balance, sized case by case",
+    "No API version you can pin, and no published backward-compatibility or deprecation policy",
+    "Errors carry the wrong HTTP status: a missing bank account returned 400, not 404",
+    "An invalid key returns 401 with an empty body, so there is no structured error at all",
+    "13 field names carry conflicting types across schemas, including one written as an array that reads back as a string",
+    "The request id on every response is undocumented, so support cannot be relied on to honour it",
+    "No optimistic concurrency: no ETag, no If-Match and no version field on the object",
+    "The changelog publishes in irregular batches, including a seven-month gap",
+    "No official SDKs and no MCP server",
+    "No updated-since filter anywhere, so detecting changed records means using the events feed",
+    "Some capabilities need per-platform enablement, which the live run hit on the balance-history endpoint",
   ],
-  "bottom": "Column is a real, nationally chartered bank with one of the best "
-            "banking APIs you can build on, and unlike almost every banking API "
-            "you will be pitched, there is no sponsor bank in the middle: Column "
-            "holds the money itself. You could build automated owner "
-            "disbursements, vendor payments, rent collection by ACH debit, check "
-            "issuance and deposit, and a reconciliation feed with running "
-            "balances, and hand an AI agent a key that reads balances but is "
-            "structurally incapable of moving a dollar. What you cannot do is "
-            "treat it as a substitute for your PMS or your trust accounting. The "
-            "API has no concept of a property, unit, lease or tenant, and despite "
-            "a polished property-management page promising trust reconciliation "
-            "and owner disbursements, there is not one property-management "
-            "endpoint in the API itself. Two words in the marketing deserve care: "
-            "the trust accounts in Column's changelog are legal estate-planning "
-            "trusts, not client trust accounting, and the PM-specific promises "
-            "are relationship features reached through a sales conversation, not "
-            "documented API capabilities. Biggest strength is control and safety; "
-            "biggest limitation is operational opacity; and the biggest business "
-            "limitation is not technical at all.",
+  "bottom": "Column is a real bank, nationally chartered, OCC-regulated and "
+            "FDIC-insured, holding the accounts itself rather than renting them "
+            "from a sponsor bank behind the scenes, and its API is one of the "
+            "most genuinely buildable on this board, with every category "
+            "live-tested rather than taken on faith. In practice you can open "
+            "accounts, read balances and transactions, send and receive money on "
+            "every rail, and cancel, return, reverse or stop-pay anything, all "
+            "from your own code, with the safety features that matter for "
+            "automation: read-only and narrowly scoped keys, mandatory human "
+            "approval on transfers a key initiates, proven protection against "
+            "accidental double-payments, and a free sandbox you can build against "
+            "today without talking to anyone. The real limitations are for the "
+            "people maintaining the integration rather than for the money. Error "
+            "responses use the wrong HTTP status codes and an invalid key returns "
+            "a blank response, there is no API version you can pin, and the "
+            "changelog that would warn you about changes publishes in irregular "
+            "batches with multi-month gaps. Understand clearly what Column is and "
+            "is not. It is the bank and the payment rails, not a property "
+            "management system. It documents FBO and sub-account structures, "
+            "holds and escrow, and consolidated statements that make trust and "
+            "operating separation workable, and its property-management page "
+            "names trust accounts, security deposits, rent, owner distributions "
+            "and vendor payments. But the API itself has no concept of a lease, a "
+            "tenant, a unit or an owner statement, and the property-management "
+            "framing lives largely on the marketing page rather than in the API "
+            "reference. You would still run a PMS or trust-accounting system on "
+            "top. A high API score here means Column would be an unusually "
+            "programmable bank underneath it, not a replacement for it.",
 },
 
 "LeadSimple": {
@@ -1555,7 +1568,7 @@ RESULTS = {
   # No cross-category caveat here. The table groups by software type, so this is
   # read against the other phone systems, which is the whole reason the grouping
   # exists. A note explaining that would only undercut the score.
-  "note": "The highest score graded so far, and the first A. Graded three "
+  "note": "Graded three "
           "independent times, and all three runs landed on 93. 25 of the 27 "
           "checks were unanimous, and the two that split sat in the same category "
           "and offset each other exactly, so the total is 93 under either "
@@ -1594,7 +1607,7 @@ RESULTS = {
              "premium tier to unlock and no sales call."),
   ],
   "strengths": [
-    "The highest score graded so far, and the only A",
+    "An A grade, on 25 of 27 checks unanimous across three independent runs",
     "Read-only and finely scoped keys, proven on the key used for this run",
     "A real sandbox with its own accounts and isolated data",
     "OpenAPI spec plus maintained SDKs in eight languages",

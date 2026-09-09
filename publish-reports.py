@@ -26,7 +26,7 @@ SOURCES = {
     "aptly":             "aptly-2026-09-03.md",
     "boom":              "boom-2026-09-03.md",
     "buildium":          "buildium-2026-08-27.md",
-    "column":            "column-2026-09-02.md",
+    "column":            "column-2026-09-09.md",
     "leadsimple":        "leadsimple-2026-08-28.md",
     "process-street":    "process-street-2026-08-31.md",
     "property-meld":     "property-meld-2026-09-01.md",
@@ -116,6 +116,34 @@ SUPPRESS = {
 # stand; only the figures derived from C5.3 move.
 # ---------------------------------------------------------------------------
 CORRECTIONS = {
+    "aptly": [
+        # Aptly C5.3 language, corrected 2026-09-09. The run reported that Aptly
+        # publishes no plan tiers or prices. It does: getaptly.com/pricing shows
+        # Essential, Premium and Enterprise with prices, and lists "Access to
+        # Aptly API" as a Premium feature. That does not change the mark, which
+        # rests on the Help Center's Premium requirement; the pricing page
+        # independently confirms it. Verified against the live page 2026-09-09.
+        ("# API Report Card: Aptly",
+         "> **Correction, 2026-09-09.** This report stated that Aptly publishes no\n"
+         "> plan tiers or prices. That was wrong. getaptly.com/pricing publishes three\n"
+         "> tiers, Essential, Premium and Enterprise, with prices, and lists \"Access to\n"
+         "> Aptly API\" as a Premium plan feature. The language below is corrected.\n"
+         "> **The score is unchanged at 58 (F).** C5.3 was never scored on the pricing\n"
+         "> page: it rests on Aptly's Help Center stating the API requires a Premium\n"
+         "> Subscription, which the pricing page now independently corroborates.\n\n"
+         "# API Report Card: Aptly"),
+        ("- https://www.getaptly.com/pricing \u2014 no published plan tiers; demo-gated pricing",
+         "- https://www.getaptly.com/pricing \u2014 three published tiers (Essential, "
+         "Premium, Enterprise) with prices; \"Access to Aptly API\" listed as a Premium "
+         "plan feature [rechecked live 2026-09-09]"),
+        ('Aggravating rather than mitigating: Aptly publishes no plan tiers or prices at all \u2014 https://www.getaptly.com/pricing carries only "Book a demo to get custom pricing for your portfolio" \u2014 so an operator cannot determine the cost of API entitlement without a sales conversation.',
+         'Corroborated by the pricing page: https://www.getaptly.com/pricing publishes '
+         'three named tiers \u2014 Essential, Premium and Enterprise \u2014 with prices, and '
+         'lists "Access to Aptly API" as a Premium plan feature and "Enterprise API" '
+         'under Enterprise. That independently confirms the Help Center\'s Premium '
+         'requirement, so an operator can both see the gate and price it '
+         '[rechecked live 2026-09-09].'),
+    ],
     "boom": [
         # 1. dated notice at the top, so a reader knows this differs from the run as first reconciled
         ("# API Report Card: Boom",
