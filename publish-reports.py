@@ -27,6 +27,7 @@ SOURCES = {
     "boom":              "boom-2026-09-03.md",
     "buildium":          "buildium-2026-08-27.md",
     "column":            "column-2026-09-09.md",
+    "latchel":           "latchel-2026-09-10.md",
     "leadsimple":        "leadsimple-2026-08-28.md",
     "magic-door":        "magic-door-2026-09-10.md",
     "process-street":    "process-street-2026-08-31.md",

@@ -27,6 +27,7 @@ SOURCES = {
     "Boom":                "boom.md",
     "Buildium":            "buildium.md",
     "Column":              "column.md",
+    "Latchel":             "latchel.md",
     "LeadSimple":          "leadsimple.md",
     "Magic Door":          "magic-door.md",
     "Process Street":      "process-street.md",

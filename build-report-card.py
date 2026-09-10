@@ -624,6 +624,144 @@ RESULTS = {
             "programmable bank underneath it, not a replacement for it.",
 },
 
+"Latchel": {
+  "score": 66, "grade": "D",
+  "meta": {"run": "Sep 10, 2026", "method": "1.1", "model": "Claude Opus 5",
+           "tier": "Baseline verified, sandbox", "raw": "32.83 / 50"},
+  # The clearest case yet for grading three times. Run 2 withheld the score
+  # outright, having spotted that the answer to "is the API included in your
+  # plan" was published as an image the discovering run had filtered out of its
+  # retrieval and never read. Retrieving it settled the check and saved the
+  # number: had it stayed unread, Category 5 would have been Unable to verify
+  # and no score would have been published at all.
+  "note": "Graded three independent times against the same frozen evidence, and "
+          "the runs did not agree. Run 1 published 62 (D-), run 3 published 62 "
+          "(D-) by a different route, and run 2 withheld the score entirely. 19 "
+          "of the 27 checks were unanimous. All eight disagreements were resolved "
+          "against the evidence rather than averaged, and the discovering run was "
+          "overruled on six of them, in both directions: two resolved in "
+          "Latchel's favour and four against it. The decisive one was run 2's catch "
+          "that Latchel's plan comparison is published as an image, which run 1 "
+          "had filtered out of its retrieval and graded around. The image was "
+          "then retrieved and read, and it settled the question. One part of the "
+          "run is flagged rather than finished: Latchel's API has no "
+          "webhook-registration endpoint, subscriptions are created only in the "
+          "dashboard, and this run had API access but no dashboard, so webhook "
+          "delivery and retry behaviour were graded from documentation. Resolving "
+          "that could raise the score to 67 (D+).",
+  "cats": [
+    (9.4, 15, "You can push work orders into Latchel from your own systems, "
+              "approve or deny their budgets, cancel them, and read almost "
+              "everything back out. All of that was confirmed against a live "
+              "sandbox. What you cannot do is drive a work order to completion, "
+              "reassign it to a different vendor once it exists, or reschedule "
+              "it. Latchel runs those steps itself, through its own coordinators "
+              "and vendor flow. So the API is a strong intake and reporting "
+              "surface and a partial control surface: you can start jobs, steer "
+              "their budget, kill them, and watch them, but you cannot finish "
+              "them or move them to a different vendor."),
+    (3.3, 10, "This is the weakest technical area and it is where an integration "
+              "will actually hurt. Some things are fine: it is a clean REST API, "
+              "the rate limits are published and the headers are honest, and "
+              "paging and date-filtering both work. But four problems compound. "
+              "If your automation retries a work-order creation because a request "
+              "timed out, you get two work orders and there is no way to prevent "
+              "it. If you send an update the API will not apply, it returns 200 "
+              "OK and silently throws your change away, so your code cannot tell "
+              "success from failure. If something goes wrong there is no request "
+              "id to give support, and no status page to check. And the "
+              "specification mistypes dollar amounts and booleans, so tools that "
+              "generate code from it will get those fields wrong."),
+    (2, 5, "This is the weakest area and it matters most if you plan to point an "
+           "AI agent at Latchel. There is one key per company, it can do "
+           "everything you can do, and you cannot make a read-only one or "
+           "restrict it to a single property. If you hand it to a contractor, a "
+           "Zapier zap and an AI assistant, all three hold the same unlimited "
+           "credential, and cutting off any one of them means regenerating the "
+           "key and re-entering it everywhere. The two things Latchel does get "
+           "right here are real: you can rotate the key yourself in seconds, and "
+           "the sandbox is genuinely separate, confirmed by trying the demo key "
+           "against production and being refused. If you want a "
+           "limited-permission agent, use the Latchel MCP connector instead, "
+           "which signs in as a specific user and is scoped to what that user can "
+           "see."),
+    (3.1, 5, "The basics are here and the front door is genuinely good: the "
+             "reference is public with no login, there is a real downloadable "
+             "specification, and Latchel ships an MCP connector that can create "
+             "and resolve work orders conversationally, which is unusual in this "
+             "category. What holds the score down is that the documentation stops "
+             "short in several places at once. The specification does not tell "
+             "you which fields are required, never mentions that most lists "
+             "paginate, never explains what the work-order status numbers mean, "
+             "and mistypes money and boolean fields. The AI-readable "
+             "documentation is excellent for the help centre but covers the API "
+             "in only three pages. And while the release notes are current to the "
+             "week of the run, API changes appear in them only occasionally, "
+             "buried in a general product newsletter, so you cannot rely on that "
+             "channel to catch a behaviour change."),
+    (15, 15, "There is no door to get through. If you are a Latchel customer, you "
+             "click Generate in Account Settings and you have a key, today, "
+             "without talking to anyone or upgrading anything. There is a real "
+             "sandbox to develop against, and a free trial if you want to try "
+             "before committing. Latchel does not publish a pricing page, so you "
+             "will have a sales conversation to become a customer, but that is "
+             "the cost of the product, not a toll on the API."),
+  ],
+  "strengths": [
+    "A key in about thirty seconds from Account Settings, with no sales call and no upgrade",
+    "A real documented sandbox, proven separate when the demo key was refused by production",
+    "A first-party MCP connector that creates and resolves work orders conversationally",
+    "A public OpenAPI specification with no login, 73 operations, updated the day of the run",
+    "Work-order create, update, budget approve and cancel all verified live",
+    "Incremental sync works: an updated-since filter returned exactly the right records",
+    "Published rate limits, with honest headers on every response including errors",
+    "Documented webhooks for created and updated across seven object types",
+    "Self-serve key rotation that invalidates the previous key immediately",
+    "A 334-page help centre, every page retrievable as clean Markdown for AI tools",
+  ],
+  "watch": [
+    "No way to mark a work order complete through the API, confirmed live",
+    "A vendor cannot be reassigned once a job exists: the write returns 200 and is ignored",
+    "Updates the API will not apply return 200 OK and silently drop the field",
+    "No idempotency: a retried create produced two work orders, on two separate probes",
+    "Exactly one API key per company, full access, with no read-only or scoped option",
+    "Regenerating the key to cut off one integration breaks every other one",
+    "Page size is fixed at 10, and pagination is undocumented on every collection but one",
+    "No request id on any response, so a support ticket has to be described in prose",
+    "No status page: status.latchel.com resolves to Atlassian's own marketing site",
+    "The specification mistypes money fields and declares booleans that return as integers",
+  ],
+  "bottom": "Latchel's API is easy to get into and pleasant to read, and then it "
+            "stops short of the thing you would most want to automate. Getting a "
+            "key takes about thirty seconds in Account Settings with no sales call "
+            "and no upgrade, the reference is public, there is a real sandbox, and "
+            "there is even an MCP connector that lets Claude or ChatGPT create "
+            "work orders conversationally. Using it, you can push maintenance "
+            "requests in from your own systems, assign a vendor at the moment you "
+            "create the job, approve or deny budgets, cancel jobs, and pull work "
+            "orders, residents, properties, vendors and invoices back out with "
+            "working date filters. What you cannot do is mark a work order "
+            "complete, move it to a different vendor after it exists, or "
+            "reschedule it, and all three were confirmed against the live sandbox "
+            "rather than inferred from the documentation. That is a deliberate "
+            "product boundary as much as an API gap, because Latchel's whole "
+            "proposition is that its coordinators run the job to completion for "
+            "you, but it means the API cannot be the control plane for your "
+            "maintenance operation, only its front door and its reporting window. "
+            "Three other things to plan around. There is exactly one API key per "
+            "company and it can do everything, so you cannot hand a limited or "
+            "read-only credential to an AI agent or a contractor. A retried write "
+            "creates a duplicate work order, because there is no idempotency of "
+            "any kind. And when the API will not apply a change you asked for, it "
+            "does not tell you: it returns 200 OK and quietly drops the field, "
+            "which means your automation cannot distinguish a real success from a "
+            "silent no-op without reading the record back every time. Build that "
+            "read-back in from day one. Latchel is not a bank and not a PMS, and "
+            "says so itself, so you will still need your accounting and "
+            "trust-accounting system underneath it; nothing in this API changes "
+            "that.",
+},
+
 "LeadSimple": {
   "score": 87, "grade": "B+",
   "meta": {"run": "Aug 28, 2026", "method": "1.1", "model": "Claude Opus 4.8",

@@ -1004,6 +1004,207 @@
    }
   ]
  },
+ "Latchel": {
+  "source": "latchel.md",
+  "meta": {
+   "tier": "Baseline verified (sandbox writes)",
+   "battery": "steps 1-6 complete. Step 7 N-A (the API documents no idempotency mechanism; the probe was run anyway and its result is recorded under C2.4). Step 8 not completable with the access supplied (see below).",
+   "date": "2026-09-10",
+   "model": "Claude Opus 5 (claude-opus-5)",
+   "coverage": "100% (27 of 27 applicable checks verified; no check marked unverified; no category below the 0.70 floor; gate satisfied)"
+  },
+  "checks": [
+   {
+    "id": "C1.1",
+    "cat": 1,
+    "title": "Object coverage",
+    "mark": "partial",
+    "why": "weighted coverage = 72.5% (14.5 of 20 applicable weight; Invoices marked N-A within the sub-map as finalised financial records). No critical object is wholly absent. Work orders 1.0 (papi.yaml `/jobs` block, seven operations). Status transitions 0.5 (state is readable on every Job and at `/jobs/{job_id}/history/state`, and three named transitions exist, but no general transition control). Vendor assignment 0.5 (`vendor_id` is a member of `Job_Creatable` but not of `Job_Updatable`; live-verified unchangeable after creation). Vendors 1.0, Residents 1.0, Properties and Portfolios 1.0. Scheduling 0.5 (read-only). Estimates 0.5 (`estimate` and `estimate_note` readable on Job, no write path). Owner approval 1.0. Tags 0.0 (no tag object anywhere in the 79 schemas)."
+   },
+   {
+    "id": "C1.2",
+    "cat": 1,
+    "title": "Core operational actions",
+    "mark": "partial",
+    "why": "weighted coverage = 65.0% (13 of 20 applicable weight), scoring the completion workflow 0.5 rather than 0.0. The limitation, exactly: a work order's status can be transitioned through the API, but only via three named terminal-or-branch operations (`cancel`, `approve`, `deny`), and there is no path to completion. Live-verified 2026-09-10: `POST /v1/jobs/22888/approve` moved state 27 to state 1 and `POST /v1/jobs/22897/cancel` moved it to state 14, so transitions demonstrably work; but `PUT /v1/jobs/22896` with `{\"state_id\": 6}` returned HTTP 200 while leaving `state_id` at 26, and `POST /v1/jobs/22897/{complete|close|finish|resolve}` each returned 404. Creation and update are strong and live-verified (see coverage map). This mark was contested. Run 1 marked it `no` on the check's second trigger (\"a critical write workflow absent\"); runs 2 and 3 independently marked it `partial`. Resolved to `partial` against the evidence, because that trigger is glossed in the rubric as \"API is primarily observational\", which this API is demonstrably not: it exposes over 30 write operations, nine of which were exercised live in this run, including two that changed a work order's state. See \"Reconciliation across independent runs\"."
+   },
+   {
+    "id": "C1.3",
+    "cat": 1,
+    "title": "Delete or lifecycle actions",
+    "mark": "partial",
+    "why": "weighted coverage = 67.6% (11.5 of 17), scoring the completion action 0.5 on the same basis and for the same reason as C1.2, so that one missing capability is not zeroed twice across two checks. Present and live-verified: cancel (state 14), budget approve (state 27 to state 1), property deactivation via `is_active: 0`. Present and documented: budget deny, subscription end, resident move-out dates. The limitation, exactly: of the principal lifecycle changes, completion/close is absent entirely, vendor reassignment on an existing job is absent (live-verified: `PUT` with `vendor_id` returns 200 and does not apply), and rescheduling is absent (`scheduled_start`/`scheduled_end` are on the Job response schema but on neither write schema). This mark was contested: run 1 and run 3 marked it `no`, run 2 marked it `partial`. Resolved to `partial` for consistency with C1.2 and to respect the rubric's own warning against unintended double-counting of a single capability across two checks."
+   },
+   {
+    "id": "C1.4",
+    "cat": 1,
+    "title": "Change notification",
+    "mark": "yes",
+    "why": "documented webhooks cover `created` and `updated` for Job, Tenant, Portfolio, Property, Invoice, File and Owner (webhooks.yaml, `webhooks` block, seven entries), and the update trigger is defined at property level, so a state change fires the Job webhook: \"a Job's updated webhook will be triggered if the vendor for a job is changed (because `job.vendor_id` will change)\" (info-description.md, \"What Triggers an Updated Webhook\"). That covers the critical and important state changes. Independently, efficient incremental polling was live-verified: `GET /v1/jobs?updated_at_start_date=2026-09-10T16:10:00Z` returned exactly the 3 of 7 jobs updated after that instant, and `GET /v1/jobs?in_states=3` returned exactly the 2 jobs in state 3. Push delivery itself was not observed (see step 8 note); the polling half was."
+   },
+   {
+    "id": "C2.1",
+    "cat": 2,
+    "title": "Modern API conventions",
+    "mark": "yes",
+    "why": "resource-oriented REST over HTTPS with standard verbs, JSON bodies, and a published OpenAPI 3.0.0 specification (papi.yaml, `openapi: 3.0.0`; 52 paths across GET/POST/PUT/PATCH/DELETE). Live-confirmed on every request in this run."
+   },
+   {
+    "id": "C2.2",
+    "cat": 2,
+    "title": "Consistent typing",
+    "mark": "no",
+    "why": "the published schema is not type-consistent with itself or with live behaviour, and the inconsistencies land on core fields, which is the condition that rules out `partial`. Three distinct defects, all verified directly against `specs/papi.yaml` and the live log: (1) an invalid type keyword on money fields. `type: float` appears five times, on `Job.max_cost` (in both the create and update schemas), `Job.estimate`, `Invoice.price` and `Invoice.total`. `float` is not a valid OpenAPI 3.0 type; the valid spelling is `type: number, format: float`. A generated client cannot type a dollar amount from this schema. (2) booleans that are not booleans. Four fields are declared `type: boolean` (`disable_invoice_collection`, `vendor_lock_in`, `force_latchel_invoices`, `vip_vendor`) yet carry `example: 1`, and live `GET /v1/vendor-companies` returns them as integers. Meanwhile the equivalent flags on Job (`is_mandatory`, `enter_permission`, `is_vacant`, `is_urgent`, `is_emergency`, `manually_assign_vendor`) are declared `type: integer` and documented as \"1 or 0\". The same semantic concept is therefore typed two different ways in the same specification, and the boolean-declared half does not return booleans. This is the check's headline question (\"a boolean stays a boolean\") failing directly. (3) timestamp format varying across endpoints. `GET /v1/jobs/22888` and `GET /v1/tenants` return `\"created_at\": \"2026-09-10 16:09:17\"` (space separator, no timezone), while `GET /v1/properties/5574`, `GET /v1/me` and `GET /v1/jobs/22888/history/state` return `\"2026-09-10T16:09:00.000000Z\"` (ISO 8601 with zone). Both are declared `type: string, format: date-time`, which the Job and Tenant responses do not satisfy. None of this is confined to non-core fields: `max_cost` is the budget field, and `jobs.updated_at` is the field an incremental sync is built on. This mark was contested: run 1 and run 3 marked it `partial`, run 2 marked it `no`. Resolved to `no` because `partial` requires the inconsistencies be \"confined to non-core fields\", which on this evidence they are not. Defects (1) and (2) were found by the independent graders and missed by run 1."
+   },
+   {
+    "id": "C2.3",
+    "cat": 2,
+    "title": "Structured errors",
+    "mark": "no",
+    "why": "two of the check's explicit `no` triggers were observed live, and `partial`'s band accommodates neither. Trigger one, a success code that hides a failure. `PUT /v1/jobs/22896` with `{\"vendor_id\": 4313301, \"state_id\": 6}` returned HTTP 200 and a complete Job body, with no error, warning or partial-success indicator, having applied neither field; the confirming `GET` showed both unchanged. These are not unknown fields being tolerated: `vendor_id` is a valid member of the create schema and `state_id` is a real Job property. A caller is told its write succeeded when it did not. Trigger two, unstructured errors. `POST /v1/jobs` with `{\"property_id\": \"not-a-number\"}` returned HTTP 500 with an HTML Laravel stack trace exposing a raw `SQLSTATE[22P02]: Invalid text representation` Postgres error and internal release paths, rather than the 422 the same endpoint returns for every other bad value. A string where an integer is expected is precisely what a no-code tool or a loosely typed script sends, so this is not an exotic edge case. What the API does well, recorded for fairness: status semantics are correct on the common classes (401 missing key, 403 invalid key, 404 unknown record, 422 validation) and the messages are genuinely usable, for example `{\"errors\":[\"The name field is required.\",\"The property id field is required.\",\"The description field is required.\"]}`. Two further weaknesses that would independently have held this to `partial`: there is no populated stable machine-readable error code anywhere, only an array of English strings, so an integration must string-match; and 403 \"Forbidden\" is reused for a state-precondition failure (`POST /v1/jobs/22896/approve` on a job not in an approval state) where a 409 or 422 would be actionable. This mark was contested: run 1 and run 3 marked it `partial`, run 2 marked it `no`. Resolved to `no` on the silent-discard trigger, which `partial` does not cover at any point in its definition."
+   },
+   {
+    "id": "C2.4",
+    "cat": 2,
+    "title": "Duplicate prevention",
+    "mark": "no",
+    "why": "no idempotency mechanism is documented (term sweep for `idempot` across papi.yaml, llms-full.txt and the help corpus returned zero hits) and none exists in practice. Live-verified twice: two identical `POST /v1/jobs` requests carrying the same `Idempotency-Key: apitest-fixed-key-001` created two distinct work orders (job_id 22898 and 22899); two identical creates carrying the same `ref_job_id: \"APITEST-REF-001\"` also created two distinct work orders (22900 and 22901). A retried work-order creation duplicates the job. Not N-A: the API has consequential writes."
+   },
+   {
+    "id": "C2.5",
+    "cat": 2,
+    "title": "Graceful handling under load",
+    "mark": "yes",
+    "why": "\"Requests to the Partner API are limited to 600 requests per API key, per 10 minutes... Once the limit has been overstepped, a 429 response code will be returned with `Retry-After` and `X-RateLimit-Reset` headers stating when the next retry attempt will be successful\" (papi.yaml, `info.description`, \"Request Limits\"). Live-confirmed that the budget headers are actually emitted: every response in this run carried `x-ratelimit-limit: 600` and a decrementing `x-ratelimit-remaining`, on both reads and writes and on both 2xx and 4xx responses."
+   },
+   {
+    "id": "C2.6",
+    "cat": 2,
+    "title": "Pagination for large collections",
+    "mark": "partial",
+    "why": "pagination works and is traversable. Live-verified: `GET /v1/jobs` returns a `links` object (`first`, `last`, `prev`, `next`) and a `meta` object (`current_page`, `from`, `path`, `per_page`, `to`), and `GET /v1/jobs?page=2` correctly returned an empty `data` array with `prev` populated and `next: null`. The same shape appeared on `/properties`, `/tenants` and `/jobs/{id}/history/state`. The limitations, exactly: (1) `per_page` is not honoured, so page size is fixed at 10 (live: `GET /v1/jobs?per_page=2` returned all 7 records with `per_page: 10`); (2) on these endpoints `links.last` is null and `meta` carries no `total` or `last_page`, so there is no total-count signal and a client must walk until `next` is null; (3) no stable ordering guarantee is documented anywhere; (4) pagination is undocumented for every collection except `/on-call-instances`, whose schema alone describes `links`, `meta`, `last_page` and `total` (papi.yaml, `PageOfOnCallInstances`). A developer building from the specification would not know that `/jobs` paginates at all."
+   },
+   {
+    "id": "C2.7",
+    "cat": 2,
+    "title": "Bulk or incremental export",
+    "mark": "partial",
+    "why": "incremental sync is genuinely possible on the standard list endpoints and was live-verified (`updated_at_start_date` and `updated_at_end_date` on `/jobs`, honoured exactly), combined with the pagination above. But there is no dedicated bulk or export path: no async export job, no bulk endpoint, no file export among the 73 operations. This is precisely the check's `partial` condition. At a fixed 10 records per page and 600 requests per 10 minutes, a full extract of a 6,000-work-order history costs 600 calls and would consume an entire rate-limit window."
+   },
+   {
+    "id": "C2.8",
+    "cat": 2,
+    "title": "Webhook security and delivery reliability",
+    "mark": "partial",
+    "why": "(documentation-graded) - a verification mechanism exists: \"Webhook bodies include a property named secret, and the header includes a property called `x-api-key`. Both the secret value and the x-api-key header contain a UUID that is unique to your account\" (info-description.md, \"Authentication\"). That is a static shared secret rather than an HMAC signature over the payload, so it verifies the sender but not payload integrity, and it cannot be rotated self-serve (\"Please contact Latchel Engineering to obtain your UUID codes\"). The limitations, exactly: no retry policy is documented anywhere in the packet, and no replay or idempotency guidance is given to consumers. The check requires all three; one of three is present. Not double-counted with C1.4, which grades event coverage rather than delivery security."
+   },
+   {
+    "id": "C2.9",
+    "cat": 2,
+    "title": "Concurrency and conflict control",
+    "mark": "no",
+    "why": "no optimistic concurrency and no documented conflict semantics. Live-verified: `GET /v1/jobs/22896` returns no `ETag` and no `Last-Modified` header, and `PUT /v1/jobs/22896` sent with `If-Match: \"bogus-etag\"` returned HTTP 200 and applied the write rather than 412. No version field exists on any schema, no 409 is documented among the response codes in the specification (which documents only 200, 201, 204, 403, 404 and 422), and no concurrency limits or behaviour are described. Not N-A: the API is not read-only."
+   },
+   {
+    "id": "C2.10",
+    "cat": 2,
+    "title": "Versioning and backward compatibility",
+    "mark": "partial",
+    "why": "an explicit version identifier exists in the path (`https://papi.latchel.com/v1`, papi.yaml `servers`) and the specification carries `info.version: 1.0.0`. The limitation, exactly: there is no backward-compatibility policy defining breaking versus non-breaking changes, and no deprecation window or notice mechanism. A verification-pass sweep for `deprecat`, `backward` and `breaking change` across papi.yaml, llms-full.txt and the help-centre Markdown corpus returned no policy text (the two `backward` hits were an access-instruction example string). Graded on the versioning contract only; currency of change communication is graded separately at C4.4."
+   },
+   {
+    "id": "C2.11",
+    "cat": 2,
+    "title": "Request traceability",
+    "mark": "no",
+    "why": "no request or correlation identifier is returned on any response. Live-verified across a GET 200, a POST 201, a POST 422, a 403 and a 404: the complete header set is `server`, `content-type`, `vary`, `cache-control`, `date`, `x-ratelimit-limit`, `x-ratelimit-remaining`, `x-xss-protection`, `x-content-type-options`. No `x-request-id`, no trace header, and none documented. Supporting a ticket means describing the call in prose."
+   },
+   {
+    "id": "C2.12",
+    "cat": 2,
+    "title": "Service availability and status transparency",
+    "mark": "no",
+    "why": "no public availability signal. `status.latchel.com` resolves, but to Atlassian's own Statuspage product marketing site rather than to a Latchel-operated status page, and `latchel.statuspage.io` does the same. No uptime figure, incident history or SLA appears anywhere in the first-party corpus (sweep for `uptime`, `status page` and `SLA` across papi.yaml, llms-full.txt and the help corpus). The one `SLA` hit on the site is unrelated prose."
+   },
+   {
+    "id": "C3.1",
+    "cat": 3,
+    "title": "Read-only credentials",
+    "mark": "no",
+    "why": "no read-only credential or read-only integration identity is documented or evidenced. The Account Settings panel offers a single \"API Key\" with \"Generate\" and \"Re-Generate\" and no permission selector (How to Generate an API Key, both sections and the accompanying interface screenshots). Live-confirmed that the one key is full-access: the same credential read every collection and also created a property, created four work orders, updated a work order, approved a work order, cancelled five work orders and deactivated a property. Not N-A: the API is not read-only."
+   },
+   {
+    "id": "C3.2",
+    "cat": 3,
+    "title": "Scoped credentials",
+    "mark": "no",
+    "why": "no resource, action or role scoping is documented. The key is company-scoped and all-or-nothing. A verification-pass sweep for `scope`, `permission` and `role` in an API-credential sense returned nothing in papi.yaml beyond the unrelated field `enter_permission`."
+   },
+   {
+    "id": "C3.3",
+    "cat": 3,
+    "title": "Multiple keys",
+    "mark": "no",
+    "why": "the documented interface exposes exactly one key per company, and the second workflow is \"Re-Generate API Key\", which replaces it rather than adding one (How to Generate an API Key, \"How to re-generate an API key?\"). No first-party evidence of issuing multiple concurrent credentials for separate integrations. The practical effect: one shared key across every integration, so revoking access for one tool breaks all of them."
+   },
+   {
+    "id": "C3.4",
+    "cat": 3,
+    "title": "Rotation and revocation",
+    "mark": "yes",
+    "why": "self-serve and immediate. \"Scroll down to the API Key panel, and click Re-Generate API Key. Then click OK to generate a new API key\" (How to Generate an API Key), performed by the property manager in Account Settings without a support ticket. Regeneration invalidates the prior key, which serves as revocation."
+   },
+   {
+    "id": "C3.5",
+    "cat": 3,
+    "title": "Test and production isolation",
+    "mark": "yes",
+    "why": "separate environments with separate credentials, documented and live-verified. The specification names two servers and states the separation explicitly: \"Testing/development/sandbox server. Your API key will be different for this server. Data on this server is not guaranteed to remain intact, indefinitely\" (papi.yaml, `servers`), with the endpoints listed as `https://papi.latchel.com/v1` for production and `https://latchel-demo.com/v1` for testing (papi.yaml, `info.description`, \"Endpoints\"). Live-verified 2026-09-10: the sandbox key returned 200 against `latchel-demo.com/v1/me` and 403 against `papi.latchel.com/v1/me`, confirming the credentials do not cross environments. Every write in this run was contained to the sandbox as a result."
+   },
+   {
+    "id": "C4.1",
+    "cat": 4,
+    "title": "Complete self-serve reference",
+    "mark": "partial",
+    "why": "a complete, publicly accessible reference exists at `papi.latchel.com/api-docs/papi/` with no login, rendered by ReDoc from the OpenAPI specification. It documents authentication (`x-api-key` header), every one of the 73 operations, parameters, field descriptions, the inheritance model, rate limits and both server environments, and carries 396 field-level `example:` values from which ReDoc renders worked request and response bodies. The limitations, exactly: (1) `required` is declared on only 6 of 79 schemas, and `Job_Creatable` declares none, yet the API enforces three required fields, which a developer discovers only by receiving the 422 (live-verified: `POST /v1/jobs` with `{}` returns \"The name field is required. The property id field is required. The description field is required.\"); (2) pagination is undocumented on every collection except `/on-call-instances`, though it demonstrably works on the others; (3) job `state_id` values are never enumerated anywhere, and the `State` schema documents only that it has an id and a name, so an integrator cannot learn what state 26 or state 6 means without observing live data; (4) the fact that `PUT /jobs/{id}` silently ignores `vendor_id` and `state_id` is undocumented. Those are four flows requiring reverse-engineering, which is the check's `partial` condition."
+   },
+   {
+    "id": "C4.2",
+    "cat": 4,
+    "title": "Reliable machine-consumable integration path",
+    "mark": "yes",
+    "why": "two independent mechanisms, either sufficient on its own. First, a published OpenAPI 3.0.0 specification downloadable at `papi.latchel.com/api-docs/papi/papi.yaml`, which parsed cleanly in this run to 52 paths and 73 operations with resolvable internal `$ref`s, covering the full API surface and freshly maintained. Second, an operations-capable MCP server at `https://app.latchel.com/mcp/user-tools` which exposes write operations, not merely documentation search: \"Work orders - list them, get full details (including open tasks), review activity history, and create new ones. Tasks - list, view details, create, resolve, and reschedule (defer) tasks on a work order\" (Latchel MCP for AI Assistants, \"What You Can Do\"), authenticated by OAuth. No official SDK was located, but the check is explicit that one strong mechanism suffices and that extra formats earn no extra credit. This mark was contested: runs 1 and 2 marked it `yes`, run 3 marked it `partial` on the ground that the specification's five invalid `type: float` declarations and its total absence of declared paging parameters mean a generated client can neither page a collection nor type a dollar amount. Those defects are real and are penalised at C2.2 and C4.1. Resolved to `yes` because they fall short of the check's `partial` threshold of \"requires substantial manual correction\" (five fields across 79 schemas), and because the MCP server independently satisfies the check on its own terms. Recorded caveat on that second mechanism: Latchel states the MCP connector \"currently only supports email-matching authentication\" and recommends the Partner API for autonomous agents that cannot replicate an interactive OAuth flow."
+   },
+   {
+    "id": "C4.3",
+    "cat": 4,
+    "title": "AI-readable documentation",
+    "mark": "partial",
+    "why": "a genuinely comprehensive, intentionally AI-structured corpus exists, but it comprehensively represents the help centre and product site, not the API. `help.latchel.com/llms.txt` indexes 334 pages, each retrievable as clean Markdown at its path plus `.md`, verified by fetching eight directly; `latchel.com/llms.txt` states the same convention in-file; `latchel.com/llms-full.txt` supplies a 202,327-byte prose corpus. The limitation, exactly: of those 334 help pages, exactly three concern the API (`API-Docs`, `How-to-Generate-an-API-Key`, `The-Webhook-Subscription`), plus the `/reference/` webhook pages. There is no per-endpoint Markdown, and `papi.latchel.com/llms.txt` returns 404, so the documentation domain that actually hosts the API reference publishes no AI-retrieval index at all. The one resource that does comprehensively represent the API is `papi.yaml`, which is already credited at C4.2; crediting it again here would double-count a single artifact. This mark was contested: run 1 marked it `yes`, runs 2 and 3 independently marked it `partial`. Resolved to `partial`, since the check requires that a resource comprehensively represent the API*, and the llms.txt corpus does not."
+   },
+   {
+    "id": "C4.4",
+    "cat": 4,
+    "title": "Kept current",
+    "mark": "partial",
+    "why": "currency information exists and is genuinely fresh, but it is irregular and not API-specific. In favour: biweekly release notes run continuously to 2026-09-08, two days before this run, and the 2026-08-10 entry does document an API-specific fix and a documentation refresh (\"You can create work orders in Latchel directly from your own systems using our public API - and as of this fix, every one of them gets the same intake and diagnostic treatment as a request that came in by phone or web form. We've also given the docs a refresh\"), alongside a numbered item \"API-Created Work Orders Now Complete Diagnostics First\". The specification is demonstrably maintained: `papi.yaml` returned `Last-Modified: Thu, 10 Sep 2026 16:18:30 GMT`, the day of this run. The limitation, exactly: there is no API changelog, no release history on the specification, and no version notes. API changes surface incidentally inside a general product newsletter written for property managers, in roughly one or two of the eight most recent biweekly entries, with the rest covering dashboard and service features. A developer cannot rely on that channel to learn that an API behaviour has changed. That is \"irregular\" and \"incomplete\" in the check's own terms. This mark was contested: run 1 marked it `yes`, runs 2 and 3 independently marked it `partial`. Resolved to `partial`. Graded on currency of change communication only; the absent deprecation policy is penalised once, at C2.10, and is not re-counted here."
+   },
+   {
+    "id": "C5.1",
+    "cat": 5,
+    "title": "Self-serve API key",
+    "mark": "yes",
+    "why": "credential creation is entirely self-serve, with no sales call, support ticket or approval step. \"Latchel Property Managers can generate (for the first-time) or regenerate an API key right from the Latchel console... On your Latchel dashboard click the initial icon and on the dropdown select Account Settings. Select the Integrations tab... Scroll down to the API Key panel, then select Generate\" (How to Generate an API Key). Corroborated live: the operator-supplied key authenticated on first use without any provisioning step by Latchel. Per the check's preamble, the cost of acquiring an eligible account is not counted here."
+   },
+   {
+    "id": "C5.3",
+    "cat": 5,
+    "title": "Not commercially gated",
+    "mark": "yes",
+    "why": "resolved on a source read during reconciliation rather than on absence of evidence. Latchel's plan comparison, published as an image on the self-signup help page (`rtaImage-559.jpg`, retrieved and read 2026-09-10), shows the complete tier structure: Standard at $250-500/month with a 30-day free trial, up to 50 doors; and Professional on revenue share, \"Talk to Sales\". The feature list is identical on both tiers except that Professional adds Resident Benefits: Resident Maintenance Portal, 24/7 Emergency Support, Yardi/Rent Manager integrations, Vendor Payments, Work order management, Troubleshooting and Dispatching, Vendor Sourcing. API access appears on neither tier's list, so it is not presented as a premium or top-tier differentiator, which is precisely what the check asks. Supporting evidence: the key-generation guide addresses \"Latchel Property Managers\" with no plan qualifier and no premium condition on the API Key panel; the 2026-08-10 release note calls it \"our public API\" while addressing the general customer base; and where Latchel does gate a capability commercially it says so plainly, as with Analytics+ at \"$0.25 per unit per month with an annual contract... minimum monthly price of $100\" (llms-full.txt), with no comparable statement anywhere attached to the API. Stated honestly, so a reader can weigh it: the tier document is silent on the API rather than affirmatively granting it, and Latchel publishes no pricing page. This mark was contested and it was decisive. Run 1 marked it `yes` on the key-generation guide alone. Run 2 marked it `unverified: could not access`, correctly observing that the plan-inclusion answer was an unread image and, sharply, that the key-generation guide is the artifact C5.1 grades, so leaning on it for C5.3 conflates credential creation with commercial entitlement, which the methodology explicitly separates. Run 3 marked it `yes`. Run 2's objection was upheld as a process matter and triggered the packet amendment: the image was retrieved and read, which is what Core rule 4 requires before an unreadable first-party source is settled. With the source now read, `unverified: could not access` no longer applies, and the tier document supports `yes` on direct evidence rather than inference. Had the source stayed unread, Category 5 verification coverage would have fallen to 50%, the category would have been Unable to verify, and the entire numeric score would have been withheld."
+   }
+  ]
+ },
  "LeadSimple": {
   "source": "leadsimple.md",
   "meta": {
