@@ -3416,6 +3416,207 @@
    }
   ]
  },
+ "Showdigs": {
+  "source": "showdigs.md",
+  "meta": {
+   "tier": "Baseline verified (read-path live-tested; write-path documentation-graded)",
+   "battery": "read-path steps 1–5 complete; write-path steps 6–7 N-A (no sandbox, live writes declined for safety); step 8 (webhook delivery) documentation-graded",
+   "date": "2026-09-10",
+   "model": "Claude Opus 4.8 (claude-opus-4-8)",
+   "coverage": "100% (gate satisfied: no category Unable to verify; overall ≥ 80%; minimum read-path battery complete)"
+  },
+  "checks": [
+   {
+    "id": "C1.1",
+    "cat": 1,
+    "title": "Object coverage",
+    "mark": "partial",
+    "why": "weighted coverage = 72.5% (Σ 14.5/20; no critical object absent). Properties/Units/Listings=1.0; Inquiries=0.5 (write-only, no REST read); Tours=0.5 (event-only); Pre-screening=0.5 (event-only); Condition reports=0.5 (no read); Coverage=1.0; Templates=0.0. (All three runs = partial; sub-scores ranged 67.5–72.5%.) [api.showdigs.com/docs/ Units, Listings, Inquiries, Condition reports, Properties, Agent Coverage; live GET /units, /listings 2026-09-10]"
+   },
+   {
+    "id": "C1.2",
+    "cat": 1,
+    "title": "Core operational actions",
+    "mark": "partial",
+    "why": "weighted coverage = 84.6% (Σ 11/13; no critical write absent), just under the 0.85 yes threshold. Listing create/update, inquiry create, property create/update, condition-report create all 1.0; webhook subscription 1.0; book/modify tour 0.0 (no endpoint — prospects self-schedule via the returned scheduling_url). All three runs = partial. Documentation-graded (write). [api.showdigs.com/docs/ Create/Update a Listing, Create an inquiry, Create/Update a Property, Schedule a condition report, Webhooks subscribe]"
+   },
+   {
+    "id": "C1.3",
+    "cat": 1,
+    "title": "Delete or lifecycle actions",
+    "mark": "partial",
+    "why": "weighted coverage = 77.8% (Σ 7/9; no critical lifecycle absent). Listing DELETE (deactivate) 1.0, listing PUT 1.0, condition-report DELETE (cancel) 1.0; tour cancel/complete 0.0 (not operator-actionable via API). Documentation-graded (write). [api.showdigs.com/docs/ Delete listing, Update a Listing, Cancel a condition report]"
+   },
+   {
+    "id": "C1.4",
+    "cat": 1,
+    "title": "Change notification",
+    "mark": "partial",
+    "why": "webhooks cover the prospect→tour→inspection lifecycle (new_inquiry, disqualified_lead, tour_scheduled, tour_completed, tour_cancelled, completed_condition_report), but there are NO events for listing or property/unit changes (which can occur via PMS sync, not only operator action) and no updated-since polling fallback; weighted push coverage of critical+important state changes ≈ 0.64–0.72, below the 0.85 yes threshold. [api.showdigs.com/docs/ Webhooks; live GET /webhooks/sample 2026-09-10] (Reconciled yes→partial: 2 of 3 independent graders scored partial on the evidence.)"
+   },
+   {
+    "id": "C2.1",
+    "cat": 2,
+    "title": "Modern API conventions",
+    "mark": "yes",
+    "why": "resource-oriented REST with standard GET/POST/PUT/DELETE verbs and JSON bodies. [api.showdigs.com/docs/; live 2026-09-10]"
+   },
+   {
+    "id": "C2.2",
+    "cat": 2,
+    "title": "Consistent typing",
+    "mark": "no",
+    "why": "a core field is stringly typed and types vary across endpoints: `bedrooms:\"2\"`/`\"4\"` (string) beside `bathrooms:1`/`2.5` (number) in both `/units` and `/listings`; webhook `cost:\"20\"` (string) vs tour `charge:49` (number); `inquiry_id` documented as `\"4789\"` (string) but returned `2394` (number) live; and the webhook `prospects[]` array mixes `phone_number` and `phone` keys. [live GET /units, /listings, /webhooks/sample 2026-09-10; api.showdigs.com/docs/ Webhooks]"
+   },
+   {
+    "id": "C2.3",
+    "cat": 2,
+    "title": "Structured errors",
+    "mark": "partial",
+    "why": "correct HTTP status semantics (401/404/422) with a human-readable `message` and Laravel `errors{}` for validation, but no populated stable machine-readable error code across endpoints (only an occasional ad-hoc `error:\"existingInspection\"`). [live 401 {\"message\":\"Unauthenticated.\"}, 404 {\"message\":\"Unit not found.\"}, 422 {\"message\":...,\"errors\":{...}} 2026-09-10; api.showdigs.com/docs/ Schedule a condition report]"
+   },
+   {
+    "id": "C2.4",
+    "cat": 2,
+    "title": "Duplicate prevention",
+    "mark": "no",
+    "why": "no idempotency-key or request-ID mechanism is documented, and the most consequential communicating write (`POST /inquiries`, which contacts a real prospect) can create duplicate prospects/outreach on retry. Natural idempotency exists only incidentally and undocumented (condition-report in-progress guard — 422 \"existingInspection\"; property `origin_id` upsert), which is a defensible basis for \"partial\" but was resolved to \"no.\" Documentation-graded. [api.showdigs.com/docs/ Schedule a condition report, Create a Property, Create an inquiry] (Reconciled partial→no: 2 of 3 independent graders scored no.)"
+   },
+   {
+    "id": "C2.5",
+    "cat": 2,
+    "title": "Graceful handling under load",
+    "mark": "partial",
+    "why": "responses carry `X-RateLimit-Limit: 180` and `X-RateLimit-Remaining` (standard, machine-readable throttle signalling), but rate limiting is undocumented and no 429/`Retry-After` recovery guidance is published (limit not breached in testing to avoid throttling the production key). [live response headers 2026-09-10]"
+   },
+   {
+    "id": "C2.6",
+    "cat": 2,
+    "title": "Pagination for large collections",
+    "mark": "partial",
+    "why": "offset pagination (`page`/`per_page`≤100) with a full Laravel paginator observed live (`total:1549`, `last_page`, populated `next`/`prev` and a `links[]` array), usable to traverse the whole collection; but no documented stable-ordering guarantee, so rows can shift between page fetches during a long sync. [live GET /units?page=1/2 2026-09-10; api.showdigs.com/docs/ Get all units]"
+   },
+   {
+    "id": "C2.7",
+    "cat": 2,
+    "title": "Bulk or incremental export",
+    "mark": "partial",
+    "why": "full datasets are obtainable via list endpoints without per-record calls for units (paginated) and listings (full set), but there is no updated-since incremental sync, no dedicated bulk/export path, and no list endpoint at all for inquiries, tours, or condition reports. [api.showdigs.com/docs/ Get all units, List all listings; live 2026-09-10]"
+   },
+   {
+    "id": "C2.8",
+    "cat": 2,
+    "title": "Webhook security and delivery reliability",
+    "mark": "partial",
+    "why": "deliveries can be authenticated via an optional shared \"webhook access token\" echoed as `Authorization: Bearer TOKEN`, but there is no HMAC/per-payload signature, no documented retry policy, and no replay/idempotency guidance for consumers. Documentation-graded. [api.showdigs.com/docs/ Webhooks → Webhook Access Token]"
+   },
+   {
+    "id": "C2.9",
+    "cat": 2,
+    "title": "Concurrency and conflict control",
+    "mark": "no",
+    "why": "no ETag/If-Match, version fields, or documented 409 conflict semantics; PUTs are last-write-wins and no ETag header appears on responses. [api.showdigs.com/docs/ Update a Listing, Update a Property; live response headers 2026-09-10]"
+   },
+   {
+    "id": "C2.10",
+    "cat": 2,
+    "title": "Versioning and backward compatibility",
+    "mark": "partial",
+    "why": "an explicit path version exists (`/api/v1/`), but no documented backward-compatibility policy (breaking vs non-breaking) and no deprecation window/notice. [api.showdigs.com/docs/ endpoint paths]"
+   },
+   {
+    "id": "C2.11",
+    "cat": 2,
+    "title": "Request traceability",
+    "mark": "no",
+    "why": "no request/correlation identifier on any response header, and none documented. [live response headers 2026-09-10 — only Date, Content-Type, Server, Vary, Cache-Control, X-RateLimit-*, X-Frame-Options, X-XSS-Protection, X-Content-Type-Options]"
+   },
+   {
+    "id": "C2.12",
+    "cat": 2,
+    "title": "Service availability and status transparency",
+    "mark": "no",
+    "why": "no public status page (status.showdigs.com does not resolve; showdigs.statuspage.io redirects to Atlassian marketing) and no published uptime/SLA. [absence checks 2026-09-10]"
+   },
+   {
+    "id": "C3.1",
+    "cat": 3,
+    "title": "Read-only credentials",
+    "mark": "no",
+    "why": "no read-only credential/identity can be issued; a single all-purpose Bearer token is used. [operator first-party observation of Business Settings → Integrations, 2026-09-10; api.showdigs.com/docs/ Authenticating requests]"
+   },
+   {
+    "id": "C3.2",
+    "cat": 3,
+    "title": "Scoped credentials",
+    "mark": "no",
+    "why": "the token cannot be restricted to specific resources, actions, or a role; it is all-or-nothing. [operator first-party observation, 2026-09-10]"
+   },
+   {
+    "id": "C3.3",
+    "cat": 3,
+    "title": "Multiple keys",
+    "mark": "no",
+    "why": "the operator cannot create multiple distinct credentials for separate integrations. [operator first-party observation, 2026-09-10]"
+   },
+   {
+    "id": "C3.4",
+    "cat": 3,
+    "title": "Rotation and revocation",
+    "mark": "no",
+    "why": "no self-serve mechanism to rotate/regenerate or revoke the token is available to the operator. [operator first-party observation, 2026-09-10]"
+   },
+   {
+    "id": "C3.5",
+    "cat": 3,
+    "title": "Test and production isolation",
+    "mark": "na",
+    "why": "no sandbox/test environment exists. [no test environment evidenced in docs or site]"
+   },
+   {
+    "id": "C4.1",
+    "cat": 4,
+    "title": "Complete self-serve reference",
+    "mark": "partial",
+    "why": "a complete, example-rich Scribe reference covers the core endpoints with worked request/response examples, but every example uses `http://localhost` as the base URL (the real host is never stated), and the webhook subscribe/unsubscribe request bodies are under-documented (example `url` is just `\"https:\"`), so a developer must infer the real base URL and webhook payload. [api.showdigs.com/docs/ Introduction, all endpoints, Webhooks subscribe]"
+   },
+   {
+    "id": "C4.2",
+    "cat": 4,
+    "title": "Reliable machine-consumable integration path",
+    "mark": "no",
+    "why": "the two advertised machine-consumable artifacts are both broken (View OpenAPI spec → `docs.openapi` returns HTTP 500; View Postman collection → `docs.postman` returns HTTP 404), there is no official SDK and no MCP server, and the per-endpoint multi-language snippets are copy-paste examples, not a spec/SDK. (A first-party Zapier app exists but is a no-code connector within Zapier, not one of the qualifying build mechanisms.) [api.showdigs.com/docs/ menu links; live 500/404 across Accept variants 2026-09-10; help.showdigs.com Zapier integrations]"
+   },
+   {
+    "id": "C4.3",
+    "cat": 4,
+    "title": "AI-readable documentation",
+    "mark": "no",
+    "why": "no `llms.txt`/`llms-full.txt` (422), no per-endpoint Markdown, and no downloadable plain-text/Markdown corpus; the single Scribe HTML page is human documentation, not a resource structured for AI retrieval. [absence checks 2026-09-10]"
+   },
+   {
+    "id": "C4.4",
+    "cat": 4,
+    "title": "Kept current",
+    "mark": "partial",
+    "why": "the only currency signal is the reference's \"Last updated: August 4, 2026\" date (plus a few inline forward-looking notes); there is no changelog, release notes, or deprecation guidance. [api.showdigs.com/docs/ footer \"Last updated\"]"
+   },
+   {
+    "id": "C5.1",
+    "cat": 5,
+    "title": "Self-serve API key",
+    "mark": "yes",
+    "why": "an entitled operator retrieves the token self-serve from Business Settings → Integrations, with no sales call, support ticket, or key-approval step; confirmed by the operator obtaining and using a working production token. [api.showdigs.com/docs/ Authenticating requests: \"You can retrieve your token by visiting your integrations settings page.\"; operator token verified live 2026-09-10]"
+   },
+   {
+    "id": "C5.3",
+    "cat": 5,
+    "title": "Not commercially gated",
+    "mark": "yes",
+    "why": "Showdigs sells a single plan ($1.20/unit/month, $120 minimum); API access is not locked behind a premium/top-tier upgrade and is not shown as a paid add-on. The ~100-unit account minimum is a commercial-scale threshold for the product itself, not API-specific gating. [www.showdigs.com/pricing]"
+   }
+  ]
+ },
  "Tenant Turner": {
   "source": "tenant-turner.md",
   "meta": {

@@ -38,6 +38,7 @@ SOURCES = {
     "rent-manager":      "rent-manager-2026-09-07.md",
     "rentvine":          "rentvine-2026-09-02.md",
     "ringcentral":       "ringcentral-2026-09-01.md",
+    "showdigs":          "showdigs-2026-09-10.md",
     "showmojo":          "showmojo-2026-09-02.md",
     "tenant-turner":     "tenant-turner-2026-09-01.md",
     "xero":              "xero-2026-08-27.md",

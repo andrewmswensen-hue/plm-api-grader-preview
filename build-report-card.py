@@ -72,7 +72,7 @@ NO_API = {"Enterprise Bank"}
 # their own account. Distinct from "scoring in progress", which means the run is
 # under way: these are waiting on a customer, and saying so is how we get one.
 LOOKING = {"DoorLoop", "Revela", "Rentec Direct", "Yardi Breeze",
-           "Showdigs", "Findigs", "RentSpree"}
+           "Findigs", "RentSpree"}
 
 GUIDE_URL = "https://www.peterlohmann.com/api-grader-guide"
 
@@ -1914,6 +1914,128 @@ RESULTS = {
             "idempotency keys and the lack of lost-update protection, so protect "
             "your own retries of anything that sends a message or moves money, "
             "and the stale changelog, so verify against the live reference.",
+},
+
+"Showdigs": {
+  "score": 54, "grade": "F",
+  "meta": {"run": "Sep 10, 2026", "method": "1.1", "model": "Claude Opus 4.8",
+           "tier": "Baseline verified", "raw": "27.08 / 50"},
+  # No marks at all in Access Control, which is what carries the F. That whole
+  # category rests on the operator describing a login-gated settings page rather
+  # than on a screenshot, and the report says so plainly and offers to revise if
+  # a control was missed.
+  "note": "Graded three independent times against the same frozen evidence, with "
+          "unreconciled totals of 60, 55 and 54. 23 of the 26 applicable checks "
+          "were unanimous, and the three that were contested were resolved "
+          "against the evidence rather than averaged. The grade is F on the "
+          "reconciled marks and on every strict reading; only if all three boundary "
+          "calls broke the most generous way at once would it reach a ceiling of "
+          "about 61, a D-. Two limits on this run are worth knowing. There "
+          "is no sandbox, and the write endpoints either contact real prospects "
+          "or publish real listings, so no write was performed and those checks "
+          "were graded from documentation. And Access Control was scored from the "
+          "operator's own first-party description of a login-gated settings page, "
+          "not from a screenshot. The report flags that itself and states it will "
+          "be revised if any control was missed, since a single regenerate button "
+          "would move one of those four checks.",
+  "cats": [
+    (7.5, 15, "You can list and read your units and listings, push properties and "
+              "listings in, drop prospects into Showdigs' scheduling funnel, "
+              "order inspections, and receive webhooks for the prospect, tour and "
+              "inspection journey. The real gaps: there is no way to read, book or "
+              "cancel a tour through the API, because tours exist only as webhook "
+              "events. Inquiries and condition reports are write-only, so you "
+              "cannot query them back. There is no endpoint for scheduling or "
+              "screening templates. And change notification runs one way only: no "
+              "webhook fires when a listing or property changes, which can happen "
+              "through a PMS sync rather than your own action, and there is no "
+              "updated-since filter to catch it."),
+    (3.3, 10, "The API is a clean, modern REST interface with usable errors and "
+              "genuinely good pagination, and it does emit rate-limit headers. But "
+              "building production automation on it takes defensive engineering. "
+              "You have to coerce inconsistently typed fields, since bedrooms "
+              "comes back as a string while bathrooms comes back as a number. You "
+              "get no request id to hand support. There is no protection against "
+              "two writers overwriting each other. Idempotency is not documented, "
+              "so a retried write can duplicate. Webhook deliveries carry no "
+              "signature and no retry contract. And there is no status page to "
+              "watch. Fine for internal tooling, below the bar you would want for "
+              "mission-critical, high-volume sync."),
+    (0, 5, "This is the weakest area and it carries a real security implication. "
+           "You get one powerful token that can do everything the API allows. You "
+           "cannot hand a limited or read-only slice to a third-party app or an AI "
+           "agent, you cannot issue separate keys per integration, and, most "
+           "importantly, if that token leaks there is no self-serve way to revoke "
+           "or rotate it. Treat the token as a high-value secret, and if it is "
+           "ever exposed, contact Showdigs support immediately. This rests on the "
+           "operator's own observation of the settings page rather than a "
+           "screenshot, and the report commits to revising it if a control was "
+           "missed."),
+    (1.3, 5, "A developer can build from the reference, but not smoothly. Every "
+             "documented example uses localhost as the base URL, so the real host "
+             "is never actually stated and has to be inferred. Both of the "
+             "machine-readable files Showdigs advertises are broken: the OpenAPI "
+             "spec returns a server error and the Postman collection is missing. "
+             "There is no SDK, no MCP server, and no AI-readable documentation "
+             "corpus, so there is nothing to generate a client from or feed to a "
+             "coding tool. Expect more hand-coding and reverse-engineering than a "
+             "well-tooled API requires, and no reliable changelog to watch for "
+             "breaking changes."),
+    (15, 15, "This is the API's strongest area. If you already have a Showdigs "
+             "account, the API is right there: a self-serve token, no upsell, no "
+             "gatekeeping. Showdigs sells a single plan at $1.20 per unit per "
+             "month with a $120 minimum, and API access is not a paid add-on and "
+             "not reserved for a higher tier. Nothing about cost or access stops "
+             "you from building today."),
+  ],
+  "strengths": [
+    "A self-serve token from Business Settings, with no sales call and no approval step",
+    "One plan at $1.20 per unit per month, with no API upsell and no add-on",
+    "A clean REST API with standard verbs and JSON, confirmed live",
+    "Genuinely good pagination: a full paginator with totals, verified across pages live",
+    "Machine-readable rate-limit headers on every response",
+    "Webhooks across the whole inquiry, tour and inspection lifecycle",
+    "An example-rich reference covering the core endpoints with worked requests and responses",
+    "Full create, read, update and delete on listings, the object the product is built around",
+    "Properties and units can be pushed in and kept in sync from your own systems",
+    "Condition-report inspections can be ordered and cancelled through the API",
+  ],
+  "watch": [
+    "One all-powerful token, with no read-only or scoped option",
+    "No way to issue separate credentials for separate integrations",
+    "No self-serve way to rotate or revoke the token if it leaks",
+    "Tours are webhook events only: you cannot read, book or cancel one through the API",
+    "Inquiries and condition reports are write-only, with no way to query them back",
+    "No webhook fires when a listing or property changes, and no updated-since filter catches it",
+    "No idempotency, so a retried inquiry can contact a real prospect twice",
+    "Both advertised machine-readable files are broken: the spec 500s, the Postman collection 404s",
+    "Every documented example uses localhost, so the real base URL is never stated",
+    "No request id on any response, and no status page to check when something breaks",
+  ],
+  "bottom": "Showdigs has a real, first-party REST API that is easy to get into, "
+            "with a self-serve token, a single plan and no upsell, and it covers "
+            "its core leasing-showing job well. You can sync properties and "
+            "listings, push prospects into its self-scheduling funnel, order "
+            "condition-report inspections, and receive webhooks across the "
+            "inquiry, tour and inspection lifecycle. What you can build today is "
+            "solid listing sync and lead and inspection automation with "
+            "event-driven notifications. What you cannot build well is anything "
+            "that needs to read or manage tours through the API, since they are "
+            "webhook-only, anything that needs to query inquiries or inspections "
+            "back, or anything running at mission-critical scale. The API lacks "
+            "consistent typing, request ids, concurrency control, documented "
+            "idempotency, signed and retried webhooks, a status page, and any "
+            "working spec or SDK. The most serious limitation is access control: "
+            "a single all-powerful token with no read-only or scoped keys and no "
+            "self-serve rotation or revocation, so guard it carefully. Showdigs "
+            "is not a bank, not a PMS and not a trust-accounting system, and it "
+            "does not handle applications, leases or funds. It is a leasing and "
+            "showing layer that sits on top of your PMS, which you still need for "
+            "the rest. Net: a genuinely useful integration surface for leasing "
+            "automation, held to a failing grade by production-hardening and "
+            "credential-security gaps. One non-scopable, non-revocable token, thin "
+            "operability, one-directional change notification, and no working "
+            "specification or SDK.",
 },
 
 "ShowMojo": {

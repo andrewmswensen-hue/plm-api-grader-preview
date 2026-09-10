@@ -38,6 +38,7 @@ SOURCES = {
     "RentEngine":          "rentengine.md",
     "Rentvine":            "rentvine.md",
     "RingCentral":         "ringcentral.md",
+    "Showdigs":            "showdigs.md",
     "ShowMojo":            "showmojo.md",
     "Tenant Turner":       "tenant-turner.md",
     "Xero":                "xero.md",
