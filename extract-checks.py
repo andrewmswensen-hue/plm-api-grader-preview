@@ -28,6 +28,7 @@ SOURCES = {
     "Buildium":            "buildium.md",
     "Column":              "column.md",
     "LeadSimple":          "leadsimple.md",
+    "Magic Door":          "magic-door.md",
     "Process Street":      "process-street.md",
     "Property Meld":       "property-meld.md",
     "QuickBooks Online":   "quickbooks-online.md",

@@ -71,7 +71,7 @@ NO_API = {"Enterprise Bank"}
 # Platforms we cannot grade until an operator who uses one runs the file against
 # their own account. Distinct from "scoring in progress", which means the run is
 # under way: these are waiting on a customer, and saying so is how we get one.
-LOOKING = {"DoorLoop", "Revela", "Rentec Direct", "Yardi Breeze", "Magic Door",
+LOOKING = {"DoorLoop", "Revela", "Rentec Direct", "Yardi Breeze",
            "Showdigs", "Findigs", "RentSpree"}
 
 GUIDE_URL = "https://www.peterlohmann.com/api-grader-guide"
@@ -964,6 +964,148 @@ RESULTS = {
             "written 30-day breaking-change promise, and no cost or sales barrier "
             "to getting a key. Its biggest limitation is that it is observational "
             "at its core, compounded by unsigned webhooks and no bulk export.",
+},
+
+"Magic Door": {
+  "score": 73, "grade": "C",
+  "meta": {"run": "Sep 10, 2026", "method": "1.1", "model": "Claude Opus 5",
+           "tier": "Fully verified, sandbox", "raw": "36.47 / 50"},
+  # A large, capable API with no published documentation at all. The run had to
+  # decode a minified service registry out of the company portal's JavaScript
+  # bundle to find it. Two checks in Access Control were downgraded to no after
+  # the verification pass tested scope enforcement and found the business API
+  # ignores it entirely.
+  "note": "Graded three independent times against the same frozen evidence, with "
+          "unreconciled totals of 70, 72 and 73. 22 of the 27 checks were "
+          "unanimous, and each of the five disagreements was resolved against the "
+          "evidence before the published 73 was calculated. The run is Fully "
+          "verified in MagicDoor's own staging environment, proven isolated by "
+          "testing the staging credential against the production host and having "
+          "it rejected. One check is left flagged rather than settled: nobody "
+          "observed how an operator obtains their first credential, because the "
+          "company portal's web interface was never opened, and a single "
+          "screenshot of that screen would resolve it. The run also records its "
+          "own departure from the method: MagicDoor publishes nothing about this "
+          "API, so the evaluator generated two keys, later revoked, and located "
+          "the interface by decoding a first-party JavaScript bundle. Three "
+          "checks rest on that evidence and each one says so.",
+  "cats": [
+    (13.1, 15, "Almost anything you can do in the MagicDoor screens you can do "
+               "from code. You can create and update properties, units, leases "
+               "and tenants, post rent charges and payments to a lease ledger, "
+               "run renewals and move-outs, and drive maintenance from request "
+               "through work order to vendor bill. The weak spot is being told "
+               "when something changes. There are no webhooks and no "
+               "what-changed-since-yesterday filter on any list, so an "
+               "integration cannot subscribe to events. There is an audit-log "
+               "endpoint that on paper can be paged as a change feed with "
+               "before-and-after values, which is the one thing standing between "
+               "this and a failing mark here, but it is undocumented outside the "
+               "specification file and the run did not exercise it. Plan on "
+               "polling, and treat that audit feed as something to prototype "
+               "before you depend on it."),
+    (4.1, 10, "It is a clean modern REST API that behaves well when you push it "
+              "too hard, returning a proper 429 that tells you exactly how long "
+              "to wait. Where it will hurt you is production hardening. If a "
+              "payment-posting call times out and your script retries it, you get "
+              "a duplicate, which the run proved by creating the same property "
+              "twice. There is no versioning, so MagicDoor can change the API "
+              "underneath you with no notice and no policy saying they will not. "
+              "Two people or two automations editing the same record overwrite "
+              "each other with no conflict warning. There is no status page, so "
+              "when something breaks you cannot tell whether it is you or them. "
+              "And the published schemas disagree with themselves about whether a "
+              "property id is a number or a string, which is the kind of thing "
+              "that generates a client library that quietly corrupts your "
+              "identifiers."),
+    (3, 5, "Key management itself is good. You can mint as many credentials as "
+           "you want, name them, revoke them instantly yourself, and there is a "
+           "real staging environment so you can build without risking live data. "
+           "But the part that matters most for safe automation does not work. "
+           "MagicDoor lets you create a key labelled read-only, and the API "
+           "holding your portfolio does not honour that label. The run created a "
+           "key restricted to reading audit records and it went on to create a "
+           "property and read every tenant. You cannot safely hand a MagicDoor "
+           "key to a contractor, a third-party app or an AI agent on the "
+           "assumption it can only look. Treat every key you issue as a "
+           "full-access admin credential."),
+    (1.3, 5, "This is the weakest part of MagicDoor's API, and it is a "
+             "documentation problem rather than a capability problem. The API "
+             "underneath is large and well built, but MagicDoor publishes nothing "
+             "about it: no developer site, no reference, no examples, no "
+             "changelog, and no mention of the API in any of their 79 help "
+             "articles. Three-quarters of the endpoint descriptions are just the "
+             "function name repeated. The one genuinely valuable asset is a "
+             "complete machine-readable specification covering every endpoint, "
+             "which is what a coding tool needs to generate a client, but nothing "
+             "tells you it exists, it never describes what an error looks like, "
+             "and its own server addresses are wrong for most of the services. "
+             "Anyone building here should expect to ask MagicDoor directly for "
+             "the specification files and base URLs, and to get no warning when "
+             "something changes."),
+    (15, 15, "Nothing stands between you and the API. It is included on every "
+             "plan including the cheapest, MagicDoor explicitly advertises no "
+             "gated features, and you can create and revoke your own keys without "
+             "talking to anyone. This is the best-scoring category in the "
+             "report."),
+  ],
+  "strengths": [
+    "Fully verified in a real sandbox: a property was created, renamed and deleted live",
+    "Roughly 1,500 company-facing operations covering essentially the whole product",
+    "API access included on every plan, from $1.50 per unit per month on an annual contract",
+    "Self-serve key creation and instant self-serve revocation, both verified live",
+    "A real staging environment, proven isolated when its key was rejected by production",
+    "Rate limiting done properly: a real 429 carrying a machine-readable retry-after",
+    "Complete OpenAPI 3.0.4 specifications for 19 services, fetchable without a login",
+    "Every response carries a unique trace id, echoed back into error bodies",
+    "Full lease lifecycle in the API: activate draft, renewals, move-outs with accept and reject",
+    "Validation errors return a proper RFC 9457 body with per-field messages",
+  ],
+  "watch": [
+    "A key created as read-only was not enforced: it created a property and read every tenant",
+    "Scopes are ignored by the API holding your portfolio, so every key is effectively full admin",
+    "No idempotency: the identical property-create payload sent twice produced two records",
+    "No webhooks and no updated-since filter anywhere, so every integration polls",
+    "No versioning at all, and no backward-compatibility or deprecation policy",
+    "No concurrency control, so two writers silently overwrite each other",
+    "No public status page: status.magicdoor.com serves nothing",
+    "No published API documentation, and none of the 79 help articles mention it",
+    "76% of endpoint descriptions are the function name repeated, with zero worked examples",
+    "The specifications' own server addresses are wrong for 14 of the 19 services",
+  ],
+  "bottom": "MagicDoor has a genuinely capable API hiding behind almost no "
+            "documentation. Nearly everything the product does is reachable from "
+            "code across roughly 1,500 operations, and it is not just readable: "
+            "the run created, renamed and deleted a property live, and you can "
+            "post rent charges and payments to a lease ledger, run renewals and "
+            "move-outs, and drive maintenance from request through work order to "
+            "vendor bill. Access is the easiest of any platform in this category, "
+            "included on every plan from $1.50 per unit per month on an annual "
+            "contract, with self-serve keys and a real staging environment to "
+            "build against. The two things you cannot rely on today are "
+            "event-driven automation and safe delegation. There are no webhooks "
+            "and no what-changed-since filter, so integrations must poll, and the "
+            "audit feed that looks like it could fill the gap is undocumented and "
+            "untested. There is no idempotency protection, so a retried payment "
+            "call will duplicate. Most seriously, the run created an API key "
+            "scoped to read-only and it created a property and read every tenant, "
+            "so treat every key you issue as a full-access admin credential and "
+            "do not hand one to a third-party app or an AI agent expecting it to "
+            "be limited. MagicDoor is not evidenced as a bank and does not hold "
+            "your money. It is the software and the ledger of record; your funds "
+            "sit in your own trust and operating bank accounts, connected through "
+            "Plaid, with card and ACH processing run by Payabli and Stripe. Its "
+            "trust accounting is unusually well specified for a platform at this "
+            "price, and the API exposes the matching reconciliation, "
+            "journal-entry and owner-distribution workflows, though this run "
+            "verified the object surface rather than the accounting behaviour "
+            "itself. The 73 reflects a strong, buildable product surface held "
+            "back by an operability and documentation gap rather than by missing "
+            "features: enforce the key scopes that already exist, add webhooks "
+            "and idempotency, publish a developer reference, and this would be "
+            "among the better property management APIs available. Until then, "
+            "plan on asking MagicDoor directly for the specification files and "
+            "base URLs, budget for polling, and keep your keys tightly held.",
 },
 
 "Process Street": {

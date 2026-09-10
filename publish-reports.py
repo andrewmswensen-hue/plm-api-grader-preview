@@ -28,6 +28,7 @@ SOURCES = {
     "buildium":          "buildium-2026-08-27.md",
     "column":            "column-2026-09-09.md",
     "leadsimple":        "leadsimple-2026-08-28.md",
+    "magic-door":        "magic-door-2026-09-10.md",
     "process-street":    "process-street-2026-08-31.md",
     "property-meld":     "property-meld-2026-09-01.md",
     "quickbooks-online": "quickbooks-online-2026-09-02.md",

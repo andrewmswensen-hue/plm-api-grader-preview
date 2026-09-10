@@ -1205,6 +1205,207 @@
    }
   ]
  },
+ "Magic Door": {
+  "source": "magic-door.md",
+  "meta": {
+   "tier": "Fully verified, sandbox (staging environment `magicdoor-test.com`, proven isolated from production by A4)",
+   "battery": "complete. Steps 1 to 6 performed. Step 7 N-A (the API documents no idempotency for operator writes; the equivalent duplicate probe was run anyway and is cited at C2.4). Step 8 N-A (no operator-facing webhooks).",
+   "date": "2026-09-10",
+   "model": "Claude Opus 5 (claude-opus-5)",
+   "coverage": "100% (26 of 26 applicable checks verified, zero unverified; gate requires no category Unable to verify and overall at or above 80%). No category fell below 0.70. Of the 27 checks in the rubric, one (C2.8) is N-A and excluded from the math."
+  },
+  "checks": [
+   {
+    "id": "C1.1",
+    "cat": 1,
+    "title": "Object coverage",
+    "mark": "yes",
+    "why": "weighted coverage = 98.7% (37.5 of 38 weight), no critical object absent. Every critical object carries full write operations; only inventory is read-only. [endpoint inventory across the 17 company-facing specifications; `GET /company-app/properties` verified live]"
+   },
+   {
+    "id": "C1.2",
+    "cat": 1,
+    "title": "Core operational actions",
+    "mark": "yes",
+    "why": "weighted coverage = 100% (inventory marked N-A within this sub-map as a generated report). All three critical write workflows present. Verified live: `POST /company-app/properties` created id `1547630408379088896`, `PUT` renamed it, `GET` confirmed both. Ledger and lease writes documentation-graded per the hard-exclusion list. [H5, H3]"
+   },
+   {
+    "id": "C1.3",
+    "cat": 1,
+    "title": "Delete or lifecycle actions",
+    "mark": "yes",
+    "why": "weighted coverage = 100%. Verified live: `DELETE /company-app/properties/{id}` returned 200 and the record left the collection. Remaining lifecycle actions documentation-graded. [H10 to H14]"
+   },
+   {
+    "id": "C1.4",
+    "cat": 1,
+    "title": "Change notification",
+    "mark": "partial",
+    "why": "There is no push mechanism. Across all 19 services only four webhook paths exist, and all are inbound endpoints where TransUnion and bank-feed providers post into MagicDoor; no subscription-management endpoint and no event catalogue exist. No operation among the 1,510 accepts an updated-since, modified-after or delta parameter; only `created.start`/`created.end` and `closedAfter`. The mechanism that carries this to `partial` rather than `no` is `GET /company-portal/audit-entries` on the audits service, whose `entityType` and `entityId` filters are declared optional and whose response returns `AuditEntryAction` of created, updated or deleted, per-field `oldValue`/`newValue` diffs, `occurredAt`, a cross-entity `names` map spanning tenants, owners, vendors, property managers, portfolios, properties, units and leases, and a `nextCursor` for continuation. That is a documented cursor-paginated change feed. It was not exercised in the live battery, its `entityType` values are not enumerated, and no ordering or retention guarantee is stated, so it does not reach `yes`. [G6, G9, specs/audits/CompanyPortal.json]"
+   },
+   {
+    "id": "C2.1",
+    "cat": 2,
+    "title": "Modern API conventions",
+    "mark": "yes",
+    "why": "Resource-oriented REST over HTTPS with standard verbs and JSON, described by OpenAPI 3.0.4. Verified live across GET, POST, PUT and DELETE."
+   },
+   {
+    "id": "C2.2",
+    "cat": 2,
+    "title": "Consistent typing",
+    "mark": "partial",
+    "why": "Live payloads are type-clean: `totalRent: 1650` and `currentBalance: 1650` are numbers, `active: true` is boolean, and 19-digit snowflake identifiers return as strings. The exact limitation is that the published schemas are not internally consistent about identifier types. 851 path parameters declare identifiers as `integer` against 273 as `string`, and 12 identifier names are declared with both types on different endpoints, including `propertyId`, `leaseId`, `tenantId`, `unitId`, `ownerId`, `vendorId` and `portfolioId`. Separately, 11 company-facing fields carrying `format: snowflake` are typed `integer` while 350 are typed `string`. A 19-digit snowflake typed as a JSON integer exceeds JavaScript's safe integer range. [specs/apiportal/CompanyApp.json, specs/auth/CompanyPortal.json]"
+   },
+   {
+    "id": "C2.3",
+    "cat": 2,
+    "title": "Structured errors",
+    "mark": "partial",
+    "why": "Validation failures return a correct RFC 9457 `application/problem+json` body with per-field messages and an echoed `traceId` [D1]. The exact limitations: no populated stable machine-readable error code, only a generic RFC hyperlink identical on every 400; error shapes vary, and one auth-service 400 additionally returned `detail`, `instance` and an `exception` object leaking an internal .NET `ArgumentException` [D4]; a 404 and a 401 both returned completely empty bodies [D2, D3]; and none of the 1,510 operations documents any non-200 response [G1]."
+   },
+   {
+    "id": "C2.4",
+    "cat": 2,
+    "title": "Duplicate prevention",
+    "mark": "no",
+    "why": "Verified live: the identical property-create payload sent twice with no intervening change produced two distinct records, ids `1547630408379088896` and `1547630412229459968` [E5]. Zero header parameters are declared across all 1,510 operations, so no idempotency key header exists [G2]. The single idempotency mechanism in the surface is a body field, `PayCompanyInvoiceDto.idempotencyKey` on `POST /company-app/invoices/{billId}/pay`, which protects paying MagicDoor's own subscription invoice and not one operator-consequential write."
+   },
+   {
+    "id": "C2.5",
+    "cat": 2,
+    "title": "Graceful handling under load",
+    "mark": "yes",
+    "why": "Every response carries `x-rate-limit-limit`, `x-rate-limit-remaining` and an ISO `x-rate-limit-reset` [C2]. Verified live by exhausting the limit: request 101 in a one-minute window returned HTTP 429 with a machine-readable `retry-after: 40` [D5]. Scored on observed behavior; this behavior is documented nowhere, which is penalized in Category 4."
+   },
+   {
+    "id": "C2.6",
+    "cat": 2,
+    "title": "Pagination for large collections",
+    "mark": "partial",
+    "why": "A consistent envelope (`items`, `totalCount`, `totalPages`, `page`, `pageSize`) is used by 71 collection endpoints and works live [C1, C3]. The exact limitations: 100 other collection-returning GETs deliver a bare unpaginated array instead [G8, C5]; only 2 of roughly 600 GETs accept any sort or order parameter [G7]; no stable ordering guarantee is stated anywhere; and the staging account held only 2 properties, 4 units and 3 tenants, so traversal of a genuinely large collection was never exercised."
+   },
+   {
+    "id": "C2.7",
+    "cat": 2,
+    "title": "Bulk or incremental export",
+    "mark": "partial",
+    "why": "Full datasets are retrievable without per-record calls via 27 report endpoints, with rent roll verified live returning every property and unit in one response [C6, G13], plus 9 `/batch` fetch-by-id endpoints. The exact limitation: no async export job, no CSV or file export, and no incremental sync of any kind [G6], so every refresh is a full re-pull."
+   },
+   {
+    "id": "C2.8",
+    "cat": 2,
+    "title": "Webhook security and delivery reliability",
+    "mark": "na",
+    "why": "No operator-facing webhooks or events exist [G9]. Their absence is scored in C1.4 and is not double-counted here."
+   },
+   {
+    "id": "C2.9",
+    "cat": 2,
+    "title": "Concurrency and conflict control",
+    "mark": "no",
+    "why": "Zero header parameters are declared, so there is no ETag or If-Match [G2]. No 409 semantics are documented; all 1,510 operations document only a 200 [G1]. No concurrency limits are published. Two `version` integer fields exist, on `DepositSlipTransactionSnapshotDto` and `ManualReconciliationTransactionSnapshotDto`, but both are read-only snapshot records with no If-Match or 409 path to use them with, so they are not concurrency tokens."
+   },
+   {
+    "id": "C2.10",
+    "cat": 2,
+    "title": "Versioning and backward compatibility",
+    "mark": "no",
+    "why": "No path carries a `/vN/` segment, every specification's `info` block contains only a `title` with no `version`, and no version header is documented [G4]. No backward-compatibility policy, deprecation window or notice mechanism exists."
+   },
+   {
+    "id": "C2.11",
+    "cat": 2,
+    "title": "Request traceability",
+    "mark": "partial",
+    "why": "Every response carries a unique `x-trace-id`, echoed into error bodies as `traceId` [C2, D1, D4]. The exact limitation: the header is declared in none of the 1,510 operations [G2] and no published support channel references it, so an operator has no documented way to have it used."
+   },
+   {
+    "id": "C2.12",
+    "cat": 2,
+    "title": "Service availability and status transparency",
+    "mark": "no",
+    "why": "No public status page. `status.magicdoor.com` serves nothing and the 294-URL sitemap contains no status, uptime, incident-history or SLA page [I4, I1]."
+   },
+   {
+    "id": "C3.1",
+    "cat": 3,
+    "title": "Read-only credentials",
+    "mark": "no",
+    "why": "A read-only credential can be requested but is not enforced, so it is not read-only. `CreateApiKeyDto` accepts a `permissions` array, and a credential created with `{\"permissions\":[\"properties:read\"]}` returned a JWT correctly carrying `\"permissions\":\"properties:read\"`. That credential then executed `POST /company-app/properties` and created a real property, HTTP 200 [F5]. Confirmed with a second, differently scoped credential limited to `audits:read`, which also created a property and read the full tenant list [F6]. Both test properties were deleted and both credentials revoked. Evidence obtained via the Step 10 disclosure recorded in the run metadata."
+   },
+   {
+    "id": "C3.2",
+    "cat": 3,
+    "title": "Scoped credentials",
+    "mark": "no",
+    "why": "Scope is declarable against a granular 144-permission catalog across 53 categories [F1], and it is enforced by the auth service, which correctly refused the `audits:read` credential with 403 on `GET /company-portal/api-keys` [F6]. But the business API at `api.portal.magicdoor-test.com/company-app/*`, which holds every property, unit, lease, tenant and ledger, ignored the scope entirely on two independent tests [F5, F6]. In practice every credential is all-or-nothing over the whole portfolio, for reads and writes alike. Same disclosure as C3.1."
+   },
+   {
+    "id": "C3.3",
+    "cat": 3,
+    "title": "Multiple keys",
+    "mark": "yes",
+    "why": "Four distinct credentials coexisted, each with its own id, name, creation and last-used timestamps [F4, F5, F6, F7]."
+   },
+   {
+    "id": "C3.4",
+    "cat": 3,
+    "title": "Rotation and revocation",
+    "mark": "yes",
+    "why": "Fully self-serve. Verified live: `POST /company-portal/api-keys` minted a credential, `DELETE /company-portal/api-keys/{id}` revoked it, re-exchanging the revoked credential returned 401, and the listing showed a populated `revoked` timestamp [F7]. Rotation is create-new plus revoke-old. `CreateApiKeyDto` also declares an `expires` field, but every attempt to use it failed with HTTP 400 (\"The UTC Offset for Utc DateTime instances must be 0\"), so time-boxed credentials are declared but were never made to work [D4, F3]."
+   },
+   {
+    "id": "C3.5",
+    "cat": 3,
+    "title": "Test and production isolation",
+    "mark": "yes",
+    "why": "A separate staging environment exists with its own auth and service hosts and its own credentials [B1, B2]. Verified live: the staging credential was rejected with HTTP 401 by the production host `auth.magicdoor.com` [A4]."
+   },
+   {
+    "id": "C4.1",
+    "cat": 4,
+    "title": "Complete self-serve reference",
+    "mark": "no",
+    "why": "There is no publicly accessible API reference. The sitemap lists 294 URLs including 79 help articles, and not one concerns the API, developers, webhooks or integrations [I1]. No documentation subdomain exists [I3]. The only reference material is a per-service Swagger UI on hostnames advertised nowhere, located in this run only by decoding a minified service registry out of the company portal's JavaScript bundle [B2, run metadata disclosure]. Even once found, 1,142 of the 1,510 operation descriptions (76%) are the `operationId` echoed back verbatim rather than prose, only 522 of 9,508 DTO properties (5.5%) carry any description, there are zero worked examples [G12], no error response is documented [G1], and the authentication note is a single line that never explains the token-exchange flow [G10]."
+   },
+   {
+    "id": "C4.2",
+    "cat": 4,
+    "title": "Machine-consumable path",
+    "mark": "partial",
+    "why": "Complete OpenAPI 3.0.4 specifications exist for 19 services, are fetchable without authentication, and cover all 1,510 company-facing operations with typed schemas, enums and validation constraints [B3, B4, G11]. The exact limitations that require substantial manual correction: not one operation declares any error response, so a generated client models only the success path [G1]; there are no examples [G12]; identifier types conflict across endpoints (see C2.2); and the declared `servers[0].url` omits the path prefix for the 14 services routed under `services.magicdoor-test.com/<name>`, so a generated client would call the wrong URL [B4, B7]. No official SDK was found, though no SDK search was performed [I9]. The pricing page advertises \"API/MCP Access\", but no MCP server exists in any specification, in the service registry, or at the endpoints tested [I8]."
+   },
+   {
+    "id": "C4.3",
+    "cat": 4,
+    "title": "AI-readable documentation",
+    "mark": "no",
+    "why": "No `llms.txt` (404) or `llms-full.txt` [I2], no per-endpoint Markdown, no downloadable documentation corpus [I1]. The OpenAPI files are credited under C4.2 and are not counted twice."
+   },
+   {
+    "id": "C4.4",
+    "cat": 4,
+    "title": "Kept current",
+    "mark": "partial",
+    "why": "17 operations carry `deprecated: true` and one DTO field carries a migration instruction (\"[DEPRECATED] Use ImageSessionId instead\") [G5], which is genuine first-party evidence that the specification is maintained as the API changes. The exact limitation: there is no changelog, no release notes, no versioning notes, no dates, no deprecation policy or window, and no channel through which a change would be announced [I5], so a builder has no way to learn that the API has changed."
+   },
+   {
+    "id": "C5.1",
+    "cat": 5,
+    "title": "Self-serve API key",
+    "mark": "yes",
+    "why": "Credential creation is self-serve with no sales call, support ticket or approval step. Verified live: credentials were created and revoked over HTTP [F5, F6, F7, F8]. The api-keys endpoints sit on the CompanyPortal audience surface [F2] and `api_keys:read`, `api_keys:write` and `api_keys:delete` are ordinary CompanyPortal permissions [F1]. Disclosed limitation: the company-portal web UI was not accessed in this run, so the mechanism by which an operator obtains a first credential was not directly observed [F8]."
+   },
+   {
+    "id": "C5.3",
+    "cat": 5,
+    "title": "Not commercially gated",
+    "mark": "yes",
+    "why": "API access is included on every plan. The pricing comparison table contains a row reading verbatim \"API/MCP Access: Included / Included / Included\", alongside \"All plans include full access to the MagicDoor platform\" and \"No tiers, no gated features\" [I6]. Pricing is $2.50 per unit per month (Advanced) and $3.50 (Professional) month to month, or $1.50 and $2.50 with a one-year contract, Enterprise custom, with a one-time onboarding fee of $500 / $500 / $1,000 and a 25-unit minimum. No tier gates the API."
+   }
+  ]
+ },
  "Process Street": {
   "source": "process-street.md",
   "meta": {
