@@ -40,6 +40,7 @@ SOURCES = {
     "ringcentral":       "ringcentral-2026-09-01.md",
     "showdigs":          "showdigs-2026-09-10.md",
     "showmojo":          "showmojo-2026-09-02.md",
+    "simplevoip":        "simplevoip-2026-09-10.md",
     "tenant-turner":     "tenant-turner-2026-09-01.md",
     "xero":              "xero-2026-08-27.md",
     "zoom":              "zoom-2026-09-08.md",

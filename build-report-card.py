@@ -2140,6 +2140,154 @@ RESULTS = {
             "does its job.",
 },
 
+"SimpleVOIP": {
+  "score": 67, "grade": "D+",
+  "meta": {"run": "Sep 10, 2026", "method": "1.1", "model": "Claude Opus 5",
+           "tier": "Baseline verified", "raw": "33.33 / 50"},
+  # An unusual case: most of the graded API is someone else's engineering.
+  # The platform surface is 2600Hz's Kazoo Crossbar API, which
+  # SimpleVoIP operates and credentials, so it qualifies as a vendor API, but
+  # the design, the reference and the release cadence are 2600Hz's. The report
+  # says so at the top and flags it again at each check it touches.
+  "note": "Graded three independent times against the same frozen evidence, and "
+          "all three runs independently landed on 65 (D). The published number is "
+          "67 anyway, because the methodology resolves disagreements against the "
+          "evidence rather than averaging totals, and four marks moved once the "
+          "packet was rechecked. The runs agreed outright on 17 of the 27 checks. "
+          "Six splits remain open and the report publishes each one with its "
+          "score effect, the largest being change notification, where the "
+          "dissenting reading would give 63 (D). The report also corrects two of "
+          "its own first-pass factual errors, on key rotation and on where an "
+          "error message actually appears. One structural point shapes the whole "
+          "result: the main API here is the 2600Hz Kazoo platform, which "
+          "SimpleVoIP runs and issues keys for, so it counts as SimpleVoIP's API, "
+          "but the design and documentation belong to 2600Hz. Writes were graded "
+          "from documentation because the operator declined live-write testing.",
+  "cats": [
+    (13.1, 15, "This is the strongest part of the API by a wide margin. "
+               "Everything a property manager would want to automate about a "
+               "phone system is reachable: you can read who has an extension and "
+               "what phone they are on, change where calls go, adjust office "
+               "hours, and pull complete call history. Two gaps are worth knowing "
+               "before you plan work. Call queues are not enabled on this "
+               "cluster, so queue and agent statistics are not available, and the "
+               "platform's SMS listing endpoint returns a server error, so text "
+               "history has to come from the webhook feed rather than a query. A "
+               "third sits on the retention side: nothing lets you delete an "
+               "individual voicemail message or call recording through the API, "
+               "so a retention policy has to be run by hand."),
+    (5.8, 10, "The platform API behaves predictably in the ways that matter most "
+              "for unattended automation. Paging through call history works "
+              "exactly as documented, you can pull a full dataset as CSV in one "
+              "request, incremental sync works, and when something fails you get "
+              "a stable error code and a request id you can quote. Three things "
+              "will cost you real engineering time. Field types are not "
+              "dependable: the same call-record timestamp comes back as text in a "
+              "list and as a number when you fetch that record on its own, so "
+              "your code has to coerce types rather than trust them. Nothing "
+              "prevents a duplicate if a create or an SMS send is retried after a "
+              "timeout. And the vendor's own layer is materially weaker than the "
+              "platform underneath it: its failures return empty bodies, its "
+              "responses carry no request id, and the call-record webhooks it "
+              "sets up for customers are unsigned, meaning anyone who learns your "
+              "endpoint URL can post fabricated call data to it."),
+    (1.3, 5, "This is the weakest category and the one that should shape how you "
+             "use the API. You cannot get a read-only key. The credential you "
+             "hold can change call routing, delete users and delete devices, so "
+             "any script, contractor or AI agent you hand it to has the power to "
+             "take your phones down, and nothing in the platform will stop it. "
+             "There is one key per account, so you cannot give a vendor its own "
+             "revocable credential, and rotating the key to cut off one "
+             "integration breaks all of them at once. There is no test "
+             "environment, so anything you build is developed against live "
+             "phones. The practical mitigations are yours to build: hold the key "
+             "in a secret store rather than in code, use a child account's key "
+             "rather than the parent's so the blast radius stops at one account, "
+             "and put a read-only wrapper of your own in front of anything you do "
+             "not fully trust."),
+    (1.9, 5, "A developer can build against this, but not quickly and not with an "
+             "AI coding assistant doing much of the work. The reference is "
+             "detailed and free to read, which is more than many vendors offer, "
+             "and pointing a coding tool at the endpoint pages does work. What "
+             "you will not get is a specification a tool can consume to generate "
+             "a working client, a maintained SDK in any language, or any "
+             "AI-oriented documentation format. Budget for reading the reference "
+             "by hand, and expect to discover by experiment which documented "
+             "endpoints your particular cluster actually serves. The most "
+             "consequential gap is that call detail records, the thing you would "
+             "most want to pull into reporting, are the least documented object "
+             "in the API, so the field list has to be derived from live "
+             "responses."),
+    (11.3, 15, "You can get in, and there is no evidence you have to buy up a tier "
+               "to do it, but you cannot get in today. Both credentials in this "
+               "assessment took a named human on the vendor's side and about a "
+               "week each. Plan API work around a lead time measured in weeks "
+               "rather than an afternoon, and get the credential requested before "
+               "you need it. Because pricing is not published at all, confirm in "
+               "writing with your account manager that API use carries no charge "
+               "on your contract before you build anything that depends on it."),
+  ],
+  "strengths": [
+    "A public status page with incident history and 90-day uptime, plus a published 99.99% SLA",
+    "Full call history as CSV in a single request, 501 rows pulled live",
+    "Cursor pagination verified live across pages with no overlap and a documented stability rule",
+    "Incremental sync works: a modified-since filter narrowed a full user listing live",
+    "A request id on every response, in both header and body, including on every deliberate error",
+    "Stable machine-readable error codes on the platform API, observed across five failure classes",
+    "29 webhook types covering essentially every state change the phone system makes",
+    "HMAC-SHA256 webhook signing with a published construction and bounded retries",
+    "Extensions, phones, routing, office hours and call history are all reachable from code",
+    "No plan tier gates API access, confirmed against the operator's own account",
+  ],
+  "watch": [
+    "No read-only credential: the documented scope mechanism returns 404 on this cluster",
+    "One key per account, so two integrations share it and neither can be revoked alone",
+    "No sandbox or test environment, so everything is built against live phones",
+    "The same call-record timestamp is a string in a list and a number when fetched on its own",
+    "No idempotency anywhere, so a retried create or SMS send duplicates",
+    "The vendor's own call-record webhooks are unsigned, by its own admission in a help article",
+    "The vendor's customer API returns empty error bodies and carries no request id",
+    "Both credentials took a project manager and about a week each to obtain",
+    "API documentation last updated between 2022 and 2025, while the live cluster is a version ahead",
+    "Call detail records, the most useful object here, have no published schema anywhere",
+  ],
+  "bottom": "You can build real automation on this today, and the useful half of it "
+            "is not SimpleVoIP's engineering, it is the 2600Hz platform "
+            "underneath, which SimpleVoIP operates and points you at. Through it "
+            "you can read your full call history, page and export it reliably, "
+            "keep extensions and phones in step with staffing, change call "
+            "routing and office hours in code, and subscribe to webhooks covering "
+            "essentially every change the phone system makes. SimpleVoIP's own "
+            "thin layer on top adds bulk hours changes across many sites and "
+            "outbound texting, but is noticeably rougher: empty error bodies, no "
+            "request identifiers, and call-record webhooks the vendor confirms "
+            "are unauthenticated, so treat anything arriving on that endpoint as "
+            "unverified input. The two things that should govern your plans are "
+            "access control and lead time. There is no read-only key, no way to "
+            "scope a credential to a single action, one key per account, and no "
+            "test environment, which together mean any credential you issue can "
+            "delete users and re-route calls against live phones. Keep the key in "
+            "a secret store, prefer a lower account's key over the parent's, and "
+            "put your own read-only wrapper in front of anything you would not "
+            "trust with the phone system. Separately, both credentials in this "
+            "assessment took a project manager and about a week, so request "
+            "access well before you need it and confirm in writing that it "
+            "carries no charge, since no pricing is published. This is a phone "
+            "system with a usable API, not a system of record. It does not touch "
+            "tenant ledgers, deposits or trust accounting. Its "
+            "property-management value is as a data source and a control surface "
+            "alongside your property management system: call history for "
+            "response-time reporting and staff accountability, and routing "
+            "changes driven by your own calendar or staffing data rather than by "
+            "hand. The 67 reflects excellent functional reach dragged down hard by "
+            "weak credential controls, thin machine-readable documentation, and "
+            "API documentation that has gone a year or more without an update "
+            "while the platform it describes has moved on a full minor version. "
+            "Three independent graders working from the same frozen evidence each "
+            "arrived at 65 before reconciliation, so treat the grade band rather "
+            "than the exact number as the finding.",
+},
+
 "Tenant Turner": {
   "score": 51, "grade": "F",
   "meta": {"run": "Sep 1, 2026", "method": "1.1", "model": "Claude Opus 5",

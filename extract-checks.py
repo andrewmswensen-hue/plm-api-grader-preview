@@ -40,6 +40,7 @@ SOURCES = {
     "RingCentral":         "ringcentral.md",
     "Showdigs":            "showdigs.md",
     "ShowMojo":            "showmojo.md",
+    "SimpleVOIP":          "simplevoip.md",
     "Tenant Turner":       "tenant-turner.md",
     "Xero":                "xero.md",
     "Zoom":                "zoom.md",

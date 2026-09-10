@@ -3617,6 +3617,207 @@
    }
   ]
  },
+ "SimpleVOIP": {
+  "source": "simplevoip.md",
+  "meta": {
+   "tier": "Baseline verified",
+   "battery": "steps 1–5 complete on both surfaces. Step 6 (create/update) not run — operator declined. Step 7 (idempotency) N-A — neither surface documents an idempotency mechanism. Step 8 (webhook registration) not run — operator prohibited it.",
+   "date": "2026-09-10",
+   "model": "Claude Opus 5 (1M context)",
+   "coverage": "100% — 26 of 26 applicable checks verified, no category Unable to verify, gate satisfied"
+  },
+  "checks": [
+   {
+    "id": "C1.1",
+    "cat": 1,
+    "title": "Object coverage",
+    "mark": "yes",
+    "why": "weighted coverage = 92% (27.5 of 30 weight). All five critical objects present with the operations their role requires, live-verified. Deductions: ring groups and queues scored 0.5 because `groups` is fully present with create, update, and delete verbs while `queues` returns HTTP 404 on this cluster; SMS scored 0.5 because the platform `sms` collection returns HTTP 500 `datastore_missing_view` and the vendor's send endpoint requires separate written authorization; faxes scored 0.5 because `faxboxes` is fully present while the `faxes` collection returns HTTP 405. Call detail records were treated as read-appropriate rather than read-only, per the methodology's immutability carve-out for audit records. [Live GET sweep across 21 collections, portal.simplevoip.us:8443/v2, 2026-09-10.]"
+   },
+   {
+    "id": "C1.2",
+    "cat": 1,
+    "title": "Core operational actions",
+    "mark": "yes",
+    "why": "weighted coverage = 95% (20 of 21 weight). Documentation-graded, as the operator declined live-data write testing. Create and update paths for users, devices, callflows, voicemail boxes, temporal rules, groups, media, and conferences are documented per-endpoint with worked curl examples and schema tables [docs.2600hz.com/developers/rest/devices-and-users/users; .../call-control/callflows/callflows], and every one of those routes advertised the corresponding verb live. Sending an outbound SMS scored 0.5: the endpoint is documented [Outbound SMS API], but it requires a 10DLC brand and campaign that the vendor sets up, and separate per-account authorization. The authorization requirement is evidenced by the 401 example in the vendor's published Postman collection, which reads, \"You have not been authorized to send via this endpoint. Please contact SimpleVoIP support for authorization.\" The help-center article's own documented error example is different: `{\"status\":\"failed\",\"error\":\"Invalid sender or recipient number provided.\"}`."
+   },
+   {
+    "id": "C1.3",
+    "cat": 1,
+    "title": "Delete or lifecycle actions",
+    "mark": "partial",
+    "why": "weighted coverage = 81% (13 of 16 weight). Documentation-graded. Deletion and disabling are available for all three critical lifecycle changes: users, devices, and call flows, so no critical lifecycle action is absent. Two deductions put it in the 0.50–0.84 band. Deleting a voicemail message or a call recording scored 0.0: no delete operation for either is evidenced anywhere in the packet, the `recordings` collection advertised `OPTIONS, GET` only, and the only message route in the reference is a read of the raw audio. Releasing a phone number scored 0.5: it appears only as a documented side effect of enhanced user deletion, never as a direct operation, and the `phone_numbers` collection advertised `GET` only."
+   },
+   {
+    "id": "C1.4",
+    "cat": 1,
+    "title": "Change notification",
+    "mark": "yes",
+    "why": "Live query of the system webhook catalogue on this cluster returned 29 hook types, including an `object` hook covering actions `doc_created`, `doc_edited`, and `doc_deleted` across account, callflow, device, user, vmbox, media, fax, faxbox, mailbox_message, and call_recording document types; a `notifications` hook exposing 43 event types including new voicemail, missed call, device registration and de-registration, inbound fax, port request, and new user; a dedicated `cdr` hook; and `channel_create`, `channel_answer`, `channel_bridge`, `channel_hold`, `channel_unhold`, and `channel_destroy`. That covers essentially every critical and important state change in the fixed classification. Efficient incremental polling is independently available and was verified live: `modified_from` narrowed the full user listing to three records, and `created_from` and `created_to` are documented for any collection in Gregorian seconds [.../overview/query-string-filters]."
+   },
+   {
+    "id": "C2.1",
+    "cat": 2,
+    "title": "Modern API conventions",
+    "mark": "yes",
+    "why": "The platform API is resource-oriented REST over JSON with standard verbs, a version in the path, and a consistent `/v2/accounts/{ACCOUNT_ID}/{resource}/{RESOURCE_ID}` structure [.../overview/api-basics, Basic URI Structure]. Verified live across 21 collections. Disclosed limitation: the vendor's own customer API is RPC-shaped rather than resource-oriented — its bulk endpoints act on no resource identifier and the vendor describes it in its own words as \"a REST-like API\" [Time of Day Bulk Change API]."
+   },
+   {
+    "id": "C2.2",
+    "cat": 2,
+    "title": "Consistent typing",
+    "mark": "no",
+    "why": "Core fields are stringly typed and types vary across endpoints. Live-observed on 2026-09-10: in the CDR list view the `timestamp` field is a JSON string, while the single-record view of the same CDR returns `timestamp` as an integer. Also in the list view, `cost`, `rate`, `unix_timestamp`, and `unix_timestamp_micro` are strings while `billing_seconds` and `duration_seconds` are integers in the same record. The vendor's own CDR webhook documentation declares `timestamp` as JSON type `int`, which the list endpoint contradicts [Call Detail Record (CDR) Webhooks, Webhook Payload Structure]. On the customer API, time-of-day rules read back as strings such as `\"09:00\"` under day-named keys, but are written as integers in seconds past midnight under entirely different key names, so a read cannot be round-tripped into a write [Time of Day Bulk Change API, Rule Objects]. The webhook documentation separately warns that the default `form-data` delivery format results in \"integers (like timestamps) being encoded as strings.\""
+   },
+   {
+    "id": "C2.3",
+    "cat": 2,
+    "title": "Structured errors",
+    "mark": "partial",
+    "why": "The platform API is close to exemplary: every failure returned a consistent envelope carrying a populated, stable machine token in `message`, a human-readable string in `data.message`, the HTTP status echoed in `error`, and a `request_id`. Live-observed tokens include `invalid_credentials` (401), `bad_identifier` (404), `not_found` (404), `invalid_method` (405), and `datastore_missing_view` (500), each with the correct HTTP status. Two findings hold it to partial. First, a malformed query filter returned HTTP 200 with `\"status\": \"success\"` and an empty data array rather than an error, so a filter typo silently reads as \"no matching records.\" Second, the vendor's own customer API has no structured errors at all: an invalid Bearer token and a missing Authorization header each returned HTTP 401 with a zero-byte body and `Content-Type: text/html`, and an unknown path returned HTTP 404 with an empty body. A nonexistent recording identifier returned HTTP 500 where the vendor's published documentation specifies a 404 \"No Recording Found\" response."
+   },
+   {
+    "id": "C2.4",
+    "cat": 2,
+    "title": "Duplicate prevention",
+    "mark": "no",
+    "why": "Documentation-graded; no write was issued. Neither surface documents idempotency keys, and a search of the developer documentation and the 300-path swagger specification returned zero occurrences of idempotency, If-Match, or ETag parameters. The check expressly carves out operations that are naturally idempotent, so the fact that `POST` and `PATCH` updates set a document to a stated value is not protection, it is exclusion from the requirement. What remains after that carve-out is unprotected: collection-level `PUT` creates produce a duplicate record on retry, `POST /sms/send` sends a second message, and the vendor's bulk endpoints enqueue a fresh batch of jobs on every call, returning a new `enqueued_tasks` count each time. Client-set entity IDs exist but sit behind a system feature flag with no evidence it is enabled here."
+   },
+   {
+    "id": "C2.5",
+    "cat": 2,
+    "title": "Graceful handling under load",
+    "mark": "partial",
+    "why": "A 429 response is documented, together with the token-bucket mechanism keyed on client IP and account ID [.../sys-admin/rate-limiting]. What is missing is usable recovery guidance. No `Retry-After` header and no rate-limit response headers were observed on any call. The only numbers published are administrator-configurable defaults, hedged as what \"typically\" happens and presented on a page written for the platform operator rather than the API consumer, and per-endpoint token costs are themselves tunable. The one live signal the API exposes, a `tokens` object in the response envelope, read `remaining: 0` on authenticated reads that nonetheless succeeded, so an integration cannot pace itself from it. The customer API documents no throttling at all and returned no rate-limit headers."
+   },
+   {
+    "id": "C2.6",
+    "cat": 2,
+    "title": "Pagination for large collections",
+    "mark": "yes",
+    "why": "Live-verified. A CDR request with `page_size=5` returned exactly five records plus `start_key`, `next_start_key`, and `page_size`. Requesting the second page with the returned `next_start_key` produced five further records with zero overlapping identifiers and echoed the requested key back as that page's `start_key`. The documentation states that a missing `next_start_key` indicates the last page, gives the ordering default as descending with `ascending=true` available, and states the stability condition, \"Assuming no changes are made to the underlying documents, start_key will get you this page of results\" [.../overview/api-basics, Pagination]."
+   },
+   {
+    "id": "C2.7",
+    "cat": 2,
+    "title": "Bulk or incremental export",
+    "mark": "yes",
+    "why": "Live-verified on three independent mechanisms. A single request with `Accept: text/csv` returned 501 CSV rows and 326 KB of call history in one response. `paginate=false` returned the complete user collection unpaginated. `modified_from` narrowed the full user listing to three records, demonstrating working incremental sync. Chunked responses are additionally documented for large datasets, on by default for CDR interaction and ledger endpoints [.../overview/api-basics, Chunked Response]."
+   },
+   {
+    "id": "C2.8",
+    "cat": 2,
+    "title": "Webhook security and delivery reliability",
+    "mark": "partial",
+    "why": "The platform mechanism alone would earn a yes: payloads can be signed with HMAC-SHA256 through `security_settings.sha256_key`, with the exact construction published as `base64_encode(hmac(SHA256Key, TimestampString + DataJSON))` and a worked example; timestamps are included on all payloads and the documentation states this is to \"prevent replay attacks\"; `retries` is a first-class field bounded 0 to 4 and defaulting to 2; failing hooks are auto-disabled and surface a `disable_reason`; and a `webhook_attempts` resource records delivery history [.../webhooks/webhooks, Hook Security]. What holds this to partial is that the vendor's own webhooks — the CDR and SMS feeds SimpleVoIP provisions for customers and documents in its help center — are unsigned by the vendor's own admission: \"We currently don't support authentication on webhook POST requests. Mention this to your account manager if you would like to see this implemented!\" [Call Detail Record (CDR) Webhooks, FAQ]. No retry policy is documented for those either. The vendor ships both a secured mechanism and an unsecured one, and its own support articles route customers to the unsecured one."
+   },
+   {
+    "id": "C2.9",
+    "cat": 2,
+    "title": "Concurrency and conflict control",
+    "mark": "partial",
+    "why": "The mechanism exists and was observed live: a single-entity GET returned `ETag: \"22-61b6...\"` matching a `revision` field in the response envelope, and the API advertises `if-match` in `access-control-allow-headers` and `etag` in `access-control-expose-headers`. What is missing is the documentation half: a targeted first-party search across both 2600Hz domains, plus a scan of the developer documentation and the swagger specification, found no documented conflict semantics, no documented 409 behaviour, and no documented concurrency limits. The capability is discoverable only by inspecting responses."
+   },
+   {
+    "id": "C2.10",
+    "cat": 2,
+    "title": "Versioning and backward compatibility",
+    "mark": "partial",
+    "why": "An explicit version identifier is present in the path and documented as the only supported value [.../overview/api-basics], and the running build is reported in every response envelope. One breaking-changes document exists, covering the Kazoo 5.1 to 5.3 transition in field-level detail [.../changelog/kazoo-51-53-breaking-changes]. What is absent is a backward-compatibility policy defining breaking versus non-breaking changes, and any deprecation window or notice commitment. The gap is concrete rather than theoretical: the cluster serving this operator reported version 5.4.7.25 in every response, and no published change record covers 5.4 at all."
+   },
+   {
+    "id": "C2.11",
+    "cat": 2,
+    "title": "Request traceability",
+    "mark": "partial",
+    "why": "On the platform API this is a clear strength, verified on every single call including all four deliberate errors: an `x-request-id` response header and a matching `request_id` in the body envelope, documented as \"ID of the request; usable for debugging the server-side processing of the request\" [.../overview/api-basics, Response Envelope]. On the vendor's own customer API there is no request identifier of any kind — live header capture across successful and failed calls returned only `Date`, `Server`, `X-Powered-By`, and cache headers. A customer reporting a problem on that surface has nothing to quote."
+   },
+   {
+    "id": "C2.12",
+    "cat": 2,
+    "title": "Service availability and status transparency",
+    "mark": "yes",
+    "why": "SimpleVoIP publishes a public status page listing named components with current state, a past-incidents section, and 90-day uptime tracking; its incident-history feed contains multiple real prior incidents including regional connectivity events and planned hardware migrations [status.simplevoip.us and /history.atom, retrieved 2026-09-10]. A published SLA commits to \"99.99% availability each month of our hosted VoIP platform\" with a one-day service credit per whole hour of unavailability below that, and describes the three-datacenter architecture behind it [SimpleVoIP Service Level Agreement]. Disclosed limitation: both the status components and the SLA cover voice, portal, and application services rather than the APIs specifically."
+   },
+   {
+    "id": "C3.1",
+    "cat": 3,
+    "title": "Read-only credentials",
+    "mark": "no",
+    "why": "The upstream platform documents both a `crossbar:read_only` scope and a `token_restrictions` mechanism capable of restricting a token to specific HTTP methods and accounts [.../authentication/scope-restrictions; .../authentication/token-restrictions]. Neither is available on SimpleVoIP's cluster: live requests to the token-restrictions route returned HTTP 404 `bad_identifier` at both account and user level, and the scope-restrictions route returned HTTP 404 `not_found`. The single credential issued to this operator carries write access to every route it can reach. The operator states no read-only credential was offered for either surface."
+   },
+   {
+    "id": "C3.2",
+    "cat": 3,
+    "title": "Scoped credentials",
+    "mark": "partial",
+    "why": "Coarse scoping exists and was verified: each account in the tree holds its own API key, and the child account exposed a distinct key of its own, so an operator can choose a credential bounded to a lower account rather than the parent. That is the extent of it. The parent credential under test reached the parent account record, its children and descendants listing, the full record set of the child account, and the parent account's own API key value. No restriction by resource, by action, or by role was available, for the reasons cited in C3.1."
+   },
+   {
+    "id": "C3.3",
+    "cat": 3,
+    "title": "Multiple keys",
+    "mark": "no",
+    "why": "An account holds exactly one API key; the documented retrieval route returns a single `api_key` value and no route exists to issue an additional credential for the same account [.../authentication/account-api-authentication]. Two integrations against the same account must therefore share one key, which means neither can be revoked without breaking the other. Per-account keys in a parent-child tree are an account-structure artefact, not an integration-credential mechanism."
+   },
+   {
+    "id": "C3.4",
+    "cat": 3,
+    "title": "Rotation and revocation",
+    "mark": "partial",
+    "why": "Self-serve rotation is documented for the platform surface, and this corrects an error in the first grading pass of this report. The account reference carries a section headed \"Re-create the account's API key,\" stating that \"If you think that your account's API key might be exposed you can create a new one with the api_key endpoint. Issuing a PUT request to this endpoint will generate a new API key for the account and will return the new key in response,\" gated on an admin token [.../account-actions-and-permissions/accounts]. The route advertised `PUT` live; it was deliberately not executed, since doing so would have invalidated the operator's working credential. Held to partial for two reasons. The customer API Bearer token has no documented rotation or revocation path at all and is reissued by the engineering team through an account manager. And because there is exactly one key per account, rotating is all-or-nothing: it cuts off every integration at once rather than the one you meant to revoke."
+   },
+   {
+    "id": "C3.5",
+    "cat": 3,
+    "title": "Test and production isolation",
+    "mark": "na",
+    "why": "No sandbox or separate test environment exists for SimpleVoIP customers. Help-center searches for sandbox, test account, trial, and developer account returned no such offering; the 2600Hz documentation sitemap contains no sandbox pages, and its single trial-account page concerns 2600Hz's own hosted trial for testing a different product rather than an environment available to a SimpleVoIP customer. Per the check's own instruction, this is excluded from the math rather than scored zero."
+   },
+   {
+    "id": "C4.1",
+    "cat": 4,
+    "title": "Complete self-serve reference",
+    "mark": "partial",
+    "why": "The platform reference is publicly accessible with no login and is genuinely example-rich: 123 developer pages carrying per-endpoint curl request and response examples plus schema tables giving key, description, type, default, and required status. What holds it to partial is that it documents the upstream platform rather than SimpleVoIP's deployment, and nothing first-party tells a SimpleVoIP customer which parts apply to them. Four documented endpoints behaved differently on the live cluster: `queues` returned 404, `sms` returned 500, `about` returned 403, and the documented per-resource schema route returned 404 for the CDR schema. The resource a property manager most needs is the least documented: call detail records have no schema in the live schemas catalogue, no definition in the swagger file, and return 35 fields in the list view versus 71 in the single-record view, with the extra fields described nowhere. On the vendor's own surface, the published Postman collection contains two entries with no method, no URL, and no example — \"Fetch Media IDs by account\" and \"Password Reset\" — and its Mobile endpoints reference a `{{provisioning_api_url}}` base variable that the collection never defines, though the host is recoverable by reading it out of the saved example request URLs."
+   },
+   {
+    "id": "C4.2",
+    "cat": 4,
+    "title": "Reliable machine-consumable integration path",
+    "mark": "partial",
+    "why": "Three candidate mechanisms exist and none is complete. A Swagger 2.0 specification carrying 300 paths and 783 definitions is present in 2600Hz's repository, but it is not fit for code or tool generation as published: every operation declares only `{\"200\": {\"description\": \"request succeeded\"}}` with no response schema and no error responses, `host` is the placeholder `localhost:8000`, there is no `cdr` definition at all, and it is neither published on nor referenced from the documentation site. 2600Hz's own engineering documentation warns that the generator \"would maybe result in generating outdated JSON schema files and Swagger file.\" The official SDK page is banner-marked as covering a Kazoo version that \"is no longer supported,\" lists \"PHP\" with no link, and has an empty community section. No MCP server was evidenced. The one genuine strength is a live schemas endpoint, which returned 492 JSON Schemas on this cluster and gives real machine-readable data models — but schemas alone carry no paths or methods, so they cannot generate a client on their own."
+   },
+   {
+    "id": "C4.3",
+    "cat": 4,
+    "title": "AI-readable documentation",
+    "mark": "no",
+    "why": "Neither `llms.txt` nor `llms-full.txt` exists on either docs.2600hz.com or simplevoip.com; all four requests returned 404. Probes for `.md` and `.txt` variants of documentation pages returned 404. No downloadable documentation corpus was evidenced. SimpleVoIP's own API documentation consists of Zendesk help-center articles and a client-rendered Postman page, neither structured for reliable retrieval — the Postman page in particular returns only an empty shell to a non-browser client, and its content had to be recovered from a separate JSON endpoint."
+   },
+   {
+    "id": "C4.4",
+    "cat": 4,
+    "title": "Kept current",
+    "mark": "partial",
+    "why": "Currency signals exist but are stale and irregular, and the staleness is specific to the API rather than to the vendor's documentation generally. Across all 123 developer pages, none carries a last-modified date later than mid-2025, and the tail reaches back to 2016. The only changelog stops at Kazoo 5.3 while the cluster serving this operator reports 5.4.7.25 in every response, so the running version has no published change record. SimpleVoIP's release notes stop at Sprint 108, released 2 September 2025 — a year before this assessment — even though its help center is otherwise actively maintained, with its newest article created 26 August 2026. Its three API articles were last updated December 2022, August 2024, and July 2025."
+   },
+   {
+    "id": "C5.1",
+    "cat": 5,
+    "title": "Self-serve API key",
+    "mark": "partial",
+    "why": "Split evidence across the two surfaces. The platform key is self-serve once a portal login exists: the vendor's engineer states in writing that \"to find your Account API key, you may find it in Authentication -> API Key Authentication -> API Key Value,\" and the operator confirms retrieving it that way. But the prerequisite portal login was not self-serve, taking a project manager and roughly a week to obtain. The customer API key is not self-serve at any stage — the vendor's own published article states, \"You will also need an API key provided by the SimpleVoIP Engineering team. These are available upon request. Please reach out to your account manager to initiate this process\" [Time of Day Bulk Change API, Prerequisites], and the operator reports that token likewise required a project manager and about a week. Sending SMS requires a further approval step beyond the key, evidenced by the vendor's own documented rejection message directing the caller to contact support for authorization."
+   },
+   {
+    "id": "C5.3",
+    "cat": 5,
+    "title": "Not commercially gated",
+    "mark": "yes",
+    "why": "No first-party material conditions API access on a plan tier, and the plans page does not mention API access at all [simplevoip.com/features-and-plans/]. The operator's own record is affirmative rather than merely silent: working credentials for both surfaces were issued against their existing account, with no plan upgrade involved and no charge for API access stated to them. The 10DLC brand and campaign required before sending SMS is carrier-mandated regulatory registration, which this check expressly excludes from counting as commercial gating. Chargeable engineering hours for bespoke webhook customization are custom development work, not a gate on the documented API. Disclosed limitation: SimpleVoIP publishes no pricing for any tier, so this rests on the absence of any evidenced gate plus one operator's live experience rather than on a published entitlement statement."
+   }
+  ]
+ },
  "Tenant Turner": {
   "source": "tenant-turner.md",
   "meta": {
