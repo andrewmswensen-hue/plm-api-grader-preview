@@ -32,6 +32,7 @@ SOURCES = {
     "magic-door":        "magic-door-2026-09-10.md",
     "process-street":    "process-street-2026-08-31.md",
     "property-meld":     "property-meld-2026-09-01.md",
+    "propertyware":      "propertyware-2026-09-11.md",
     "quickbooks-online": "quickbooks-online-2026-09-02.md",
     "quo":               "quo-2026-09-08.md",
     "rentengine":        "rentengine-2026-09-03.md",

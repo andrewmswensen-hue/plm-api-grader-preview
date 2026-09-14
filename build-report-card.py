@@ -918,6 +918,118 @@ RESULTS = {
             "ledgers, owner statements and payments.",
 },
 
+"Propertyware": {
+  "score": 56, "grade": "F",
+  "meta": {"run": "Sep 11, 2026", "method": "1.1", "model": "Claude Sonnet 5 or Opus 5",
+           "tier": "Fully verified, sandbox", "raw": "27.95 / 50"},
+  # A SINGLE-RUN result: methodology step 12 calls for two or three independent
+  # runs on the frozen packet, and the report says that has not been done yet.
+  # The note has to carry that plainly.
+  # The model is recorded as the report records it: the session was configured
+  # for claude-sonnet-5 but the environment reported claude-opus-5.
+  "note": "Graded once, by a single evaluator. The report states plainly that "
+          "the independent re-grading of the frozen evidence that the "
+          "methodology calls for has not yet been done, so treat this number as "
+          "less settled than a reconciled one. To compensate, the report "
+          "publishes every judgment call that could move the result. The largest "
+          "by far is whether a paid API add-on available on every plan counts as "
+          "a premium gate; read the other way, the score would be 63 (D). If "
+          "every listed reading broke the same way at once, the report puts the "
+          "bounds at roughly 52 and 76. The run itself is Fully verified in a "
+          "Propertyware sandbox the operator confirmed was separate from "
+          "production, with real writes: a contact created and updated, and two "
+          "$1.00 ledger charges posted and then removed, leaving the lease "
+          "balance back at zero.",
+  "cats": [
+    (7.5, 15, "You can build real two-way automations on Propertyware: move-in "
+              "paperwork into leases, post charges, record payments, sync units "
+              "and tenants, and create work orders. The gaps show up when "
+              "something has to be undone or reconciled. The API cannot reverse "
+              "an NSF payment, reconcile a bank account, read back a deposit or "
+              "post a general journal entry, and deleting anything requires "
+              "joining Propertyware's beta program. Plan on staff finishing those "
+              "steps in the Propertyware screens. To keep a warehouse current, "
+              "poll for recently modified records; nothing is pushed to you, and "
+              "deletions will not show up."),
+    (5.5, 10, "Day-to-day reads are predictable. Records page cleanly, numbers are "
+              "numbers, and changed-since filters work, which makes it a good fit "
+              "for syncing to Google Sheets or a warehouse. Writes need more care. "
+              "A retried request can post a duplicate charge, which the run proved "
+              "by sending the same charge twice and watching the lease balance "
+              "double. Two people editing the same record can overwrite each "
+              "other silently. Every error carries the same code, so your code has "
+              "to read the message text, and there is no request id to hand to "
+              "support. Add your own duplicate checks, slow down on 429s, and log "
+              "what you send."),
+    (5, 5, "This is Propertyware's strongest area. You can give an AI agent or a "
+           "vendor a key that reads only leases and work orders, give each "
+           "integration its own key, and delete any key yourself in Setup, "
+           "Administration Setup, API Keys. Each key is scoped across 14 resource "
+           "groups to none, read, write or delete, and a key used against the "
+           "wrong organization was refused live. Test in a sandbox, which you "
+           "request from Propertyware Sales Ops, before pointing anything at live "
+           "data."),
+    (2.5, 5, "An AI coding tool can get started from the OpenAPI file, which is "
+             "complete and matches the live documentation exactly. Download it "
+             "from the docs page and add the three authentication headers "
+             "yourself, since the file does not declare them. Expect some trial "
+             "and error on writes, because the documentation does not list every "
+             "required field and its examples are placeholders rather than worked "
+             "requests. There is no AI-readable documentation, and the changelog "
+             "contradicts the live API in places. Check behaviour in a sandbox "
+             "rather than trusting the documentation or changelog alone."),
+    (7.5, 15, "Once API access is turned on, you can make keys yourself in "
+              "minutes. Turning it on costs extra on every plan: Propertyware's "
+              "pricing page lists Enterprise and API access as $1 per unit per "
+              "month added to any package. Deletes and sandbox accounts also "
+              "require going through Propertyware staff. This is the single "
+              "judgment call that moves the grade most, and it is disclosed in "
+              "the report: read as partial gating rather than a premium "
+              "requirement, the score would be 63."),
+  ],
+  "strengths": [
+    "Fully verified in a real sandbox, including ledger charges posted and updated live",
+    "Full marks on Access Control: keys scoped per resource to none, read, write or delete",
+    "Genuinely read-only keys, limited to GET requests, created self-serve",
+    "Multiple separately named keys, each one deletable by you in Setup",
+    "A public status page with an Open API component and incident history back to 2022",
+    "A written versioning policy defining breaking changes, plus a dated changelog",
+    "A complete downloadable OpenAPI 3.0 spec, 177 operations, matching the live docs exactly",
+    "Updated-since filters on every top-level list, honoured exactly in live tests",
+    "Pagination traversed a full collection live with no gaps and no duplicates",
+    "Broad two-way coverage: leases, tenant charges and payments, bills, owner draws, work orders",
+  ],
+  "watch": [
+    "API access costs extra on every plan: $1 per unit per month added to any package",
+    "The same charge sent twice posted twice and doubled the lease balance, proven live",
+    "No way to reverse a lease payment or record an NSF through the API",
+    "Every DELETE is beta-only, and deleting an existing record returned 404 live",
+    "No bank reconciliation, no bank balance, and deposits cannot be read back",
+    "No webhooks, and deleted records simply vanish from polling with no signal",
+    "Every error observed carried the same code, 1001, so code must read the message text",
+    "No request id on any response, and no protection against concurrent overwrites",
+    "General-ledger reads are limited to date windows under 30 days",
+    "Documentation examples are placeholders, and contacts need undocumented required fields",
+  ],
+  "bottom": "Propertyware's Open API is a real, broad two-way REST API. You can read "
+            "and write the records a single-family property-management business "
+            "runs on, including properties, units, leases, tenants, tenant "
+            "charges and payments, bills, owner draws and work orders, and you "
+            "can keep a spreadsheet or warehouse in sync by polling for recent "
+            "changes. Its biggest strength is access control: keys can be limited "
+            "by resource and action, and you create and revoke them yourself. The "
+            "biggest limitations are the missing undo and reconcile steps, since "
+            "deletes are beta-only and there is no NSF reversal, bank "
+            "reconciliation or deposit read-back, and thin operability, since "
+            "retries can duplicate charges, errors share one code, and there are "
+            "no request ids or conflict protection. The rubric weighs the paid API "
+            "add-on heavily, and together these pull the score to an F despite "
+            "solid fundamentals. Propertyware is a PM-specialized system of record "
+            "with trust-accounting features, not a bank: you still need your own "
+            "bank accounts, and the Propertyware interface for reconciliation and "
+            "corrections.",
+},
+
 "QuickBooks Online": {
   "score": 64, "grade": "D",
   "meta": {"run": "Sep 2, 2026", "method": "1.1", "model": "Claude Fable 5",

@@ -2009,6 +2009,207 @@
    }
   ]
  },
+ "Propertyware": {
+  "source": "propertyware.md",
+  "meta": {
+   "tier": "Fully verified — sandbox",
+   "battery": "complete. Steps 1–6 were performed. Step 7 is N-A (no idempotency mechanism is claimed). Step 8 is N-A (no webhooks or events are offered).",
+   "date": "2026-09-11",
+   "model": "Claude (Anthropic), Cowork session — configured model ID `claude-sonnet-5`; the serving model may differ (the environment reported `claude-opus-5`)",
+   "coverage": "100% (26 of 26 applicable checks verified; no category Unable to verify; gate passed)"
+  },
+  "checks": [
+   {
+    "id": "C1.1",
+    "cat": 1,
+    "title": "Object coverage",
+    "mark": "partial",
+    "why": "weighted coverage = 80.3% (30.5 / 38); no critical object absent. Every critical object is exposed [S1 `/portfolios`, `/buildings`, `/units`, `/leases`, `/contacts`, `/leases/charges`…, `/accounting/glaccounts`, `/accounting/generalledger`]. Two critical objects are only partly covered. The general ledger has lease-scoped journal entries only (`POST /leases/journalentries` requires `leaseID` [S1 `SaveLeaseJournalEntryDTO`]), and ledger reads are limited to windows under 30 days with no per-account filter [S1 `GET /accounting/generalledger`; L6]. Bank accounts can be created and updated as bank-type GL accounts, but deposits can't be read back (`POST /accounting/bankdeposits` has no GET) and there is no balance or register endpoint [S1]. Reconciliation, associations and inventory are absent. Communications can be created only on leases and prospects [S1 `/leases/{id}/conversations`, `/prospects/{id}/conversations`]."
+   },
+   {
+    "id": "C1.2",
+    "cat": 1,
+    "title": "Core operational actions",
+    "mark": "yes",
+    "why": "weighted coverage = 86.4% (38 / 44); no critical write workflow absent. Ledger posting was live-verified: `POST /leases/charges` → 201 and `PUT /leases/charges/{id}` → 200 [L10]. Contacts were live-verified: `POST /contacts` → 201 and `PATCH /contacts/{id}` → 200 [L9]. Documented writes: `POST/PUT/PATCH /leases`, `POST /leases/payments`, `/leases/refunds`, `/leases/adjustments`, `/bills` (+bulk, PATCH approval), `/bills/payment(s)`, `/accounting/ownerdraws`, `/workorders` (+tasks), `/units`, `/buildings`, `/portfolios` [S1]. The general-ledger item scores 0.5 because there are no general journal entries."
+   },
+   {
+    "id": "C1.3",
+    "cat": 1,
+    "title": "Delete or lifecycle actions",
+    "mark": "no",
+    "why": "weighted coverage = 59.6% (15.5 / 26), and a critical lifecycle action is absent. S1 has no endpoint to reverse, void or NSF a lease payment. All 18 DELETE operations are marked \"(BETA)… only available to customers who have opted in to our beta program\" [U1 per-operation note]. DELETE on an existing contact and an existing charge both returned 404 [L11]. No write DTO exposes an `active` flag for archiving [S1]. There is no reconciliation resource. Lease notice, move-out and termination (status) [S1 `PATCH /leases/{id}`], deposit refunds [S1 `POST /leases/refunds`], bill approve/reject [S1 `PATCH /bills/{id}`] and applicant status [S1 `PATCH /prospects/{id}`] are available."
+   },
+   {
+    "id": "C1.4",
+    "cat": 1,
+    "title": "Change notification",
+    "mark": "partial",
+    "why": "no webhooks or events anywhere [S1; U1]. The only mechanism is efficient incremental polling: `lastModifiedDateTimeStart/End` plus status/entity filters on every top-level list endpoint [S1, e.g. `GET /leases` parameters]. It was honored exactly in live tests [L3], and it picked up the newly created contact and charges [L9, L10]. Deleted records disappear with no signal [L12]."
+   },
+   {
+    "id": "C2.1",
+    "cat": 2,
+    "title": "Modern API conventions",
+    "mark": "yes",
+    "why": "a resource-oriented REST API with JSON and standard GET/POST/PUT/PATCH/DELETE [U1 § API Overview: \"built upon standard REST conventions\"; S1]. Live-verified [L1–L10]."
+   },
+   {
+    "id": "C2.2",
+    "cat": 2,
+    "title": "Consistent typing",
+    "mark": "partial",
+    "why": "core fields are consistently typed. In a live survey, 634 of 635 non-null field observations across 17 endpoints matched the published schema [L7]. A limited set of documented inconsistencies sits in non-core fields: `targetDeposit` is money-as-string (`\"1615.0\"`), deprecated 2026-05-10 in favor of numeric `targetDepositAmount` [U1 Changelog; L7]; building `multiUnit` is `\"Yes\"/\"No\"` [L7]; vendor `timeTracking` is boolean on write but `\"Disabled\"` on read [S1 `SaveVendorDTO`/`VendorDTO`; L7]; work order `requestedBy` is an integer on write but a string on read, `dateToEnter` is a date on write but a date-time on read, and `unitIDs` is schema `object` but a live array [S1; L7]; custom-field values are always strings [L7]. One difference touches a critical object: GL `accountType` is an integer code on write but a text label on read [S1 `SaveAccountDTO`/`AccountDTO`]. Also observed, though not a typing issue: `createdDateTime` runs 2 hours behind `lastModifiedDateTime` and the server clock, both labeled UTC [L9]."
+   },
+   {
+    "id": "C2.3",
+    "cat": 2,
+    "title": "Structured errors",
+    "mark": "partial",
+    "why": "the documented JSON error body `{userMessage, errorCode, errors[{key,message}]}` [S1 `ErrorResponse`] is returned for most 400/401/404 responses, with field-level validation errors [L4, L8]. But `errorCode` was `\"1001\"` for every error observed, so it can't tell errors apart. Error shapes also vary: 400 type-conversion errors and the 406 have empty bodies, unknown paths return an HTML page, and DELETE 404s have a null message. Some status codes are wrong: missing credentials return 400 where U1 § Authentication says 401, and DELETE on an existing record returns 404 [L4, L11]."
+   },
+   {
+    "id": "C2.4",
+    "cat": 2,
+    "title": "Duplicate prevention",
+    "mark": "no",
+    "why": "no idempotency key or duplicate protection is documented [S1; U1]. Sending the identical `POST /leases/charges` twice created two charges and doubled the lease balance [L10]."
+   },
+   {
+    "id": "C2.5",
+    "cat": 2,
+    "title": "Graceful handling under load",
+    "mark": "partial",
+    "why": "429 is documented with the guidance \"We recommend an exponential backoff of your requests\" [U1 § Response Codes]. There is no `Retry-After` header or numeric backoff guidance, and no rate-limit headers were observed [L5]. A \"Rate Limiting (FUTURE)\" note sits inside a hidden HTML comment in the spec and was not credited [S1 `info.description`]."
+   },
+   {
+    "id": "C2.6",
+    "cat": 2,
+    "title": "Pagination for large collections",
+    "mark": "yes",
+    "why": "`limit`/`offset` are documented (default 100, max 500) along with the `X-Total-Count` header [U1 § Pagination], and `orderby` (including `id`) is documented on every core list [S1 \"Sortable by\"]. Full traversal was live-verified with no gaps or duplicates [L2]. Contradiction noted: on the final partial page, `X-Total-Count` returns that page's row count rather than the total [L2]."
+   },
+   {
+    "id": "C2.7",
+    "cat": 2,
+    "title": "Bulk or incremental export",
+    "mark": "partial",
+    "why": "incremental sync is possible on the standard list endpoints (\"All top-level API resources support bulk fetches\" [U1 § Bulk Request Options], with updated-since filters honored [L3]). There is no dedicated export path in the API, and some data can't be fully exported: no deleted-record signal [L12], general-ledger transactions only in windows under 30 days [L6], bank deposits not readable [S1], and child lists (lease notes, conversations, work-order tasks, lease contacts) need one call per parent record [S1]. Report publishing with \"Individual/API Access\" exists [U10], but its format and limits are undocumented."
+   },
+   {
+    "id": "C2.8",
+    "cat": 2,
+    "title": "Webhook security and delivery reliability",
+    "mark": "na",
+    "why": "no webhooks or events are offered [S1; U1]. Their absence is scored in C1.4."
+   },
+   {
+    "id": "C2.9",
+    "cat": 2,
+    "title": "Concurrency and conflict control",
+    "mark": "no",
+    "why": "no ETag/If-Match, version field or 409 conflict semantics is documented [S1; U1], and no ETag header was observed [L5]."
+   },
+   {
+    "id": "C2.10",
+    "cat": 2,
+    "title": "Versioning and backward compatibility",
+    "mark": "yes",
+    "why": "the version is in the path (`/v1`; requests without it return 404) [U1 § API Versioning]. The docs define backward-compatible and backwards-incompatible changes and promise \"advance notice for all API releases\". The changelog carries deprecation notices (`managementFeeType` 2024-04-10; `targetDeposit` 2026-05-10; old journal-entry and auto-charge URLs) [U1 § Changelog]. Caveats: no deprecation time windows are stated, and the 2024-06-09 changelog records a type change to generally available fields inside v1, which departs from the stated policy."
+   },
+   {
+    "id": "C2.11",
+    "cat": 2,
+    "title": "Request traceability",
+    "mark": "no",
+    "why": "no request or correlation ID is documented [S1; U1] or returned [L5]. Responses carry only a CDN `server-timing` performance header. Its per-request token is undocumented and not shown to be usable with support, so it was not credited."
+   },
+   {
+    "id": "C2.12",
+    "cat": 2,
+    "title": "Service availability and status transparency",
+    "mark": "yes",
+    "why": "a public status page lists an \"Open API\" component with a per-component uptime display and incident history back to 2022 [U8]."
+   },
+   {
+    "id": "C3.1",
+    "cat": 3,
+    "title": "Read-only credentials",
+    "mark": "yes",
+    "why": "each resource can be set to READ [S2]; \"You can restrict a key to particular Propertyware entities or to read-only access (GET resources only)\" [U1 § Keeping API Keys Safe]."
+   },
+   {
+    "id": "C3.2",
+    "cat": 3,
+    "title": "Scoped credentials",
+    "mark": "yes",
+    "why": "each key is scoped per resource group (14 groups) × NONE/READ/WRITE/DELETE [S2], and a 403 is documented when a key lacks permission [U1 § Response Codes]."
+   },
+   {
+    "id": "C3.3",
+    "cat": 3,
+    "title": "Multiple keys",
+    "mark": "yes",
+    "why": "five separately named keys with distinct client IDs coexist in one organization [P1]. The docs advise naming keys so you can \"locate the right key\" [U1 § Creating API Keys]."
+   },
+   {
+    "id": "C3.4",
+    "cat": 3,
+    "title": "Rotation and revocation",
+    "mark": "yes",
+    "why": "each key has a self-serve Delete (and Edit) action in the admin UI [P1], and requests with a deleted key return 401 [U1 § API Keys]. The docs recommend regularly recreating keys [U1 § Keeping API Keys Safe]. Rotation means creating a new key and deleting the old one; there is no in-place secret regeneration."
+   },
+   {
+    "id": "C3.5",
+    "cat": 3,
+    "title": "Test and production isolation",
+    "mark": "yes",
+    "why": "separate sandbox/testing accounts are available on request [U9]. A key \"will only work with the organization it belongs to\" [U1 § How to Make a Request], and live, the key was rejected (401) under a different organization ID [L4]. The operator confirmed the sandbox is separate from production. Caveats: sandboxes are provisioned through Sales Ops, share the production hosts, and their side-effect behavior (for example, emails) is not documented."
+   },
+   {
+    "id": "C4.1",
+    "cat": 4,
+    "title": "Complete self-serve reference",
+    "mark": "partial",
+    "why": "a public, no-login reference covers authentication, every endpoint, parameters, field-level schemas and a step-by-step first request [U1]. The request/response samples are schema placeholders (`\"amount\": 0`, `\"comments\": \"string\"`), with no worked examples for core write flows [U1 per-operation samples; S1 has 0 operation-level examples]. Live use required reverse-engineering: contact creation has undocumented required fields (country, street, city, state, zip) [L8], and a PATCH was rejected by an unrelated default setting (`emailAlerts`) [L9]. (Behavior differences already scored elsewhere, such as status codes in C2.3 and changelog accuracy in C4.4, are not counted again here.)"
+   },
+   {
+    "id": "C4.2",
+    "cat": 4,
+    "title": "Reliable machine-consumable integration path",
+    "mark": "yes",
+    "why": "a complete OpenAPI 3.0 spec (124 paths, 177 operations, 141 schemas) can be downloaded from the public reference and matches the live docs exactly (content hash, 2026-09-11) [U1 \"Download OpenAPI specification\"; S1]. It has defects that need light manual correction: no security schemes (0 of 177 operations declare the three auth headers), 7 duplicate templated paths (OAS 3.0 says MUST NOT), one schema type error, a scheme-relative server URL, and no stable spec URL (download button only) [packet §4]. No official SDK or MCP server was found."
+   },
+   {
+    "id": "C4.3",
+    "cat": 4,
+    "title": "AI-readable documentation",
+    "mark": "no",
+    "why": "no Propertyware domain has an `llms.txt` or `llms-full.txt` [U14; U16], and there is no per-endpoint Markdown, plain-text corpus or MCP documentation resource. The OpenAPI download is credited under C4.2 only."
+   },
+   {
+    "id": "C4.4",
+    "cat": 4,
+    "title": "Kept current",
+    "mark": "partial",
+    "why": "the reference has a dated changelog (2022-09-21 → 2026-05-10) with frequent entries and deprecation notes [U1 § Changelog], but it is unreliable in places. The reference still labels `PUT /leases/refunds/{id}` and `PUT /workorders/closeworkorder/{id}` BETA/opt-in after the changelog announced beta removal (2026-04-22, 2026-05-10) [S1]. The general-ledger window now enforced (under 30 days, L6) contradicts the last recorded change (7 days, 2024-02-25). No subscription channel for API change notices was found [U1; U15]."
+   },
+   {
+    "id": "C5.1",
+    "cat": 5,
+    "title": "Self-serve API key",
+    "mark": "yes",
+    "why": "once an account is entitled, its administrator creates keys self-serve (name, description, per-resource permissions, Generate Key) [U1 § Creating API Keys; S2]. The admin page shows five keys created by three different users, with no key-approval step [P1]."
+   },
+   {
+    "id": "C5.3",
+    "cat": 5,
+    "title": "Not commercially gated",
+    "mark": "no",
+    "why": "API access is not included in any published package: \"For Enterprise/API: Add $1 per unit/per month to any package\" [U3]. A paid add-on required for any API use is treated as the rubric's \"API requires a premium plan\" (see disagreements). Separately, sandbox accounts go through Sales Ops [U9], and write-side DELETEs require joining a beta program [U1]."
+   }
+  ]
+ },
  "QuickBooks Online": {
   "source": "quickbooks-online.md",
   "meta": {

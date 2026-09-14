@@ -32,6 +32,7 @@ SOURCES = {
     "Magic Door":          "magic-door.md",
     "Process Street":      "process-street.md",
     "Property Meld":       "property-meld.md",
+    "Propertyware":        "propertyware.md",
     "QuickBooks Online":   "quickbooks-online.md",
     "Quo":                 "quo.md",
     "Rent Manager":        "rent-manager.md",
