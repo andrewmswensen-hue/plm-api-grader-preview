@@ -32,7 +32,7 @@ SOURCES = {
     "magic-door":        "magic-door-2026-09-10.md",
     "process-street":    "process-street-2026-08-31.md",
     "property-meld":     "property-meld-2026-09-01.md",
-    "propertyware":      "propertyware-2026-09-11.md",
+    "propertyware":      "propertyware-2026-09-14.md",
     "quickbooks-online": "quickbooks-online-2026-09-02.md",
     "quo":               "quo-2026-09-08.md",
     "rentengine":        "rentengine-2026-09-03.md",
@@ -53,6 +53,9 @@ REDACT = [
     (r"dreambig\.rentvine\.com",           "[account].rentvine.com"),
     (r"`dreambig`",                        "`[account]`"),
     (r"BANK-ENTERPRISE CLIENT TRUST MAIN", "[trust account name withheld]"),
+    # Propertyware: the operator's live org number and the IDs of its test-fixture contacts
+    (r"\b610009088\b",                    "[org id withheld]"),
+    (r"\b(8483110918|8483569669|8477179913)\b", "[test contact id withheld]"),
 ]
 
 
@@ -121,6 +124,22 @@ SUPPRESS = {
 # stand; only the figures derived from C5.3 move.
 # ---------------------------------------------------------------------------
 CORRECTIONS = {
+    "propertyware": [
+        # Propertyware coverage-map figure, corrected 2026-09-15. The functional coverage map
+        # still carried run 1's pre-reconciliation C1.2 figure (81.4%, objects-only sub-map).
+        # The C1.2 check itself, and the published score, use the reconciled 85.2%. No mark,
+        # category value or score changes; only the stale summary line is brought into line.
+        ("# API Report Card: Propertyware Open API",
+         "> **Correction, 2026-09-15.** The functional coverage map below originally repeated\n"
+         "> run 1's pre-reconciliation figure for core write coverage (81.4%). The reconciled\n"
+         "> figure used by check C1.2 and by the published score is 85.2%, and the map now\n"
+         "> says so. **No mark or score changes: Propertyware remains 71 (C-).**\n\n"
+         "# API Report Card: Propertyware Open API"),
+        ('Weighted mutable coverage **28.5 / 35 = 81.4%** (general-ledger transactions marked N-A within the sub-map as computed records, per the C1 method).',
+         "Weighted mutable coverage **85.2%** after reconciliation, as scored in C1.2 below "
+         "(run 1's original objects-only construction gave 28.5 / 35 = 81.4%; see the "
+         "reconciliation note under C1.2)."),
+    ],
     "aptly": [
         # Aptly C5.3 language, corrected 2026-09-09. The run reported that Aptly
         # publishes no plan tiers or prices. It does: getaptly.com/pricing shows

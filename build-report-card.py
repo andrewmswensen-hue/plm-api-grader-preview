@@ -919,115 +919,124 @@ RESULTS = {
 },
 
 "Propertyware": {
-  "score": 56, "grade": "F",
-  "meta": {"run": "Sep 11, 2026", "method": "1.1", "model": "Claude Sonnet 5 or Opus 5",
-           "tier": "Fully verified, sandbox", "raw": "27.95 / 50"},
-  # A SINGLE-RUN result: methodology step 12 calls for two or three independent
-  # runs on the frozen packet, and the report says that has not been done yet.
-  # The note has to carry that plainly.
-  # The model is recorded as the report records it: the session was configured
-  # for claude-sonnet-5 but the environment reported claude-opus-5.
-  "note": "Graded once, by a single evaluator. The report states plainly that "
-          "the independent re-grading of the frozen evidence that the "
-          "methodology calls for has not yet been done, so treat this number as "
-          "less settled than a reconciled one. To compensate, the report "
-          "publishes every judgment call that could move the result. The largest "
-          "by far is whether a paid API add-on available on every plan counts as "
-          "a premium gate; read the other way, the score would be 63 (D). If "
-          "every listed reading broke the same way at once, the report puts the "
-          "bounds at roughly 52 and 76. The run itself is Fully verified in a "
-          "Propertyware sandbox the operator confirmed was separate from "
-          "production, with real writes: a contact created and updated, and two "
-          "$1.00 ledger charges posted and then removed, leaving the lease "
-          "balance back at zero.",
+  "score": 71, "grade": "C-",
+  "meta": {"run": "Sep 14, 2026", "method": "1.1", "model": "Claude Opus 5",
+           "tier": "Baseline verified", "raw": "35.41 / 50"},
+  # Final reconciled report on packet PW-2026-09-14-final (three independent runs).
+  # The downloadable report carries a dated correction (2026-09-15) fixing a stale
+  # pre-reconciliation figure in its coverage map; no mark or score changed.
+  "note": "Graded three independent times against the same frozen evidence, with "
+          "unreconciled totals of 66, 70 and 68. 22 of the 27 checks were "
+          "unanimous, and each of the five disagreements was a one-step, 2 to 1 "
+          "split resolved against the evidence rather than averaged. The report "
+          "is candid that the result has real spread: across every contested "
+          "reading it puts the defensible range at 63 to 72. The most important "
+          "open question is a gap in the rubric itself rather than a fact about "
+          "Propertyware: the three graders agreed on every underlying fact for "
+          "core write actions and still landed on either side of the pass line, "
+          "because the methodology does not spell out exactly what that check "
+          "covers. Read the other way it gives 67 (D+). Writes were tested live on "
+          "labelled test contacts, but deleting anything requires Propertyware's "
+          "opt-in beta, so delete and close actions were graded from documentation.",
   "cats": [
-    (7.5, 15, "You can build real two-way automations on Propertyware: move-in "
-              "paperwork into leases, post charges, record payments, sync units "
-              "and tenants, and create work orders. The gaps show up when "
-              "something has to be undone or reconciled. The API cannot reverse "
-              "an NSF payment, reconcile a bank account, read back a deposit or "
-              "post a general journal entry, and deleting anything requires "
-              "joining Propertyware's beta program. Plan on staff finishing those "
-              "steps in the Propertyware screens. To keep a warehouse current, "
-              "poll for recently modified records; nothing is pushed to you, and "
-              "deletions will not show up."),
-    (5.5, 10, "Day-to-day reads are predictable. Records page cleanly, numbers are "
-              "numbers, and changed-since filters work, which makes it a good fit "
-              "for syncing to Google Sheets or a warehouse. Writes need more care. "
-              "A retried request can post a duplicate charge, which the run proved "
-              "by sending the same charge twice and watching the lease balance "
-              "double. Two people editing the same record can overwrite each "
-              "other silently. Every error carries the same code, so your code has "
-              "to read the message text, and there is no request id to hand to "
-              "support. Add your own duplicate checks, slow down on 429s, and log "
-              "what you send."),
-    (5, 5, "This is Propertyware's strongest area. You can give an AI agent or a "
-           "vendor a key that reads only leases and work orders, give each "
-           "integration its own key, and delete any key yourself in Setup, "
-           "Administration Setup, API Keys. Each key is scoped across 14 resource "
-           "groups to none, read, write or delete, and a key used against the "
-           "wrong organization was refused live. Test in a sandbox, which you "
-           "request from Propertyware Sales Ops, before pointing anything at live "
-           "data."),
-    (2.5, 5, "An AI coding tool can get started from the OpenAPI file, which is "
-             "complete and matches the live documentation exactly. Download it "
-             "from the docs page and add the three authentication headers "
-             "yourself, since the file does not declare them. Expect some trial "
-             "and error on writes, because the documentation does not list every "
-             "required field and its examples are placeholders rather than worked "
-             "requests. There is no AI-readable documentation, and the changelog "
-             "contradicts the live API in places. Check behaviour in a sandbox "
-             "rather than trusting the documentation or changelog alone."),
-    (7.5, 15, "Once API access is turned on, you can make keys yourself in "
-              "minutes. Turning it on costs extra on every plan: Propertyware's "
-              "pricing page lists Enterprise and API access as $1 per unit per "
-              "month added to any package. Deletes and sandbox accounts also "
-              "require going through Propertyware staff. This is the single "
-              "judgment call that moves the grade most, and it is disclosed in "
-              "the report: read as partial gating rather than a premium "
-              "requirement, the score would be 63."),
+    (11.3, 15, "Almost everything your business runs on is reachable, and you can "
+               "write to it, not just read it: leases, charges, payments, bills, "
+               "work orders, owners and tenants. Two real gaps: there is no "
+               "reconciliation object at all, so bank reconciliation stays a manual "
+               "job in the product, and there is no way to be told when something "
+               "changes. Every integration you build will be a scheduled poll, and "
+               "it will silently miss deletions. The bigger practical brake is that "
+               "deleting or closing anything requires Propertyware to enrol you in a "
+               "beta program first. Both test keys demonstrated it: without that "
+               "enrolment, your automation can create and update but can never "
+               "clean up after itself."),
+    (5.9, 10, "The shape of the API is fine. It is proper REST, it pages "
+              "predictably, the version contract is clear, and there is a real "
+              "status page that calls out the API separately. The operability "
+              "layer underneath is where it loses most of its points, and the "
+              "misses compound. Nothing stops a retried payment from posting "
+              "twice. Nothing stops two integrations from overwriting each other on "
+              "the same lease. And when something does go wrong there is no request "
+              "id to give support. For a read-and-report integration none of that "
+              "matters much; for anything that writes money into your ledger, you "
+              "have to build the safety rails yourself: your own de-duplication "
+              "keys, your own write serialisation, your own logging."),
+    (4.5, 5, "This is the strongest part of the API and the part that matters most "
+             "if you are going to point an AI agent at your data. You can create a "
+             "key that can only read, or only touch certain records, hand it to a "
+             "vendor or an agent, and delete it the moment you want the access "
+             "gone, all yourself, in the product, without calling anyone. The one "
+             "soft spot is testing: a sandbox exists, but you have to email Sales "
+             "Ops Support to get one, and no developer document explains how it is "
+             "kept apart from live data, so prove that for yourself before you "
+             "trust it."),
+    (2.5, 5, "A developer can sit down with this documentation and build, and the "
+             "OpenAPI file means your tooling can generate most of the client code "
+             "for you. Two things will cost you time. The reference under-declares "
+             "what the API actually requires, so expect a round of trial and error "
+             "on every create endpoint; the graders hit it immediately on contacts. "
+             "And if you plan to point an AI coding assistant at these docs, it "
+             "cannot read them: the whole documentation site is blocked to crawlers "
+             "and the specification has no fetchable address, so you will have to "
+             "download the file by hand and give it to the tool yourself."),
+    (11.3, 15, "Getting a key is genuinely easy: you make it yourself in the "
+               "product in about a minute, and you can make several. The catch is "
+               "cost. The API is a paid add-on at a dollar per unit per month on top "
+               "of whatever you already pay, which on the Basic package doubles your "
+               "per-unit price. And having API access does not include being able to "
+               "delete or close anything; that needs a separate conversation with "
+               "support to join a beta. Budget for the add-on, and ask about beta "
+               "enrolment in the same conversation."),
   ],
   "strengths": [
-    "Fully verified in a real sandbox, including ledger charges posted and updated live",
-    "Full marks on Access Control: keys scoped per resource to none, read, write or delete",
-    "Genuinely read-only keys, limited to GET requests, created self-serve",
-    "Multiple separately named keys, each one deletable by you in Setup",
-    "A public status page with an Open API component and incident history back to 2022",
-    "A written versioning policy defining breaking changes, plus a dated changelog",
-    "A complete downloadable OpenAPI 3.0 spec, 177 operations, matching the live docs exactly",
-    "Updated-since filters on every top-level list, honoured exactly in live tests",
-    "Pagination traversed a full collection live with no gaps and no duplicates",
-    "Broad two-way coverage: leases, tenant charges and payments, bills, owner draws, work orders",
+    "Read-only and narrowly scoped keys, limited by resource and by action, created self-serve",
+    "Several separately named keys per account, each revocable yourself in the product",
+    "Write access across leases, tenants, charges, payments, bills, owners and work orders",
+    "Create and update verified live: a test contact was created and then updated",
+    "Lease status, notice and move-out dates are all writable through the API",
+    "Predictable pagination with total counts and sorting, verified live",
+    "An updated-since filter on all 34 collections, honoured exactly in live tests",
+    "A written versioning policy that defines breaking changes and promises advance notice",
+    "A public status page with its own Open API component and monthly uptime figures",
+    "A complete public OpenAPI 3.0 specification, 177 operations, no login required",
   ],
   "watch": [
-    "API access costs extra on every plan: $1 per unit per month added to any package",
-    "The same charge sent twice posted twice and doubled the lease balance, proven live",
-    "No way to reverse a lease payment or record an NSF through the API",
-    "Every DELETE is beta-only, and deleting an existing record returned 404 live",
-    "No bank reconciliation, no bank balance, and deposits cannot be read back",
-    "No webhooks, and deleted records simply vanish from polling with no signal",
-    "Every error observed carried the same code, 1001, so code must read the message text",
-    "No request id on any response, and no protection against concurrent overwrites",
-    "General-ledger reads are limited to date windows under 30 days",
-    "Documentation examples are placeholders, and contacts need undocumented required fields",
+    "API access is a paid add-on: $1 per unit per month on top of any package",
+    "Every delete, and closing a work order, requires joining an opt-in beta; both test keys were refused",
+    "No idempotency: an identical create sent twice produced two records live",
+    "No webhooks, and polling cannot see records that were deleted",
+    "No concurrency control, so two integrations can silently overwrite each other",
+    "No request id on any response, so support gets nothing but a timestamp",
+    "Every error observed carried the same code, and some came back empty or as an HTML page",
+    "Creating a building failed with a server error on five payloads copied from existing records",
+    "No reconciliation object, and bank accounts exist only as general-ledger account types",
+    "General-ledger reads reject date windows over 30 days, a limit documented nowhere",
   ],
-  "bottom": "Propertyware's Open API is a real, broad two-way REST API. You can read "
-            "and write the records a single-family property-management business "
-            "runs on, including properties, units, leases, tenants, tenant "
-            "charges and payments, bills, owner draws and work orders, and you "
-            "can keep a spreadsheet or warehouse in sync by polling for recent "
-            "changes. Its biggest strength is access control: keys can be limited "
-            "by resource and action, and you create and revoke them yourself. The "
-            "biggest limitations are the missing undo and reconcile steps, since "
-            "deletes are beta-only and there is no NSF reversal, bank "
-            "reconciliation or deposit read-back, and thin operability, since "
-            "retries can duplicate charges, errors share one code, and there are "
-            "no request ids or conflict protection. The rubric weighs the paid API "
-            "add-on heavily, and together these pull the score to an F despite "
-            "solid fundamentals. Propertyware is a PM-specialized system of record "
-            "with trust-accounting features, not a bank: you still need your own "
-            "bank accounts, and the Propertyware interface for reconciliation and "
-            "corrections.",
+  "bottom": "Propertyware's API reaches nearly everything your business actually runs "
+            "on and lets you write to it: leases, tenants, charges, payments, bills, "
+            "owners and work orders. Its access controls are strong: you can mint a "
+            "read-only or narrowly scoped key yourself, hand it to a vendor or an AI "
+            "agent, and revoke it just as fast. The documentation is solid enough to "
+            "build from, the versioning contract is clear, and a real status page "
+            "tracks the Open API separately from the platform. What holds the score "
+            "to a low C- is the operational plumbing underneath. There are no "
+            "webhooks, so every integration is a scheduled poll that quietly misses "
+            "deletions. There is no idempotency, so a retried request can post a "
+            "charge or a payment twice. There is no concurrency control, so two "
+            "integrations editing the same lease overwrite each other. And there is "
+            "no request id, so when something breaks you have nothing but a "
+            "timestamp to give support. Two access facts belong in your budgeting: "
+            "the API is a paid add-on at $1 per unit per month, which doubles the "
+            "per-unit cost on the Basic package, and API access does not include "
+            "deleting or closing records, which sits behind an opt-in beta you have "
+            "to ask support to join. Propertyware is a property-management-"
+            "specialized system of record, not a bank: its bank accounts are "
+            "general-ledger accounts inside the accounting system. Security-deposit "
+            "segregation is configurable, but no first-party documentation "
+            "describes trust accounting or reconciliation as an API workflow, so "
+            "bank reconciliation stays a manual job inside the product. Workable for "
+            "syncing and reporting, but it needs your own safety rails before you "
+            "let it write money.",
 },
 
 "QuickBooks Online": {
